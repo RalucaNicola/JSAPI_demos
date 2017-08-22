@@ -1,37 +1,22 @@
-## Welcome to GitHub Pages
+# ArcGIS API for JavaScript Demos
 
-You can use the [editor on GitHub](https://github.com/RalucaNicola/JSAPI_demos/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This page shows live demos that I use for blog posts.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Art galleries in New York
 
-### Markdown
+I found a dataset on art galleries in New York and thought it would be fun to map it. Here's what came out of it:
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+![screenshot](./art-galleries-nyc/img/screenshot.png)
 
-```markdown
-Syntax highlighted code block
+**Read the blog post**: Coming soon
 
-# Header 1
-## Header 2
-### Header 3
+**View the live app**: [Art galleries in New York](./art-galleries-nyc/index.html)
 
-- Bulleted
-- List
+**Technologies used**:
+- ArcGIS Pro for data processing and publishing
+- ArcGIS API for JavaScript for data visualization
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/RalucaNicola/JSAPI_demos/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+**Original data**:
+- [NYC Open Data - Art Galleries](https://data.cityofnewyork.us/Recreation/New-York-City-Art-Galleries/tgyc-r5jh/data) provided by [DoITT](http://www1.nyc.gov/site/doitt/index.page)
+- [NYC building data](http://www1.nyc.gov/site/doitt/initiatives/3d-building.page) provided by [DoITT](http://www1.nyc.gov/site/doitt/index.page)
+- [Watercolor basemap](http://maps.stamen.com/#watercolor/) provided by [Stamen Design](http://stamen.com/)
