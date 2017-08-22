@@ -1,0 +1,85 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background-color: floralwhite;
+  font-family: 'Shadows Into Light Two', cursive;
+}
+
+.esri-popup__main-container {
+  font-family: 'Shadows Into Light Two', cursive;
+  font-size: 2em;
+  background-image: url("./img/background.png");
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-color: floralwhite;
+  margin-top: 50px;
+}
+
+.esri-popup__content p {
+  font-size: 1.1em;
+}
+
+.esri-search__submit-button.esri-widget-button {
+  display: none !important;
+}
+
+.esri-search__input-container {
+  background-color: floralwhite;
+  font-family: 'Shadows Into Light Two', cursive;
+  padding: 5px;
+}
+
+.esri-component.esri-attribution.esri-widget {
+  opacity: 0.6;
+  background-color: transparent;
+}
+
+.esri-attribution__sources.esri-interactive {
+  font-size: 0.7em;
+}
+
+.esri-popup__header {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.esri-popup__footer {
+  display: none !important;
+}
+
+header {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-left: 20px;
+}
+
+footer {
+  position: absolute;
+  right: 10px;
+  bottom: 20px;
+}
+
+a, a:visited {
+  text-decoration: none;
+  font-weight: bold;
+  color: #444;
+}
+
+.esri-attribution__powered-by {
+  display: none;
+}
+#paneDiv {
+  position: absolute;
+  top: 12px;
+  left: 62px;
+  width: 80%;
+  padding: 12px 12px 12px 12px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid white;
+  color: black;
+}
