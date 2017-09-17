@@ -8,7 +8,7 @@ I found a dataset on art galleries in New York and thought it would be fun to ma
 
 ![screenshot](./art-galleries-nyc/img/screenshot.png)
 
-**Read the blog post**: Coming soon
+**Read the blog post**: [ArcGIS Blog](https://blogs.esri.com/esri/arcgis/2017/09/05/mapping-art-in-3d/)
 
 **View the live app**: [Art galleries in New York](./art-galleries-nyc/index.html)
 
