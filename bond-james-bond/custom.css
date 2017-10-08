@@ -1,0 +1,163 @@
+/* base rules */
+
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  color: white;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+a {
+  text-decoration: none;
+  border-bottom: 1px dotted white;
+  color: white;
+}
+
+/* reset */
+
+h1, p {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 1.2em;
+}
+
+ul {
+  padding: 0 10px;
+  list-style-type: none;
+}
+
+/* layout rules */
+
+#view {
+  width: 100%;
+  height: 100%;
+  background: #090d21;
+}
+
+.timeline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: rgba(250, 250, 250, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#start {
+  margin: 0 20px;
+}
+
+.timeline .container {
+  border: 1px solid rgba(250, 250, 250, 0.1);
+  height: 0px;
+  flex-basis: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.timeline .movie-item {
+  border-radius: 50%;
+  background: rgba(250, 250, 250, 0.9);
+  box-shadow: 0 0 0 2px rgba(250, 250, 250, 0.4);
+  height: 10px;
+  width: 10px;
+}
+
+.timeline .movie-item:hover {
+  background: rgba(66, 220, 224, 1);
+  box-shadow: 0 0 0 4px rgba(250, 250, 250, 0.4);
+  cursor: pointer;
+}
+
+.timeline .movie-item.selected {
+  background: rgba(66, 220, 224, 1);
+  box-shadow: 0 0 0 4px rgba(250, 250, 250, 0.4);
+}
+
+.timeline .movie-item>p {
+  margin-top: 15px;
+  margin-left: -10px;
+  font-size: 0.9em;
+}
+
+.timeline .esri {
+  text-align: center;
+  padding: 2px;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 50px;
+  max-width: 250px;
+  height: 100px;
+  border-left: 1px dashed white;
+  border-top: 1px solid white;
+  font-size: 0.9em;
+  display: none;
+}
+
+.visible {
+  display: inline;
+}
+
+.tooltip h1{
+  margin-top: -20px;
+}
+
+.tooltip p{
+  margin: 10px;
+}
+
+.info-selected {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding-left: 10px;
+  border-left: 1px dashed rgba(255, 255, 255, 0.7);
+}
+
+.info-selected h1 {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 30em;
+}
+
+
+
+.info-selected h1.animate {
+  animation: type 2s steps(60, end);
+}
+
+.info-selected h1.animate:nth-child(2){
+  animation: type2 4s steps(60, end);
+}
+
+@keyframes type{
+  from { width: 0; }
+}
+
+@keyframes type2{
+  0%{width: 0;}
+  50%{width: 0;}
+  100%{ width: 100; }
+}
+
+.info-selected p {
+  margin-top: 10px;
+}
+
+.esri-component.esri-attribution.esri-widget{
+  background: transparent;
+  color:white;
+  font-size: 0.6em;
+}
