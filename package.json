@@ -4,7 +4,7 @@
   "description": "Simple demos for ArcGIS API for JavaScript",
   "main": "index.js",
   "scripts": {
-    "jslint": "jshint ./bond-james-bond/*.js || true",
+    "jslint": "jshint ./art-galleries-nyc/*.js || true",
     "start": "node index.js"
   },
   "devDependencies": {
