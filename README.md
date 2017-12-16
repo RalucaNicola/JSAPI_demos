@@ -1,6 +1,23 @@
 # ArcGIS API for JavaScript Demos
 
-This page shows live demos that I use for blog posts.
+This page shows small demo apps that I build with esrijs API.
+
+## Map of Christmas traditions
+
+This is work in progress. The app shows Christmas traditions in countries where people celebrate Christmas.
+
+![screenshot](./christmas-map/img/screenshot.png)
+
+**View the live app**: [Art galleries in New York](./christmas-map/index.html)
+
+**Technologies used**:
+- Blender for creating the 3D models
+- ArcGIS Pro for publishing the models as webstyles
+- Inkscape for creating the illustrations
+- ArcGIS API for JavaScript for data visualization
+
+**Original data**:
+- to come
 
 ## Art galleries in New York
 

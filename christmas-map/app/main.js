@@ -6,9 +6,6 @@ define(['app/store', 'app/scene', 'app/tour'], function(store, scene, tour) {
       var st = store.init();
       scene.init(st);
       tour.init('tour', st);
-      st.subscribe( function() {
-        console.log(st.getState());
-      });
     }
   }
 })

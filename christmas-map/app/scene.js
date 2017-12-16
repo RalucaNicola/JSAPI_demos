@@ -8,68 +8,71 @@ define([
 
 
   function _init(store) {
+
     esriConfig.request.corsEnabledServers.push("https://zurich.maps.arcgis.com/");
-    /*************************
-     * Create view and webscene
-     * and add basemap layers
-     *************************/
+
+    // create vector tile layer with the Christmas style
     var christmasLayer = new VectorTileLayer({
       url: "https://basemaps.arcgis.com/b2/arcgis/rest/services/World_Basemap/VectorTileServer"
     });
     christmasLayer.loadStyle("christmas-style.json");
 
+    // create webscene with the vector tile layer as basemap
     var webscene = new WebScene({
       basemap: {
-        // Add the white background and the watercolor basemap layers
         baseLayers: [christmasLayer]
       }
     });
 
+    // create view and add webscene
     var view = new SceneView({
       container: "viewDiv",
       map: webscene,
+      camera : {
+        heading: 35.7,
+        tilt: 77.4,
+        position: {
+          x: -1531838.33985668,
+          y: 3759521.621593286,
+          z: 753037.8103598615,
+          spatialReference: {
+            wkid: 102100
+          }
+        }
+      },
       viewingMode: "local",
       environment: {
         lighting: {
           directShadowsEnabled: true,
-          ambientOcclusionEnabled: false
+          ambientOcclusionEnabled: true
         }
-      },
-      popup: {
-        dockEnabled: true,
-        dockOptions: {
-          // Disables the dock button from the popup
-          buttonEnabled: false,
-          // Ignore the default sizes that trigger responsive docking
-          breakpoint: false,
-          position: "top-right"
-        },
-        // Features will be highlighted when popup opens
-        highlightEnabled: true
       },
       // Set a custom color for the highlight
       highlightOptions: {
-        color: "#ff9900"
+        color: "#ff635e",
+        fillOpacity: 0
+      },
+      padding: {
+        top: 200
       }
     });
-    // Clear the top-left corner to make place for the title
+
+    // Clear the top-left corner - that's where the application menu is
     view.ui.empty("top-left");
+
+    window.view = view;
 
     view.on("click", function (event) {
 
-      // get the returned screen x, y coordinates and use it
-      // with hitTest to find if any graphics were clicked
-      // (using promise chaining for cleaner code and error handling)
       view.hitTest(event).then(function (response) {
 
-        // we're only interested in the first result
         var result = response.results[0];
         if (result && result.graphic) {
           return result.graphic;
         }
+
       }).then(function (graphic) {
 
-        // now extract the object id from the graphic
         var objectid = graphic.attributes.objectid;
         store.dispatch({
           type: 'SELECT COUNTRY',
@@ -79,11 +82,21 @@ define([
       });
     });
 
+    view.watch('interacting', function (newValue) {
+      if (newValue) {
+        var state = store.getState();
+        if (state && state.selected) {
+          store.dispatch({
+            type: 'SELECT COUNTRY',
+            selected: null
+          })
+        }
+      }
+    })
+
     /************************************
      * Create and add the countries layer
      ***********************************/
-
-    // Create Feature Layer from the points
 
     var options = ['Purple', 'Orange', 'Blue', 'Green'];
     var uniqueValueInfos = options.map((color, index) => {
@@ -104,17 +117,6 @@ define([
         }
       }
     });
-    var renderer = {
-      type: 'unique-value',
-      valueExpression: `$feature.OBJECTID % 4`,
-      uniqueValueInfos: uniqueValueInfos,
-      visualVariables: [
-        {
-          type: "rotation",
-          valueExpression: "Random()*360"
-        }
-      ]
-    };
 
     var layer = new FeatureLayer({
       url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/World_Cities_analysis/FeatureServer/0",
@@ -123,7 +125,17 @@ define([
         mode: "relative-to-ground"
       },
       definitionExpression: "STATUS = 'National and provincial capital'",
-      renderer: renderer,
+      renderer: {
+        type: 'unique-value',
+        valueExpression: `$feature.OBJECTID % 4`,
+        uniqueValueInfos: uniqueValueInfos,
+        visualVariables: [
+          {
+            type: "rotation",
+            valueExpression: "Random()*360"
+          }
+        ]
+      },
       outFields: ["*"],
       labelingInfo: [
         {
@@ -153,70 +165,39 @@ define([
       labelsVisible: true
     });
 
-    var artGalleriesLayer = new FeatureLayer({
-      url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/art_galleries_nyc/FeatureServer",
-      renderer: {
-        type: 'simple',
-        symbol: {
-          type: 'point-3d',
-          symbolLayers: [{
-            type: 'icon',
-            resource: {
-              href: "./img/icon.png"
-            },
-            size: 28,
-          }],
-          // Vertical offset will shift the points vertically so that a line callout can be applied
-          verticalOffset: {
-            screenLength: 40,
-            maxWorldLength: 200,
-            minWorldLength: 35
-          },
-          // Line callouts are applied to help interpret point location
-          callout: {
-            type: 'line',
-            color: "#534741",
-            size: 1
-          }
-        }
-      },
-      elevationInfo: {
-        // Elevation mode that will place points on top of the buildings or other SceneLayer 3D objects
-        mode: "relative-to-scene"
-      },
-      outFields: ["*"],
-      // Feature reduction is set to selection because our scene contains too many points and they overlap
-      featureReduction: {
-        type: "selection"
-      },
-      labelingInfo: [
-        {
-          labelExpressionInfo: {
-            value: "{name}"
-          },
-          symbol: {
-            type: 'label-3d',
-            symbolLayers: [{
-              type: 'text',
-              material: {
-                color: [250, 250, 250]
-              },
-              // Set a halo on the font to make the labels more visible with any kind of background
-              halo: {
-                size: 1,
-                color: [250, 10, 10]
-              },
-              font: {
-                family: 'Berkshire Swash'
-              },
-              size: 15
-            }]
-          }
-        }],
-      labelsVisible: true
-    });
-
     webscene.add(layer);
+
+    var highlight;
+    function selectCountry(country) {
+
+      view.whenLayerView(layer).then(function(layerView) {
+        highlight = layerView.highlight(country);
+      });
+      view.goTo({ target: country, zoom: 5})
+      .then(function(){
+        view.popup.open({
+          content: '<div>Christmas is one of those holidays that just seems to be filled with cheer and wonder. Whether you are celebrating a secular or religious Christmas, your day is sure to be filled with happiness, especially with a little help from wikiHow. Read some steps on how to celebrate a secular, religious, kid-friendly, or consumer-free Christmas after the jump. Happy Holidays!</div>',
+          location: country.geometry,
+        })
+      });
+    }
+
+    function deselect(){
+      view.popup.close();
+      highlight.remove();
+    }
+
+    store.subscribe( function() {
+      var state = store.getState();
+      if (state.lastAction === 'SELECT COUNTRY') {
+        if (state.selected) {
+          selectCountry(state.selected);
+        }
+        else {
+          deselect();
+        }
+      }
+    });
   }
 
   return {

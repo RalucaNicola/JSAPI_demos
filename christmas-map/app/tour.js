@@ -6,8 +6,8 @@ define([], function() {
       container.addEventListener('click', function() {
         var state = store.getState();
         if (state.onTour) {
-          store.dispatch({type: 'TOUR STOPPED'});
-          container.innerHTML = 'Take a tour';
+        store.dispatch({type: 'TOUR STOPPED'});
+        container.innerHTML = 'Take a tour';
         }
         else {
           store.dispatch({type: 'TOUR STARTED'});
