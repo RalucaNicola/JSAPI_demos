@@ -73,14 +73,33 @@ a, a:visited {
 .esri-attribution__powered-by {
   display: none;
 }
-#tour {
+#menu {
   position: absolute;
-  bottom: 20px;
-  width: 300px;
+  top: 0;
+  left: 0;
+  width: 310px;
   margin: 0 auto;
   padding: 12px 12px 12px 12px;
-  background-color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid white;
   color: black;
+  text-align: center;
   font-family: 'Berkshire Swash', cursive;
+}
+
+button#tour {
+  background: #b090bf;
+  border: none;
+  font-family: 'Berkshire Swash', cursive;
+  position: relative;
+  top: -20px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 1.1em;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button#tour:hover {
+  background: #9265a6;
 }
