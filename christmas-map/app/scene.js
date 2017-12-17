@@ -3,9 +3,13 @@ define([
   'esri/views/SceneView',
   'esri/layers/VectorTileLayer',
   'esri/layers/FeatureLayer',
-  'esri/config'
-], function (WebScene, SceneView, VectorTileLayer, FeatureLayer, esriConfig) {
+  'esri/config',
 
+  'app/handleChange'
+], function (
+    WebScene, SceneView, VectorTileLayer, FeatureLayer, esriConfig,
+    handleChange
+  ) {
 
   function _init(store) {
 
@@ -57,7 +61,7 @@ define([
       }
     });
 
-    // Clear the top-left corner - that's where the application menu is
+    // clear the top-left corner - that's where the application menu is
     view.ui.empty("top-left");
 
     window.view = view;
@@ -73,12 +77,15 @@ define([
 
       }).then(function (graphic) {
 
-        var objectid = graphic.attributes.objectid;
         store.dispatch({
           type: 'SELECT COUNTRY',
           selected: graphic
         });
-
+        if (store.getState().onTour) {
+          store.dispatch({
+            type: 'TOUR STOPPED'
+          });
+        }
       });
     });
 
@@ -89,15 +96,17 @@ define([
           store.dispatch({
             type: 'SELECT COUNTRY',
             selected: null
-          })
+          });
+        }
+        if (state.onTour) {
+          store.dispatch({
+            type: 'TOUR STOPPED'
+          });
         }
       }
     })
 
-    /************************************
-     * Create and add the countries layer
-     ***********************************/
-
+    // create and add the countries layer
     var options = ['Purple', 'Orange', 'Blue', 'Green'];
     var uniqueValueInfos = options.map((color, index) => {
       return {
@@ -168,8 +177,8 @@ define([
     webscene.add(layer);
 
     var highlight;
-    function selectCountry(country) {
 
+    function selectCountry(country) {
       view.whenLayerView(layer).then(function(layerView) {
         highlight = layerView.highlight(country);
       });
@@ -189,15 +198,14 @@ define([
       }
     }
 
-    store.subscribe( function() {
-      var state = store.getState();
-      if (state.selectionChanged) {
-        deselectCountry();
-        if (state.selected) {
-          selectCountry(state.selected);
-        }
+    var handleSelection = handleChange(store.getState, 'selected');
+
+    store.subscribe( handleSelection(function(newVal, oldVal, property) {
+      if (oldVal) { deselectCountry(); }
+      if (newVal) { selectCountry(newVal); }
       }
-    });
+    ));
+
   }
 
   return {
