@@ -36,8 +36,9 @@ body,
 
 #menu {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 10px;
+  left: 10px;
+  border-radius: 5px;
   width: 310px;
   margin: 0 auto;
   padding: 12px 12px 12px 12px;

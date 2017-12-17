@@ -1,34 +1,41 @@
 define(['redux'], function(Redux){
 
   return {
-    init: function() {
-      var stateManager = function(state = { selected: null, onTour: false, lastAction: null}, action) {
+    initStore: function() {
+      var reducer = function(state, action) {
+
+        if (typeof state === 'undefined') {
+          return { selected: null, onTour: false, lastAction: null};
+        }
+
         switch (action.type) {
           case 'SELECT COUNTRY':
             return {
               ...state,
-              lastAction: action.type,
+              selectionChanged: true,
               selected : action.selected
             }
             break;
           case 'TOUR STARTED':
             return {
               ...state,
-              lastAction: action.type,
+              selectionChanged: false,
               onTour: true
             }
             break;
           case 'TOUR STOPPED':
             return {
               ...state,
-              lastAction: action.type,
+              selectionChanged: false,
               onTour: false
             }
             break;
+          default:
+            return state;
         }
       }
 
-      return Redux.createStore(stateManager);
+      return Redux.createStore(reducer);
     }
   }
 

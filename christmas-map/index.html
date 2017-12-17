@@ -23,19 +23,12 @@
   </script>
   <script src="https://js.arcgis.com/4.6/"></script>
   <script>
-    require(['app/main', 'dojo/domReady!'], function (app) {
+    require(['app/storeConfig', 'app/scene', 'app/tour', 'dojo/domReady!'], function(storeConfig, scene, tour) {
 
-      /*var settings = {
-        scenePortalItem: '03a9607d96244883af64c7f8c7e5de1b',
-        buildingsPortalItem: '5ecba5273b2d41ff9f6f1eb33f238d18',
-        fields: {
-          height: 'measuredHeight',
-          year: 'yearCompleted'
-        }
-      };
+      var store = storeConfig.initStore(); // initialize store
+      scene.init(store); // initialize scene
+      tour.init('tour', store); // initialize tour
 
-      var app = new Application(settings);*/
-      app.init();
     });
   </script>
 </head>

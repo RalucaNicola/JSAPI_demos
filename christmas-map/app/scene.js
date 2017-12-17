@@ -85,7 +85,7 @@ define([
     view.watch('interacting', function (newValue) {
       if (newValue) {
         var state = store.getState();
-        if (state && state.selected) {
+        if (state.selected) {
           store.dispatch({
             type: 'SELECT COUNTRY',
             selected: null
@@ -182,19 +182,19 @@ define([
       });
     }
 
-    function deselect(){
+    function deselectCountry(){
       view.popup.close();
-      highlight.remove();
+      if (highlight) {
+        highlight.remove();
+      }
     }
 
     store.subscribe( function() {
       var state = store.getState();
-      if (state.lastAction === 'SELECT COUNTRY') {
+      if (state.selectionChanged) {
+        deselectCountry();
         if (state.selected) {
           selectCountry(state.selected);
-        }
-        else {
-          deselect();
         }
       }
     });
