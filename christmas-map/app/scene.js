@@ -185,7 +185,7 @@ define([
       view.goTo({ target: country, zoom: 5})
       .then(function(){
         view.popup.open({
-          content: '<div>Christmas is one of those holidays that just seems to be filled with cheer and wonder. Whether you are celebrating a secular or religious Christmas, your day is sure to be filled with happiness, especially with a little help from wikiHow. Read some steps on how to celebrate a secular, religious, kid-friendly, or consumer-free Christmas after the jump. Happy Holidays!</div>',
+          content: '<div>Christmas is one of those holidays that just seems to be filled with cheer and wonder. Happy Holidays!</div>',
           location: country.geometry,
         })
       });
