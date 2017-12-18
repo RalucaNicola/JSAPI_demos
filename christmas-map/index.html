@@ -18,16 +18,26 @@
       }, {
         name: 'app',
         location: location.pathname.replace(/\/[^\/]+$/, '') + 'app/'
-      }]
+      }],
+      has: {
+        "esri-promise-compatibility": 1
+      }
     };
   </script>
   <script src='https://js.arcgis.com/4.6/'></script>
   <script>
-    require(['app/storeConfig', 'app/scene', 'app/tour', 'dojo/domReady!'], function(storeConfig, scene, tour) {
+    require(['app/dataUtils', 'app/storeConfig', 'app/scene', 'app/tour', 'dojo/domReady!'], function(dataUtils, storeConfig, scene, tour) {
 
-      var store = storeConfig.initStore(); // initialize store
-      scene.init('scene', store); // initialize scene
-      tour.init('tour', store); // initialize tour
+      dataUtils.loadData('data/traditions.json')
+        .then(function(data) {
+          return dataUtils.convertToGraphics(data);
+        })
+        .then(function(graphics) {
+          var store = storeConfig.initStore(graphics); // initialize store
+          scene.init('scene', store); // initialize scene
+          tour.init('tour', store); // initialize tour
+        });
+
 
     });
   </script>

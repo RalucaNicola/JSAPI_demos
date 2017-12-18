@@ -25,7 +25,8 @@ define([
     var webscene = new WebScene({
       basemap: {
         baseLayers: [christmasLayer]
-      }
+      },
+      ground: {}
     });
 
     // create view and add webscene
@@ -126,17 +127,35 @@ define([
         }
       }
     });
-
+    var graphics = store.getState().graphics;
+    var fields = [
+      {
+        name: "ObjectID",
+        alias: "ObjectID",
+        type: "oid"
+      },{
+        name: "country",
+        alias: "country",
+        type: "string"
+      },{
+        name: "description",
+        alias: "description",
+        type: "string"
+      }
+    ]
     var layer = new FeatureLayer({
-      url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/World_Cities_analysis/FeatureServer/0",
+      source: graphics,
+      fields: fields,
+      objectIdField: "ObjectID",
+      geometryType: "point",
       title: "cities",
       elevationInfo: {
         mode: "relative-to-ground"
       },
-      definitionExpression: "STATUS = 'National and provincial capital'",
+      screenSizePerspectiveEnabled: false,
       renderer: {
         type: 'unique-value',
-        valueExpression: `$feature.OBJECTID % 4`,
+        valueExpression: `$feature.ObjectID % 4`,
         uniqueValueInfos: uniqueValueInfos,
         visualVariables: [
           {
@@ -150,7 +169,7 @@ define([
         {
           labelPlacement: "left-center",
           labelExpressionInfo: {
-            value: "{CNTRY_NAME}"
+            value: "{country}"
           },
           symbol: {
             type: 'label-3d',
@@ -179,16 +198,17 @@ define([
     var highlight;
 
     function selectCountry(country) {
-      view.whenLayerView(layer).then(function(layerView) {
-        highlight = layerView.highlight(country);
-      });
-      view.goTo({ target: country, zoom: 5})
-      .then(function(){
-        view.popup.open({
-          content: '<div>Christmas is one of those holidays that just seems to be filled with cheer and wonder. Happy Holidays!</div>',
-          location: country.geometry,
-        })
-      });
+      view.whenLayerView(layer)
+        .then(function(layerView) {
+          highlight = layerView.highlight(country.attributes.ObjectID);
+        });
+      view.goTo({ target: country.geometry, zoom: 5, tilt: 60}, { speedFactor: 2 })
+        .then(function(){
+          view.popup.open({
+            content: country.attributes.description,
+            location: country.geometry,
+          })
+        });
     }
 
     function deselectCountry(){

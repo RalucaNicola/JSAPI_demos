@@ -1,18 +1,19 @@
 define(['redux'], function(Redux){
 
   return {
-    initStore: function() {
+    initStore: function(graphics) {
       var reducer = function(state, action) {
 
         if (typeof state === 'undefined') {
-          return { selected: null, onTour: false };
+          return { selected: null, timeout: null, onTour: false, graphics: graphics };
         }
 
         switch (action.type) {
           case 'SELECT COUNTRY':
             return {
               ...state,
-              selected : action.selected
+              selected : action.selected,
+              timeout: action.timeout || null
             }
             break;
           case 'TOUR STARTED':

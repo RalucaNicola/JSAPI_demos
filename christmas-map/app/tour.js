@@ -29,12 +29,28 @@ define(['app/handleChange'], function (handleChange) {
       }
       ));
 
+      function goToFeature(graphic) {
+        var timeout = window.setTimeout(function() {
+          var state = store.getState();
+          goToFeature(state.graphics[graphic.attributes.ObjectID + 1]);
+        }.bind(this), 5000);
+        store.dispatch({
+          type: 'SELECT COUNTRY',
+          selected: graphic,
+          timeout: timeout
+        });
+      }
+
       function startTour() {
-        // todo: functionality to start the tour
+        var state = store.getState();
+        var currentId = state.selected ? state.selected.attributes.ObjectID + 1 : 0;
+        goToFeature(state.graphics[currentId]);
       }
 
       function stopTour() {
-        // todo: functionality to stop the tour
+        var state = store.getState();
+        clearTimeout(state.timeout);
+        console.log(state.timeout);
       }
     }
 
