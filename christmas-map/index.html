@@ -2,12 +2,12 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta charset='utf-8'>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'>
   <title>Map of Christmas traditions</title>
-  <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash|Roboto+Slab" rel="stylesheet">
-  <link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
-  <link rel="stylesheet" href="custom.css">
+  <link href='https://fonts.googleapis.com/css?family=Berkshire+Swash|Roboto+Slab' rel='stylesheet'>
+  <link rel='stylesheet' href='https://js.arcgis.com/4.6/esri/css/main.css'>
+  <link rel='stylesheet' href='custom.css'>
   <script>
     window.dojoConfig = {
       async: true,
@@ -21,12 +21,12 @@
       }]
     };
   </script>
-  <script src="https://js.arcgis.com/4.6/"></script>
+  <script src='https://js.arcgis.com/4.6/'></script>
   <script>
     require(['app/storeConfig', 'app/scene', 'app/tour', 'dojo/domReady!'], function(storeConfig, scene, tour) {
 
       var store = storeConfig.initStore(); // initialize store
-      scene.init(store); // initialize scene
+      scene.init('scene', store); // initialize scene
       tour.init('tour', store); // initialize tour
 
     });
@@ -34,11 +34,11 @@
 </head>
 
 <body>
-  <div id="viewDiv"></div>
+  <div id='scene'></div>
   <div id='menu'>
     <h2>Map of Christmas traditions</h2>
     <img src='img/christmas.svg' alt='christmas'/>
-    <button id="tour">Take a tour</button>
+    <button id='tour'>Take a tour</button>
   </div>
 </body>
 

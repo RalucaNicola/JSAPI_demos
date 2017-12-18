@@ -11,7 +11,7 @@ define([
     handleChange
   ) {
 
-  function _init(store) {
+  function _init(container, store) {
 
     esriConfig.request.corsEnabledServers.push("https://zurich.maps.arcgis.com/");
 
@@ -30,7 +30,7 @@ define([
 
     // create view and add webscene
     var view = new SceneView({
-      container: "viewDiv",
+      container: container,
       map: webscene,
       camera : {
         heading: 35.7,
