@@ -77,33 +77,34 @@ define([
         }
 
       }).then(function (graphic) {
-
-        store.dispatch({
-          type: 'SELECT COUNTRY',
-          selected: graphic
-        });
         if (store.getState().onTour) {
           store.dispatch({
             type: 'TOUR STOPPED'
           });
         }
+        store.dispatch({
+          type: 'SELECT COUNTRY',
+          selected: graphic
+        });
+
       });
     });
 
     view.watch('interacting', function (newValue) {
       if (newValue) {
         var state = store.getState();
+        if (state.onTour) {
+          store.dispatch({
+            type: 'TOUR STOPPED'
+          });
+        }
         if (state.selected) {
           store.dispatch({
             type: 'SELECT COUNTRY',
             selected: null
           });
         }
-        if (state.onTour) {
-          store.dispatch({
-            type: 'TOUR STOPPED'
-          });
-        }
+
       }
     })
 
