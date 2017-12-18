@@ -25,7 +25,10 @@ define(["esri/request", "esri/geometry/Point"], function(esriRequest, Point) {
             description: feature.description,
             country: feature.name,
             language: feature.language,
-            wish: feature.wish
+            wish: feature.wish,
+            image: feature.image || "",
+            caption: feature.caption || "",
+            attribution: feature.attribution || ""
           }
         }
       });

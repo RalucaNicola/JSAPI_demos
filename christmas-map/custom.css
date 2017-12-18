@@ -20,10 +20,11 @@ body,
 .esri-popup__main-container.esri-widget {
   left: 50%;
   background-color: transparent;
-  border-bottom:#ff635e 2px dashed;
+  border-bottom:#ff635e 2px solid;
+  min-height: 300px;
 }
 .esri-popup--aligned-bottom-center .esri-popup__main-container.esri-widget{
-  border-top: #ff635e 2px dashed;
+  border-top: #ff635e 2px solid;
   border-bottom: none;
 }
 
@@ -32,6 +33,19 @@ body,
   margin: 0 0 0 40px;
   padding: 10px;
   font-size: 14px;
+  border-radius: 5px;
+}
+
+.img-popup {
+  text-align: center;
+}
+
+.copyright-popup {
+  font-size: 0.8em;
+}
+
+.esri-popup__content p{
+  font-size: inherit;
 }
 
 #menu {

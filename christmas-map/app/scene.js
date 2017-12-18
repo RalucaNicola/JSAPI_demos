@@ -205,8 +205,13 @@ define([
         });
       view.goTo({ target: country.geometry, zoom: 5, tilt: 60}, { speedFactor: 2 })
         .then(function(){
+          var image = country.attributes.image ? `<div class="img-popup"><img src="./data/images/${country.attributes.image}" alt="image"><p>${country.attributes.caption}</p></div>` : "";
+          var language = ((country.attributes.language) && (country.attributes.language !== 'English')) ? `<div>Merry Christmas in ${country.attributes.language} is "${country.attributes.wish}!"</div>` : "";
+          var attribution = country.attributes.attribution ? `<div class="copyright-popup">Image copyright: ${country.attributes.attribution}</div>` : "";
+          var content = image + `<div>${country.attributes.description}</div>` + language + attribution;
+
           view.popup.open({
-            content: country.attributes.description,
+            content: content,
             location: country.geometry,
           })
         });
