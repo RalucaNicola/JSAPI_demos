@@ -33,7 +33,7 @@ define(['app/handleChange'], function (handleChange) {
         var timeout = window.setTimeout(function() {
           var state = store.getState();
           goToFeature(state.graphics[graphic.attributes.ObjectID + 1]);
-        }.bind(this), 5000);
+        }.bind(this), 10000);
         store.dispatch({
           type: 'SELECT COUNTRY',
           selected: graphic,

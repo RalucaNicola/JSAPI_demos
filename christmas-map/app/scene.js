@@ -203,7 +203,7 @@ define([
         .then(function(layerView) {
           highlight = layerView.highlight(country.attributes.ObjectID);
         });
-      view.goTo({ target: country.geometry, zoom: 5, tilt: 60}, { speedFactor: 2 })
+      view.goTo({ target: country.geometry, zoom: 5, tilt: 80}, { speedFactor: 0.9 })
         .then(function(){
           var image = country.attributes.image ? `<div class="img-popup"><img src="./data/images/${country.attributes.image}" alt="image"><p>${country.attributes.caption}</p></div>` : "";
           var language = ((country.attributes.language) && (country.attributes.language !== 'English')) ? `<div>Merry Christmas in ${country.attributes.language} is "${country.attributes.wish}!"</div>` : "";
