@@ -1,14 +1,10 @@
-# ArcGIS API for JavaScript Demos
-
-This page shows small demo apps that I build with esrijs API.
-
-## Fun Christmas facts
+# Fun Christmas facts
 
 This app shows Christmas traditions in different countries around the world.
 
 ![screenshot](./christmas-map/img/screenshot.png)
 
-**View the live app**: [Fun Christmas facts](./christmas-map/index.html)
+**View the live app**: [Fun Christmas facts](./christmas-map/)
 
 **Technologies used**:
 - Blender for creating the 3D models 🎁
@@ -24,7 +20,7 @@ This app shows Christmas traditions in different countries around the world.
  - Various sources for images mentioned in the popup.
 
 
-## Art galleries in New York
+# Art galleries in New York
 
 I found a dataset on art galleries in New York and thought it would be fun to map it. Here's what came out of it:
 
