@@ -57,7 +57,7 @@
   {"country":"RS","latitude":44.016521,"longitude":21.005859,"name":"Serbia","description": "","language": "","wish":""},
   {"country":"RU","latitude":61.52401,"longitude":105.318756,"name":"Russia","description": "","language": "","wish":""},
   {"country":"SI","latitude":46.151241,"longitude":14.995463,"name":"Slovenia","description": "","language": "","wish":""},
- {"country":"TR","latitude":38.963745,"longitude":35.243322,"name":"Turkey","description": "","language": "","wish":""},
+  {"country":"TR","latitude":38.963745,"longitude":35.243322,"name":"Turkey","description": "","language": "","wish":""},
   {"country":"UA","latitude":48.379433,"longitude":31.16558,"name":"Ukraine","description": "","language": "","wish":""},
   {"country":"US","latitude":37.09024,"longitude":-95.712891,"name":"United States","description": "","language": "","wish":""},
   {"country":"VE","latitude":6.42375,"longitude":-66.58973,"name":"Venezuela","description": "","language": "","wish":""}
