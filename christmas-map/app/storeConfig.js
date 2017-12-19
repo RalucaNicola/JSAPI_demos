@@ -5,7 +5,13 @@ define(['redux'], function(Redux){
       var reducer = function(state, action) {
 
         if (typeof state === 'undefined') {
-          return { selected: null, timeout: null, onTour: false, graphics: graphics };
+          return {
+            selected: null,
+            timeout: null,
+            onTour: false,
+            graphics: graphics,
+            currentMedia: null
+          };
         }
 
         switch (action.type) {
@@ -28,6 +34,11 @@ define(['redux'], function(Redux){
               onTour: false
             }
             break;
+          case 'MEDIA CHANGED':
+            return {
+              ...state,
+              currentMedia: action.currentMedia
+            }
           default:
             return state;
         }

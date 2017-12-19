@@ -38,14 +38,6 @@ button#tour:focus {
   box-shadow: none;
 }
 
-.esri-popup__content {
-  background-color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 0 40px;
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 5px;
-}
-
 .img-popup {
   text-align: center;
 }
@@ -66,11 +58,20 @@ button#tour:focus {
     left: 50%;
     background-color: transparent;
     border-bottom:#ff635e 2px solid;
-    min-height: 300px;
+    min-height: 400px;
   }
+
   .esri-popup--aligned-bottom-center .esri-popup__main-container.esri-widget{
     border-top: #ff635e 2px solid;
     border-bottom: none;
+  }
+
+  .esri-popup__content {
+    background-color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 0 40px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
   }
 
   #menu {
@@ -91,7 +92,7 @@ button#tour:focus {
 
 
 /* mobile portrait */
-@media (max-width: 420px) {
+@media (max-width: 419px) {
   #menu {
     position: absolute;
     top: 0;
@@ -105,7 +106,7 @@ button#tour:focus {
 }
 
 /* mobile landscape */
-@media (min-width: 420px) and (max-width: 1024px) {
+@media (min-width: 420px) and (max-width: 1023px) {
   #menu {
     position: absolute;
     top: 5px;
@@ -113,11 +114,17 @@ button#tour:focus {
     font-size: 1em;
     font-family: 'Berkshire Swash', cursive;
   }
+
   #menu>img {
     display: none;
   }
+
   button#tour {
     top: 0px;
     left: 20px;
+  }
+
+  .esri-popup--is-docked-top-right .esri-popup__main-container {
+    max-height: 100% !important;
   }
 }

@@ -26,7 +26,14 @@
   </script>
   <script src='https://js.arcgis.com/4.6/'></script>
   <script>
-    require(['app/dataUtils', 'app/storeConfig', 'app/scene', 'app/tour', 'dojo/domReady!'], function(dataUtils, storeConfig, scene, tour) {
+    require([
+      'app/mediaUtils',
+      'app/dataUtils',
+      'app/storeConfig',
+      'app/scene',
+      'app/tour',
+      'dojo/domReady!'
+    ], function(mediaUtils, dataUtils, storeConfig, scene, tour) {
 
       dataUtils.loadData('data/traditions.json')
         .then(function(data) {
@@ -36,6 +43,12 @@
           var store = storeConfig.initStore(graphics); // initialize store
           scene.init('scene', store); // initialize scene
           tour.init('tour', store); // initialize tour
+          mediaUtils.addListener(function(){
+            store.dispatch({
+              type: 'MEDIA CHANGED',
+              currentMedia: mediaUtils.getCurrentMedia()
+            })
+          });
         });
 
 

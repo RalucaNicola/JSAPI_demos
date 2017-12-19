@@ -52,6 +52,11 @@ define([
           ambientOcclusionEnabled: true
         }
       },
+      popup: {
+        dockOptions: {
+          breakpoint: false
+        }
+      },
       // Set a custom color for the highlight
       highlightOptions: {
         color: "#ff635e",
@@ -231,6 +236,26 @@ define([
       if (newVal) { selectCountry(newVal); }
       }
     ));
+
+    var handleMedia = handleChange(store.getState, 'currentMedia');
+
+    store.subscribe( handleMedia(function(newVal) {
+      if (newVal === 'mobilePortrait') {
+        view.popup.dockOptions.position = 'bottom-center';
+        view.popup.dockEnabled = true;
+      } else if (newVal === 'mobileLandscape') {
+        view.popup.dockOptions.position = 'top-right';
+        view.popup.dockEnabled = true;
+        view.padding = {
+          top: 0
+        };
+      } else {
+        view.popup.dockEnabled = false;
+        view.padding = {
+          top: 200
+        }
+      }
+    }));
 
   }
 
