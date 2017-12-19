@@ -1,10 +1,10 @@
-// this is a modified version of https://github.com/jprichardson/redux-watch
+// this is a simplified version of https://github.com/jprichardson/redux-watch
 // Copyright (c) JP Richardson
 
 define([], function () {
 
   function compare(a, b) {
-    return a === b
+    return a === b;
   }
 
   return function (getState, property) {
@@ -17,7 +17,8 @@ define([], function () {
           currentValue = newValue;
           fn(newValue, oldValue, property);
         }
-      }
-    }
-  }
+      };
+    };
+  };
+
 });

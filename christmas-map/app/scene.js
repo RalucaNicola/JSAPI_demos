@@ -13,13 +13,13 @@ define([
 
   function _init(container, store) {
 
-    esriConfig.request.corsEnabledServers.push("https://zurich.maps.arcgis.com/");
+    esriConfig.request.corsEnabledServers.push('https://zurich.maps.arcgis.com/');
 
     // create vector tile layer with the Christmas style
     var christmasLayer = new VectorTileLayer({
-      url: "https://basemaps.arcgis.com/b2/arcgis/rest/services/World_Basemap/VectorTileServer"
+      url: 'https://basemaps.arcgis.com/b2/arcgis/rest/services/World_Basemap/VectorTileServer'
     });
-    christmasLayer.loadStyle("christmas-style.json");
+    christmasLayer.loadStyle('christmas-style.json');
 
     // create webscene with the vector tile layer as basemap
     var webscene = new WebScene({
@@ -45,7 +45,7 @@ define([
           }
         }
       },
-      viewingMode: "local",
+      viewingMode: 'local',
       environment: {
         lighting: {
           directShadowsEnabled: true,
@@ -59,7 +59,7 @@ define([
       },
       // Set a custom color for the highlight
       highlightOptions: {
-        color: "#ff635e",
+        color: '#ff635e',
         fillOpacity: 0
       },
       padding: {
@@ -68,11 +68,11 @@ define([
     });
 
     // clear the top-left corner - that's where the application menu is
-    view.ui.empty("top-left");
+    view.ui.empty('top-left');
 
     window.view = view;
 
-    view.on("click", function (event) {
+    view.on('click', function (event) {
 
       view.hitTest(event).then(function (response) {
 
@@ -95,7 +95,9 @@ define([
       });
     });
 
+    // stop the tour and deselect country if the user is interacting with the scene
     view.watch('interacting', function (newValue) {
+
       if (newValue) {
         var state = store.getState();
         if (state.onTour) {
@@ -109,13 +111,13 @@ define([
             selected: null
           });
         }
-
       }
-    })
+
+    });
 
     // create and add the countries layer
     var options = ['Purple', 'Orange', 'Blue', 'Green'];
-    var uniqueValueInfos = options.map((color, index) => {
+    var uniqueValueInfos = options.map(function(color, index) {
       return {
         value: index,
         symbol: {
@@ -124,58 +126,58 @@ define([
             {
               type: 'object',
               resource: {
-                href: "https://zurich.maps.arcgis.com/sharing/rest/content/items/bdf60a763af049d2b5dea9eea34953b5/resources/styles/web/resource/" + color + "Present.json"
+                href: `https://zurich.maps.arcgis.com/sharing/rest/content/items/bdf60a763af049d2b5dea9eea34953b5/resources/styles/web/resource/${color}Present.json`
               },
               height: 100000,
-              anchor: "bottom"
+              anchor: 'bottom'
             }
           ]
         }
-      }
+      };
     });
     var graphics = store.getState().graphics;
     var fields = [
       {
-        name: "ObjectID",
-        alias: "ObjectID",
-        type: "oid"
+        name: 'ObjectID',
+        alias: 'ObjectID',
+        type: 'oid'
       },{
-        name: "country",
-        alias: "country",
-        type: "string"
+        name: 'country',
+        alias: 'country',
+        type: 'string'
       },{
-        name: "description",
-        alias: "description",
-        type: "string"
+        name: 'description',
+        alias: 'description',
+        type: 'string'
       }
-    ]
+    ];
     var layer = new FeatureLayer({
       source: graphics,
       fields: fields,
-      objectIdField: "ObjectID",
-      geometryType: "point",
-      title: "cities",
+      objectIdField: 'ObjectID',
+      geometryType: 'point',
+      title: 'cities',
       elevationInfo: {
-        mode: "relative-to-ground"
+        mode: 'relative-to-ground'
       },
       screenSizePerspectiveEnabled: false,
       renderer: {
         type: 'unique-value',
-        valueExpression: `$feature.ObjectID % 4`,
+        valueExpression: '$feature.ObjectID % 4',
         uniqueValueInfos: uniqueValueInfos,
         visualVariables: [
           {
-            type: "rotation",
-            valueExpression: "Random()*360"
+            type: 'rotation',
+            valueExpression: 'Random()*360'
           }
         ]
       },
-      outFields: ["*"],
+      outFields: ['*'],
       labelingInfo: [
         {
-          labelPlacement: "left-center",
+          labelPlacement: 'left-center',
           labelExpressionInfo: {
-            value: "{country}"
+            value: '{country}'
           },
           symbol: {
             type: 'label-3d',
@@ -192,7 +194,7 @@ define([
               font: {
                 family: 'Berkshire Swash'
               },
-              size: 15
+              size: 12
             }]
           }
         }],
@@ -204,22 +206,32 @@ define([
     var highlight;
 
     function selectCountry(country) {
+
+      //highlight the selected country
       view.whenLayerView(layer)
         .then(function(layerView) {
           highlight = layerView.highlight(country.attributes.ObjectID);
         });
-      view.goTo({ target: country.geometry, zoom: 5, tilt: 80}, { speedFactor: 0.9 })
-        .then(function(){
-          var image = country.attributes.image ? `<div class="img-popup"><img src="./data/images/${country.attributes.image}" alt="image"><p>${country.attributes.caption}</p></div>` : "";
-          var language = ((country.attributes.language) && (country.attributes.language !== 'English')) ? `<div>Merry Christmas in ${country.attributes.language} is "${country.attributes.wish}!"</div>` : "";
-          var attribution = country.attributes.attribution ? `<div class="copyright-popup">Image copyright: ${country.attributes.attribution}</div>` : "";
-          var content = image + `<div>${country.attributes.description}</div>` + language + attribution;
 
-          view.popup.open({
-            content: content,
-            location: country.geometry,
-          })
+      // animate camera to the selected country
+      view.goTo({
+        target: country.geometry,
+        zoom: 5,
+        tilt: 70
+      }, {
+        speedFactor: 0.9
+      })
+      // when animation finished, open popup with information
+      .then(function(){
+        var image = country.attributes.image ? `<div class='img-popup'><img src='./data/images/${country.attributes.image}' alt='image'><p>${country.attributes.caption}</p></div>` : '';
+        var language = ((country.attributes.language) && (country.attributes.language !== 'English')) ? `<div>Merry Christmas in ${country.attributes.language} is '${country.attributes.wish}!'</div>` : '';
+        var attribution = country.attributes.attribution ? `<div class='copyright-popup'>Image copyright: ${country.attributes.attribution}</div>` : '';
+        var content = image + `<div>${country.attributes.description}</div>` + language + attribution;
+        view.popup.open({
+          content: content,
+          location: country.geometry,
         });
+      });
     }
 
     function deselectCountry(){
@@ -253,7 +265,7 @@ define([
         view.popup.dockEnabled = false;
         view.padding = {
           top: 200
-        }
+        };
       }
     }));
 
@@ -261,5 +273,5 @@ define([
 
   return {
     init: _init
-  }
+  };
 });

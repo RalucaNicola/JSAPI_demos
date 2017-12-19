@@ -4,7 +4,7 @@
   "description": "Simple demos for ArcGIS API for JavaScript",
   "main": "index.js",
   "scripts": {
-    "jslint": "jshint ./art-galleries-nyc/*.js || true",
+    "jslint": "jshint ./christmas-map/app/*.js || true",
     "start": "node index.js"
   },
   "devDependencies": {

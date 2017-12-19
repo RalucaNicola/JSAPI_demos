@@ -100,8 +100,13 @@ button#tour:focus {
     text-align: center;
     font-family: 'Berkshire Swash', cursive;
   }
+
   #menu h2 {
     display: none;
+  }
+
+  .esri-view-width-xsmall .esri-popup--is-docked-bottom-center .esri-popup__main-container {
+    max-height: 40% !important;
   }
 }
 

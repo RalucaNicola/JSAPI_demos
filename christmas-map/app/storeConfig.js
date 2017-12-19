@@ -2,6 +2,7 @@ define(['redux'], function(Redux){
 
   return {
     initStore: function(graphics) {
+
       var reducer = function(state, action) {
 
         if (typeof state === 'undefined') {
@@ -16,37 +17,28 @@ define(['redux'], function(Redux){
 
         switch (action.type) {
           case 'SELECT COUNTRY':
-            return {
-              ...state,
+            return Object.assign(state, {
               selected : action.selected,
               timeout: action.timeout || null
-            }
-            break;
+            });
           case 'TOUR STARTED':
-            return {
-              ...state,
+            return Object.assign(state, {
               onTour: true
-            }
-            break;
+            });
           case 'TOUR STOPPED':
-            return {
-              ...state,
+            return Object.assign(state, {
               onTour: false
-            }
-            break;
+            });
           case 'MEDIA CHANGED':
-            return {
-              ...state,
+            return Object.assign(state, {
               currentMedia: action.currentMedia
-            }
+            });
           default:
             return state;
         }
-      }
+      };
 
       return Redux.createStore(reducer);
     }
-  }
-
-
+  };
 });

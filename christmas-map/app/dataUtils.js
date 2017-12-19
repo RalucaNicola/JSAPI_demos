@@ -1,16 +1,17 @@
 define(["esri/request", "esri/geometry/Point"], function(esriRequest, Point) {
 
   return {
+
     loadData: function(url) {
-      return esriRequest(url, {
-        responseType: "json"
-      }).then(function(response){
+      return esriRequest(url).then(function(response){
         return response.data;
       });
     },
 
     convertToGraphics: function(data) {
-      return data.map(function(feature, index) {
+
+      // convert data into graphics to use it as a source in a FeatureLayer
+      var graphics = data.map(function(feature, index) {
         return {
           geometry: new Point({
             longitude: feature.longitude,
@@ -19,7 +20,6 @@ define(["esri/request", "esri/geometry/Point"], function(esriRequest, Point) {
               wkid: 102100
             }
           }),
-          // select only the attributes you care about
           attributes: {
             ObjectID: index,
             description: feature.description,
@@ -30,13 +30,10 @@ define(["esri/request", "esri/geometry/Point"], function(esriRequest, Point) {
             caption: feature.caption || "",
             attribution: feature.attribution || ""
           }
-        }
+        };
       });
+
+      return graphics;
     }
-
-  }
-
-
-
-
+  };
 });

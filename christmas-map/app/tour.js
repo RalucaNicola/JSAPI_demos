@@ -1,6 +1,8 @@
 define(['app/handleChange'], function (handleChange) {
+
   return {
     init: function (id, store) {
+
       var container = document.getElementById(id);
 
       container.addEventListener('click', function () {
@@ -50,9 +52,8 @@ define(['app/handleChange'], function (handleChange) {
       function stopTour() {
         var state = store.getState();
         clearTimeout(state.timeout);
-        console.log(state.timeout);
       }
     }
 
-  }
-})
+  };
+});
