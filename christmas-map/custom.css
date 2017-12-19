@@ -9,23 +9,33 @@ body,
   font-family: 'Berkshire Swash', cursive;
 }
 
+button#tour {
+  background: #b090bf;
+  border: none;
+  font-family: 'Berkshire Swash', cursive;
+  position: relative;
+  top: -20px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 1.1em;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button#tour:hover {
+  background: #9265a6;
+}
+
+button#tour:focus {
+  outline: 0px;
+}
+
 .esri-popup__feature-buttons, .esri-popup__pointer, .esri-popup__header-buttons {
   display: none;
 }
 
 .esri-popup--shadow {
   box-shadow: none;
-}
-
-.esri-popup__main-container.esri-widget {
-  left: 50%;
-  background-color: transparent;
-  border-bottom:#ff635e 2px solid;
-  min-height: 300px;
-}
-.esri-popup--aligned-bottom-center .esri-popup__main-container.esri-widget{
-  border-top: #ff635e 2px solid;
-  border-bottom: none;
 }
 
 .esri-popup__content {
@@ -48,38 +58,66 @@ body,
   font-size: inherit;
 }
 
-#menu {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  border-radius: 5px;
-  width: 310px;
-  margin: 0 auto;
-  padding: 12px 12px 12px 12px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid white;
-  color: black;
-  text-align: center;
-  font-family: 'Berkshire Swash', cursive;
+/* desktop layout */
+
+@media ( min-width: 1024px ) {
+
+  .esri-popup__main-container.esri-widget {
+    left: 50%;
+    background-color: transparent;
+    border-bottom:#ff635e 2px solid;
+    min-height: 300px;
+  }
+  .esri-popup--aligned-bottom-center .esri-popup__main-container.esri-widget{
+    border-top: #ff635e 2px solid;
+    border-bottom: none;
+  }
+
+  #menu {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border-radius: 5px;
+    width: 310px;
+    margin: 0 auto;
+    padding: 12px 12px 12px 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid white;
+    color: black;
+    text-align: center;
+    font-family: 'Berkshire Swash', cursive;
+  }
 }
 
-button#tour {
-  background: #b090bf;
-  border: none;
-  font-family: 'Berkshire Swash', cursive;
-  position: relative;
-  top: -20px;
-  padding: 10px 20px;
-  color: white;
-  font-size: 1.1em;
-  border-radius: 5px;
-  cursor: pointer;
+
+/* mobile portrait */
+@media (max-width: 420px) {
+  #menu {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    font-family: 'Berkshire Swash', cursive;
+  }
+  #menu h2 {
+    display: none;
+  }
 }
 
-button#tour:hover {
-  background: #9265a6;
-}
-
-button#tour:focus {
-  outline: 0px;
+/* mobile landscape */
+@media (min-width: 420px) and (max-width: 1024px) {
+  #menu {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 1em;
+    font-family: 'Berkshire Swash', cursive;
+  }
+  #menu>img {
+    display: none;
+  }
+  button#tour {
+    top: 0px;
+    left: 20px;
+  }
 }
