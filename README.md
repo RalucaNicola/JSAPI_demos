@@ -21,6 +21,7 @@ This app shows Christmas traditions in different countries around the world.
  - Christmas vector tile layer by <a href='http://www.arcgis.com/home/item.html?id=dfcb45f8a2ad4b58a1a7547188a0a00cesri' target='_blank'>esri</a>
  - Country location data: <a href='https://developers.google.com/public-data/docs/canonical/countries_csv' target='_blank'>Google public data</a> published under <a href='https://creativecommons.org/licenses/by/3.0/' target='_blank'>CC BY 3.0</a>
  - Text data from <a href='https://www.whychristmas.com/cultures/' target='_blank'>www.whychristmas.com</a>
+ - Various sources for images mentioned in the popup.
 
 
 ## Art galleries in New York
