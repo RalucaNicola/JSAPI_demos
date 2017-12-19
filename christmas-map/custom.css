@@ -50,6 +50,18 @@ button#tour:focus {
   font-size: inherit;
 }
 
+footer.attribution {
+  font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
+  color: #323232;
+  background-color: rgba(255,255,255, 0.65);
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  font-size: 0.75em;
+  padding-left: 5px;
+}
+
 /* desktop layout */
 
 @media ( min-width: 1024px ) {
@@ -58,7 +70,7 @@ button#tour:focus {
     left: 50%;
     background-color: transparent;
     border-bottom:#ff635e 2px solid;
-    min-height: 400px;
+    min-height: 300px;
   }
 
   .esri-popup--aligned-bottom-center .esri-popup__main-container.esri-widget{

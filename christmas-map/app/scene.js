@@ -4,10 +4,11 @@ define([
   'esri/layers/VectorTileLayer',
   'esri/layers/FeatureLayer',
   'esri/config',
+  'esri/widgets/Attribution',
 
   'app/handleChange'
 ], function (
-    WebScene, SceneView, VectorTileLayer, FeatureLayer, esriConfig,
+    WebScene, SceneView, VectorTileLayer, FeatureLayer, esriConfig, Attribution,
     handleChange
   ) {
 
@@ -70,8 +71,6 @@ define([
     // clear the top-left corner - that's where the application menu is
     view.ui.empty('top-left');
 
-    window.view = view;
-
     view.on('click', function (event) {
 
       view.hitTest(event).then(function (response) {
@@ -116,7 +115,7 @@ define([
     });
 
     // create and add the countries layer
-    var options = ['Purple', 'Orange', 'Blue', 'Green'];
+    var options = ['Purple', 'Orange', 'Blue', 'Green', 'Turquoise'];
     var uniqueValueInfos = options.map(function(color, index) {
       return {
         value: index,
@@ -163,7 +162,7 @@ define([
       screenSizePerspectiveEnabled: false,
       renderer: {
         type: 'unique-value',
-        valueExpression: '$feature.ObjectID % 4',
+        valueExpression: '$feature.ObjectID % 5',
         uniqueValueInfos: uniqueValueInfos,
         visualVariables: [
           {

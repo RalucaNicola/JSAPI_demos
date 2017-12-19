@@ -4,7 +4,7 @@
 <head>
   <meta charset='utf-8'>
   <meta name='viewport' content='initial-scale=1'>
-  <title>Map of Christmas traditions</title>
+  <title>Christmas around the world</title>
   <link href='https://fonts.googleapis.com/css?family=Berkshire+Swash|Roboto+Slab' rel='stylesheet'>
   <link rel='stylesheet' href='https://js.arcgis.com/4.6/esri/css/main.css'>
   <link rel='stylesheet' href='custom.css'>
@@ -20,7 +20,7 @@
         location: location.pathname.replace(/\/[^\/]+$/, '') + 'app/'
       }],
       has: {
-        "esri-promise-compatibility": 1
+        'esri-promise-compatibility': 1
       }
     };
   </script>
@@ -59,10 +59,13 @@
 <body>
   <div id='scene'></div>
   <div id='menu'>
-    <h2>Map of Christmas traditions</h2>
+    <h2>Fun Christmas facts</h2>
     <img src='img/christmas.svg' alt='christmas'/>
     <button id='tour'>Take a tour</button>
   </div>
+  <footer class='attribution'>
+    Christmas vector tile layer by <a href='http://www.arcgis.com/home/item.html?id=dfcb45f8a2ad4b58a1a7547188a0a00cesri' target='_blank'>esri</a> | Country location data: <a href='https://developers.google.com/public-data/docs/canonical/countries_csv' target='_blank'>Google public data</a> published under <a href='https://creativecommons.org/licenses/by/3.0/' target='_blank'>CC BY 3.0</a> | Text data from <a href='https://www.whychristmas.com/cultures/' target='_blank'>www.whychristmas.com</a> | Map created by Raluca with <a href='https://developers.arcgis.com/javascript/' target='_blank'>ArcGIS API for JS</a> and a lot of 🎁.
+  </footer>
 </body>
 
 </html>

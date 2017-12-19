@@ -35,7 +35,7 @@ define(['app/handleChange'], function (handleChange) {
         var timeout = window.setTimeout(function() {
           var state = store.getState();
           goToFeature(state.graphics[graphic.attributes.ObjectID + 1]);
-        }.bind(this), 10000);
+        }.bind(this), 15000);
         store.dispatch({
           type: 'SELECT COUNTRY',
           selected: graphic,
