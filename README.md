@@ -8,7 +8,7 @@ This is work in progress. The app shows Christmas traditions in countries where 
 
 ![screenshot](./christmas-map/img/screenshot.png)
 
-**View the live app**: [Art galleries in New York](./christmas-map/index.html)
+**View the live app**: [Fun Christmas facts](./christmas-map/index.html)
 
 **Technologies used**:
 - Blender for creating the 3D models
