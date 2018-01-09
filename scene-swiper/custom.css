@@ -24,6 +24,28 @@ body {
   overflow: hidden;
 }
 
+#swipe {
+  position:absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 5px;
+  background: rgb(100, 100, 100);
+  border: 7px solid rgba(255, 255, 255, 0.8);
+  border-bottom: none;
+  border-top: none;
+  cursor: pointer;
+}
+
+#swipe>img {
+  height: 60px;
+  position:absolute;
+  top:50%;
+  margin-left: -13px;
+  margin-top:-30px;
+  pointer-events: none;
+}
+
 #viewBottom {
   height: 100%;
   width: 100%;

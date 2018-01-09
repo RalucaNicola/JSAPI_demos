@@ -7,15 +7,21 @@ require([
 
   swiper.init();
 
-  var webscene = new WebScene({
+  var websceneTop = new WebScene({
    portalItem: {
-     id: "19dcff93eeb64f208d09d328656dd492"
+     id: "542a491cf6404c8fa7c5feb1fa1c4a9c"
    }
+  });
+
+  var websceneBottom = new WebScene({
+    portalItem: {
+      id: "54e49fb8f0d94642ab199599cc549478"
+    }
   });
 
   var viewTop = new SceneView({
     container: "viewTop",
-    map: webscene,
+    map: websceneTop,
     environment: {
       lighting: {
         directShadowsEnabled: true,
@@ -26,7 +32,7 @@ require([
 
   var viewBottom = new SceneView({
     container: "viewBottom",
-    map: webscene,
+    map: websceneBottom,
     environment: {
       lighting: {
         directShadowsEnabled: true,
@@ -37,7 +43,9 @@ require([
 
   // Clear the top-left corner to make place for the title
   viewTop.ui.empty("top-left");
+  viewBottom.ui.empty("top-left");
 
+  // synchronize the two views
   syncUtil.syncViews(viewTop, viewBottom);
 
 });

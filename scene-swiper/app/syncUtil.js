@@ -9,9 +9,6 @@ define(["esri/core/watchUtils"], function(watchUtils) {
     var scheduleId;
 
     function clear() {
-      if (view2InteractHandle) {
-        view2InteractHandle.remove();
-      }
       viewpointWatchHandle && viewpointWatchHandle.remove();
       viewStationaryHandle && viewStationaryHandle.remove();
       scheduleId && clearTimeout(scheduleId);
@@ -31,7 +28,6 @@ define(["esri/core/watchUtils"], function(watchUtils) {
         scheduleId = null;
         viewpointWatchHandle = view1.watch('viewpoint',
           function(newValue) {
-            console.log(newValue);
             view2.viewpoint = newValue;
           });
       }, 0);

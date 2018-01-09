@@ -7,4 +7,4 @@ bs.init({
 });
 
 // Now call methods on bs
-bs.watch('./scene-swiper/*').on('change', bs.reload);
+bs.watch('./scene-swiper/app/*').on('change', bs.reload);
