@@ -1,11 +1,11 @@
 require([
   "esri/WebScene",
   "esri/views/SceneView",
-  "app/swiper"
-], function (WebScene, SceneView, swiper) {
+  "app/swiper",
+  "app/syncUtil"
+], function (WebScene, SceneView, swiper, syncUtil) {
 
-swiper.init();
-
+  swiper.init();
 
   var webscene = new WebScene({
    portalItem: {
@@ -34,7 +34,10 @@ swiper.init();
       }
     }
   });
+
   // Clear the top-left corner to make place for the title
   viewTop.ui.empty("top-left");
+
+  syncUtil.syncViews(viewTop, viewBottom);
 
 });
