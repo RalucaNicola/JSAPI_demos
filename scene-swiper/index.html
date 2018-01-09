@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1">
+  <title>Scene Swiper</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
+  <link rel="stylesheet" href="custom.css">
+
+  <script>
+      var dojoConfig = {
+        packages: [{
+          name: "app",
+          location: location.pathname.replace(/\/[^/]+$/, "") + "app"
+        }],
+        async: true
+      };
+    </script>
+  <script src="https://js.arcgis.com/4.4/"></script>
+</head>
+
+<body>
+  <div id="containerBottom">
+    <div id="viewBottom"></div>
+  </div>
+  <div id="containerTop">
+    <div id="viewTop"></div>
+  </div>
+  <header>Scene Swiper</header>
+  <footer></footer>
+  <script>
+  require([
+      "app/main",
+      "dojo/domReady!"
+    ]);
+  </script>
+</body>
+</html>

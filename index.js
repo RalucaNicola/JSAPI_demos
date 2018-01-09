@@ -3,10 +3,8 @@ var bs = require("browser-sync").create('demos-server');
 
 // .init starts the server
 bs.init({
-    server: "./art-galleries-nyc"
+    server: "./scene-swiper"
 });
 
-var bs = require("browser-sync").get('demos-server');
-
 // Now call methods on bs
-bs.watch('./art-galleries-nyc/*').on('change', bs.reload);
+bs.watch('./scene-swiper/*').on('change', bs.reload);
