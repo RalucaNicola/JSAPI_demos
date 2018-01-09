@@ -6,7 +6,7 @@ define([], function() {
 
   function changeSwipePosition(evt) {
     evt.preventDefault();
-    if (evt.clientX && (evt.clientX < document.getElementById("containerBottom").clientWidth - 30)) {
+    if (evt.clientX && (evt.clientX < document.getElementById("containerBottom").clientWidth - 30) && (evt.clientX > 30)) {
       swiper.style.left = evt.clientX + "px";
       document.getElementById('containerTop').style.right = (document.getElementById("containerBottom").clientWidth - evt.clientX) + "px";
     }
