@@ -40,7 +40,7 @@ body {
   background-clip: content-box;
   cursor: pointer;
   z-index: 1;
-  box-shadow: 0px 0px 10px 2px rgba(255,255,255,1);
+  /*box-shadow: 0px 0px 10px 2px rgba(255,255,255,1);*/
 }
 
 #swipe>img {
@@ -75,4 +75,5 @@ header {
   font-family: 'Fascinate', cursive;
   font-size: 1.7em;
   z-index: 2;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
