@@ -4,10 +4,14 @@ define([], function() {
     document.getElementById("viewTop").style.width = document.getElementById("containerBottom").clientWidth + "px";
   }
 
-  function changeSwipePosition(evt) {
+  function changeSwipePosition(positionX) {
+    swiper.style.left = positionX + "px";
+  }
+
+  function positionChanged(evt) {
     evt.preventDefault();
     if (evt.clientX && (evt.clientX < document.getElementById("containerBottom").clientWidth - 30) && (evt.clientX > 30)) {
-      swiper.style.left = evt.clientX + "px";
+      changeSwipePosition(evt.clientX);
       document.getElementById('containerTop').style.right = (document.getElementById("containerBottom").clientWidth - evt.clientX) + "px";
     }
   }
@@ -16,11 +20,11 @@ define([], function() {
 
     swiper.addEventListener('pointerdown', function(evt) {
       evt.preventDefault();
-      document.addEventListener('pointermove', changeSwipePosition);
+      document.addEventListener('pointermove', positionChanged);
     });
 
     swiper.addEventListener('pointerup', function(evt) {
-      document.removeEventListener('pointermove', changeSwipePosition);
+      document.removeEventListener('pointermove', positionChanged);
     });
 
   }
@@ -48,7 +52,11 @@ define([], function() {
   return {
     init: function() {
       setTopViewSize();
-      window.addEventListener('resize', setTopViewSize);
+      window.addEventListener('resize', function() {
+        setTopViewSize();
+        var containerTopSize = document.getElementById("containerTop").clientWidth;
+        changeSwipePosition(containerTopSize);
+      });
       initSwipeDiv();
     }
   }
