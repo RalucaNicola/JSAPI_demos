@@ -31,14 +31,16 @@ body {
   top: 0;
   bottom: 0;
   left: 50%;
+  margin-left: -7px;
   width: 5px;
   background: rgb(0, 0, 0);
-  border: 6px solid rgba(255, 255, 255, 1);
+  border: 9px solid rgba(255, 255, 255, 0.8);
   border-bottom: none;
   border-top: none;
+  background-clip: content-box;
   cursor: pointer;
   z-index: 1;
-  box-shadow: 0px 0px 20px 3px rgba(255,255,255,1);
+  box-shadow: 0px 0px 10px 2px rgba(255,255,255,1);
 }
 
 #swipe>img {
