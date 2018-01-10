@@ -14,13 +14,13 @@ define([], function() {
 
   function addDragEvent(swiper) {
 
-    swiper.addEventListener('mousedown', function(evt) {
+    swiper.addEventListener('pointerdown', function(evt) {
       evt.preventDefault();
-      document.addEventListener('mousemove', changeSwipePosition);
+      document.addEventListener('pointermove', changeSwipePosition);
     });
 
-    swiper.addEventListener('mouseup', function(evt) {
-      document.removeEventListener('mousemove', changeSwipePosition);
+    swiper.addEventListener('pointerup', function(evt) {
+      document.removeEventListener('pointermove', changeSwipePosition);
     });
 
   }
@@ -30,6 +30,7 @@ define([], function() {
     // create swipe DOM element
     swiper = document.createElement("div");
     swiper.setAttribute("id", "swipe");
+    swiper.setAttribute("touch-action", "none");
     // optional - attach an image to it, so users know they can drag
     var swipeImage = document.createElement("img");
     swipeImage.setAttribute("src", "./images/swipe-symbol.png");
