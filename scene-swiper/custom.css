@@ -38,7 +38,7 @@ body {
   border-bottom: none;
   border-top: none;
   background-clip: content-box;
-  cursor: pointer;
+  cursor: col-resize;
   z-index: 1;
   /*box-shadow: 0px 0px 10px 2px rgba(255,255,255,1);*/
 }
