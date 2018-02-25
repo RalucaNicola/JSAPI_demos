@@ -1,3 +1,16 @@
+# Scene Swiper
+
+This app displays two scenes and allows user to switch between them
+by swiping.
+
+![screenshot](./scene-swiper/images/screenshot.png)
+
+**View the live app**: [Scene Swiper](./scene-swiper/)
+
+**Technologies used**:
+- ArcGIS Pro for publishing the webscenes
+- ArcGIS API for JavaScript for data visualizations
+
 # Fun Christmas facts
 
 This app shows Christmas traditions in different countries around the world.
