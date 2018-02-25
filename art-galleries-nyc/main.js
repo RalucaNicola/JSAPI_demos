@@ -111,6 +111,10 @@ require([
         symbolLayers: [new FillSymbol3DLayer({
           material: {
             color: [255, 235, 190, 0.9]
+          },
+          edges: {
+            type: 'solid',
+            color: [122, 107, 78, 0.6]
           }
         })]
       }),
@@ -120,7 +124,11 @@ require([
         maxValue: 30,
         symbol: new MeshSymbol3D({
           symbolLayers: [new FillSymbol3DLayer({
-            material: { color: [187, 165, 181] }
+            material: { color: [187, 165, 181] },
+            edges: {
+              type: 'solid',
+              color: [122, 107, 78, 0.6]
+            }
           })]
         })
       }]
