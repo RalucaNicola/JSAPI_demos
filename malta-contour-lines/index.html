@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Malta in contour lines</title>
+
+  <link rel="stylesheet" href="https://jsdev.arcgis.com/4.7/esri/css/main.css">
+  <script src="https://jsdev.arcgis.com/4.7/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #layerToggle {
+      top: 20px;
+      right: 20px;
+      position: absolute;
+      z-index: 99;
+      background-color: white;
+      border-radius: 8px;
+      padding: 10px;
+      opacity: 0.75;
+    }
+
+  </style>
+
+  <script>
+    require([
+        "esri/config",
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/FeatureLayer",
+        "dojo/dom",
+        "dojo/on",
+        "esri/layers/GraphicsLayer",
+
+        "esri/Graphic",
+        "esri/geometry/Point",
+        "esri/geometry/Polyline",
+        "esri/geometry/Polygon",
+
+        "esri/renderers/SimpleRenderer",
+
+        "esri/symbols/PointSymbol3D",
+        "esri/symbols/TextSymbol3DLayer",
+
+        "dojo/domReady!"
+      ],
+      function (
+        esriConfig, WebScene, SceneView, FeatureLayer, dom, on,
+        GraphicsLayer,
+        Graphic, Point, Polyline, Polygon,
+        SimpleRenderer,
+        PointSymbol3D, TextSymbol3DLayer
+      ) {
+
+        var webscene = new WebScene({
+          portalItem: {
+            id: "e1569a7b6e2249adae3447cfc382972a"
+          }
+        });
+
+        view = new SceneView({
+          container: "viewDiv",
+          map: webscene,
+          viewingMode: 'local',
+          qualityProfile: "high",
+
+          environment: {
+            lighting: {
+              directShadowsEnabled: false,
+              ambientOcclusionEnabled: true
+            }
+          },
+        });
+
+        // add contour lines layer
+        var contourLayer = new FeatureLayer({
+          url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/polygon_contour_malta/FeatureServer",
+          elevationInfo: {
+            mode: "relative-to-ground",
+            featureExpressionInfo: {
+              expression: "$feature.elevation * 3"
+            }
+          },
+          returnZ: true,
+          renderer: {
+            type: "simple",
+            symbol: {
+              type: "polygon-3d", // autocasts as new PolygonSymbol3D()
+              symbolLayers: [{
+                type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
+                material: {
+                  color: "#DCD2B0"
+                },
+                size: 50
+              }]
+            },
+            visualVariables: [{
+              type: 'color',
+              field: 'elevation',
+              stops: [{
+                value: 25,
+                color: '#F2E6C9',
+              }, {
+                value: 100,
+                color: '#d3a561'
+              }, {
+                value: 200,
+                color: [186, 121, 68]
+              }]
+            }]
+          }
+        });
+        webscene.add(contourLayer);
+
+        contourLayer.load().then(function () {
+          view.then(function () {
+            view.goTo(contourLayer.fullExtent);
+            webscene.clippingArea = contourLayer.fullExtent;
+          })
+
+        });
+
+        createLabels([{
+          name: 'Valetta',
+          coordinates: [35.897341, 14.513617]
+        }, {
+          name: 'Rabat',
+          coordinates: [35.885562, 14.372360]
+        }]);
+
+
+        function createLabels(labels) {
+          for (var i = 0; i < labels.length; i++) {
+            var label = labels[i];
+            var graphic = new Graphic({
+              symbol: {
+                type: "point-3d", // autocasts as new PointSymbol3D()
+                symbolLayers: [{
+                  type: "text", // autocasts as new TextSymbol3DLayer()
+                  material: {
+                    color: [99, 63, 34]
+                  },
+                  halo: {
+                    color: [255, 255, 255, 0.7],
+                    size: 1
+                  },
+                  text: label.name,
+                  size: 14
+                }],
+                // Labels need a small vertical offset that will be used by the callout
+                verticalOffset: {
+                  screenLength: 150,
+                  maxWorldLength: 2000,
+                  minWorldLength: 30
+                },
+                // The callout has to have a defined type (currently only line is possible)
+                // The size, the color and the border color can be customized
+                callout: {
+                  type: "line", // autocasts as new LineCallout3D()
+                  size: 0.5,
+                  color: [99, 63, 34],
+                  border: {
+                    color: [255, 255, 255, 0.7]
+                  }
+                }
+              },
+              geometry: new Point({
+                latitude: label.coordinates[0],
+                longitude: label.coordinates[1],
+                spatialReference: {
+                  wkid: 3857
+                }
+              })
+            });
+
+            view.graphics.add(graphic);
+          }
+        }
+      });
+
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

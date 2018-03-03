@@ -1,3 +1,18 @@
+# Malta in contour lines
+
+Displaying Malta's elevation only using contour lines.
+
+![screenshot](./malta-contour-lines/images/screenshot.png)
+
+**View the live app**: [Malta in contour lines](./malta-contour-lines/)
+
+**Technologies used**:
+- ArcGIS Pro for publishing the contour lines
+- ArcGIS API for JavaScript for data visualization
+
+**Data**
+- contour lines from [OpenDEM](http://www.opendem.info/download_contours.html).
+
 # Scene Swiper
 
 This app displays two scenes and allows user to switch between them
