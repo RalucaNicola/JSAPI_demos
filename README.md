@@ -1,8 +1,6 @@
-#Indicity
+# A Holistic Approach to Building 3D Web Apps - session demo
 
 ![screenshot](./indicity/images/screenshot.png)
-
-Demo for **A Holistic Approach to Building 3D Web Apps** session.
 
 **View the live app**: [Indicity](./indicity/)
 
