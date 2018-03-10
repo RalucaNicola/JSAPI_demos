@@ -1,0 +1,20 @@
+{
+  "name": "jsapi-demos",
+  "version": "1.0.0",
+  "description": "Indicator demo",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "jshint": "^2.9.5"
+  },
+  "keywords": [
+    "esrijs",
+    "3D",
+    "demo"
+  ],
+  "author": "Raluca Nicola",
+  "license": "MIT"
+}

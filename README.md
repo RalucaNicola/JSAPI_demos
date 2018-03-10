@@ -1,3 +1,20 @@
+#Indicity
+
+![screenshot](./indicity/images/screenshot.png)
+
+Demo for **A Holistic Approach to Building 3D Web Apps** session.
+
+**View the live app**: [Indicity](./indicity/)
+
+**Technologies used**:
+- ArcGIS Pro for publishing the data
+- SceneViewer for creating the webscene
+- ArcGIS API for JavaScript for creating the app
+
+**Original data**:
+- [NYC Open Data - Art Galleries](https://data.cityofnewyork.us/Recreation/New-York-City-Art-Galleries/tgyc-r5jh/data) provided by [DoITT](http://www1.nyc.gov/site/doitt/index.page)
+- [NYC building data](http://www1.nyc.gov/site/doitt/initiatives/3d-building.page) provided by [DoITT](http://www1.nyc.gov/site/doitt/index.page)
+
 # Malta in contour lines
 
 Displaying Malta's elevation only using contour lines.
