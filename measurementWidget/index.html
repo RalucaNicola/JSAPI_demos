@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+<title>Using widgets with React - 4.6</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    .measurement {
+      float: left;
+      transition: opacity .25s ease-in-out;
+      -moz-transition: opacity .25s ease-in-out;
+      -webkit-transition: opacity .25s ease-in-out;
+    }
+    .button {
+      display: inline-block;
+      position: relative;
+      margin: 5px;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      font-size: 2em;
+      background-color: #fff;
+      color: #646464;
+      cursor: pointer;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .button.circle {
+      border-radius: 50%;
+    }
+    .button:hover {
+      opacity: 0.8;
+      color: rgba(0, 0, 0, 0.25);
+    }
+    .button.raised {
+      transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition-delay: 0.2s;
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
+    }
+    .button.raised:active {
+      box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+      transition-delay: 0s;
+    }
+    .disable {
+      opacity: 0.8;
+      color: rgba(0, 0, 0, 0.25);
+    }
+    .disable:hover {
+      opacity: 0.8;
+      color: rgba(0, 0, 0, 0.25);
+    }
+    .material-icons {
+      font-size: 1.2em;
+      line-height: 50px;
+    }
+</style>
+<link rel="stylesheet" href="https://jsdev.arcgis.com/4.7/esri/css/main.css">
+<script>
+    window.dojoConfig = {
+      async: true,
+      packages: [{
+        name: "react",
+        location: "https://fb.me/",
+        main: "react-0.14.7.min"
+      }, {
+        name: "react-dom",
+        location: "https://fb.me/",
+        main: "react-dom-0.14.7.min"
+      }]
+    };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script src="https://jsdev.arcgis.com/4.7"></script>
+<script type="text/babel">
+    require([
+      "react",
+      "react-dom",
+      "dojo/_base/lang",
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/core/watchUtils",
+      "esri/widgets/AreaMeasurement3D/AreaMeasurement3DViewModel"
+    ], function(
+      React, ReactDOM,
+      lang,
+      WebScene, SceneView, watchUtils, AreaMeasurement3DViewModel
+    ) {
+      var hitch = lang.hitch;
+      var map = new WebScene({
+        portalItem: {
+          id: "804f91d0219c40f3a6049e6f946e9859"
+        }
+      });
+      var view = new SceneView({
+        container: "viewDiv",
+        map: map,
+        ui: {
+          components: ["attribution"] // empty the UI, except for attribution
+        }
+      });
+
+      var Measurement = React.createClass({
+        getInitialState: function() {
+          return {
+            vm: new AreaMeasurement3DViewModel(),
+            currentMeasurement: null
+          };
+        },
+
+        getDefaultProps: function() {
+          return {
+            view: {}
+          }
+        },
+
+        componentDidMount: function() {
+          this.props.view.when(hitch(this, "onViewLoaded"));
+        },
+
+        onViewLoaded: function(view) {
+          this.state.vm.view = view;
+        },
+
+        onMeasurementChange: function(value) {
+          this.setState({
+            maxZoomed: value === view.constraints.maxZoom,
+            minZoomed: value === view.constraints.minZoom
+          });
+        },
+
+        render: function() {
+          return (
+            <div className="measurement">
+              <span>Hello</span>
+              <span>world</span>
+            </div>
+          );
+        }
+
+      });
+      var node = document.createElement("div");
+      view.ui.add(node, "bottom-left");
+      ReactDOM.render(
+        <Measurement view={view}/>,
+        node
+      );
+    });
+</script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
