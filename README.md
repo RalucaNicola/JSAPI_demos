@@ -1,4 +1,18 @@
-# A Holistic Approach to Building 3D Web Apps - session demo
+# Urban development - 3D Visualization session demo (DevSummit 2018)
+
+![screenshot](./urban-development/img/screenshot.png)
+
+**View the live app**: [Urban development](./urban-development/)
+
+**Technologies used**:
+- ArcGIS Pro & CityEngine for publishing the data
+- SceneViewer for creating the webscene
+- ArcGIS API for JavaScript for creating the app
+
+**Original data**:
+- [Zurich building data](http://www.arcgis.com/home/item.html?id=e9502ef203c74d6b98c7fd5cf7a092a1)
+
+# A Holistic Approach to Building 3D Web Apps session demo (DevSummit 2018)
 
 ![screenshot](./indicity/images/screenshot.png)
 
