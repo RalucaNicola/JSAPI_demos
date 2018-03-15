@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-<title>Using widgets with React - 4.6</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+  <title>Using widgets with React - 4.6</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
     html,
     body,
     #viewDiv {
@@ -14,57 +15,28 @@
       height: 100%;
       width: 100%;
     }
-    .measurement {
-      float: left;
-      transition: opacity .25s ease-in-out;
-      -moz-transition: opacity .25s ease-in-out;
-      -webkit-transition: opacity .25s ease-in-out;
+
+    .panel {
+      background-color: white;
+      width: 300px;
+      padding: 20px;
     }
-    .button {
-      display: inline-block;
-      position: relative;
-      margin: 5px;
-      width: 50px;
-      height: 50px;
-      line-height: 50px;
-      font-size: 2em;
-      background-color: #fff;
-      color: #646464;
-      cursor: pointer;
-      text-align: center;
-      vertical-align: middle;
+
+    .current {
+      font-size: 1.3em;
+      font-weight: bold;
+      padding: 10px 0;
     }
-    .button.circle {
-      border-radius: 50%;
+    .last {
+      font-size: 0.9em;
+      color: gray;
+      border-top: 1px solid #aaa;
+      padding: 10px 0;
     }
-    .button:hover {
-      opacity: 0.8;
-      color: rgba(0, 0, 0, 0.25);
-    }
-    .button.raised {
-      transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      transition-delay: 0.2s;
-      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
-    }
-    .button.raised:active {
-      box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
-      transition-delay: 0s;
-    }
-    .disable {
-      opacity: 0.8;
-      color: rgba(0, 0, 0, 0.25);
-    }
-    .disable:hover {
-      opacity: 0.8;
-      color: rgba(0, 0, 0, 0.25);
-    }
-    .material-icons {
-      font-size: 1.2em;
-      line-height: 50px;
-    }
-</style>
-<link rel="stylesheet" href="https://jsdev.arcgis.com/4.7/esri/css/main.css">
-<script>
+
+  </style>
+  <link rel="stylesheet" href="https://jsdev.arcgis.com/4.7/esri/css/main.css">
+  <script>
     window.dojoConfig = {
       async: true,
       packages: [{
@@ -77,10 +49,10 @@
         main: "react-dom-0.14.7.min"
       }]
     };
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
-<script src="https://jsdev.arcgis.com/4.7"></script>
-<script type="text/babel">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  <script src="https://js.arcgis.com/4.7"></script>
+  <script type="text/babel">
     require([
       "react",
       "react-dom",
@@ -111,52 +83,96 @@
       var Measurement = React.createClass({
         getInitialState: function() {
           return {
-            vm: new AreaMeasurement3DViewModel(),
-            currentMeasurement: null
+            currentMeasurement: {
+              area: null,
+              perimeter: null
+            },
+            lastMeasurement: {
+              area: null,
+              perimeter: null
+            },
+            units: "imperial"
           };
         },
 
         getDefaultProps: function() {
           return {
-            view: {}
+            view: view,
+            vm: null
           }
         },
 
-        componentDidMount: function() {
-          this.props.view.when(hitch(this, "onViewLoaded"));
+        componentWillMount: function() {
+          this.props.vm = new AreaMeasurement3DViewModel({
+              view,
+              units: this.state.units
+            });
+
+          watchUtils.watch(this.props.vm, 'measurement.area.text', () => {
+            this.onMeasurementChange();
+          })
         },
 
-        onViewLoaded: function(view) {
-          this.state.vm.view = view;
-        },
-
-        onMeasurementChange: function(value) {
+        onMeasurementChange: function() {
+          const currentMeasurement = this.props.vm.measurement;
+          const lastMeasurement = currentMeasurement.area.text ? this.state.lastMeasurement : this.state.currentMeasurement;
           this.setState({
-            maxZoomed: value === view.constraints.maxZoom,
-            minZoomed: value === view.constraints.minZoom
+            ...this.state,
+            currentMeasurement: {
+              area: currentMeasurement.area.text,
+              perimeter: currentMeasurement.perimeterLength.text
+            },
+            lastMeasurement
           });
         },
 
+        changeMeasurementUnit: function(evt) {
+          this.props.vm.unit = evt.target.value;
+        },
+
         render: function() {
+
+          const currentMeasurement = this.state.currentMeasurement.area ?
+            ( <div className="current measurement">
+                <div>{this.state.currentMeasurement.area}</div>
+                <div>{this.state.currentMeasurement.perimeter}</div>
+              </div>
+            ) :
+            (<p>Click on the map to start measuring</p>);
+
+            const lastMeasurement = this.state.lastMeasurement.area ? (
+              <div className="last measurement">
+                Last measurement:
+                <div>{this.state.lastMeasurement.area}</div>
+                <div>{this.state.lastMeasurement.perimeter}</div>
+              </div>
+            ) : null;
           return (
-            <div className="measurement">
-              <span>Hello</span>
-              <span>world</span>
+            <div className="panel">
+              {currentMeasurement}
+              {lastMeasurement}
+              <select onChange={this.changeMeasurementUnit}>
+                {this.props.vm.selectableUnits.map((item) => {
+                  return (<option value={item} >{item}</option>)
+                })}
+                </select>
             </div>
           );
         }
 
       });
       var node = document.createElement("div");
-      view.ui.add(node, "bottom-left");
+      view.ui.add(node, "top-left");
       ReactDOM.render(
-        <Measurement view={view}/>,
+        <Measurement/>,
         node
       );
     });
 </script>
 </head>
+
 <body>
   <div id="viewDiv"></div>
 </body>
+
 </html>
