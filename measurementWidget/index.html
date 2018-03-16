@@ -6,6 +6,7 @@
   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
   <title>Using widgets with React - 4.6</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-rc.8/css/calcite-web.min.css">
   <style>
     html,
     body,
@@ -24,13 +25,21 @@
     }
 
     .current {
-      padding: 10px 0;
+      padding: 0 0 10px 0;
     }
     .last {
       font-size: 0.8em;
       color: gray;
       border-top: 1px solid #aaa;
       padding: 10px 0;
+    }
+
+    select {
+      display: inline;
+      height: 1.5em;
+    }
+    .btn {
+      margin-top: 20px;
     }
 
   </style>
@@ -131,6 +140,10 @@
           this.props.vm.unit = evt.target.value;
         },
 
+        clearMeasurement: function() {
+          this.props.vm.clearMeasurement();
+        },
+
         render: function() {
 
           const currentMeasurement = this.state.currentMeasurement.area ?
@@ -158,6 +171,8 @@
                   return (<option value={item} selected={this.state.unit === item}>{item}</option>)
                 })}
                 </select>
+
+              <button className="btn btn-fill btn-clear" onClick={this.clearMeasurement}>Clear measurement</button>
             </div>
           );
         }
