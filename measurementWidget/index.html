@@ -20,15 +20,14 @@
       background-color: white;
       width: 300px;
       padding: 20px;
+      font-family: "Avenir Next W01", "Arial", sans-serif;
     }
 
     .current {
-      font-size: 1.3em;
-      font-weight: bold;
       padding: 10px 0;
     }
     .last {
-      font-size: 0.9em;
+      font-size: 0.8em;
       color: gray;
       border-top: 1px solid #aaa;
       padding: 10px 0;
@@ -136,8 +135,8 @@
 
           const currentMeasurement = this.state.currentMeasurement.area ?
             ( <div className="current measurement">
-                <div>{this.state.currentMeasurement.area}</div>
-                <div>{this.state.currentMeasurement.perimeter}</div>
+                <div>Area: {this.state.currentMeasurement.area}</div>
+                <div>Perimeter: {this.state.currentMeasurement.perimeter}</div>
               </div>
             ) :
             (<p>Click on the map to start measuring</p>);
@@ -145,15 +144,16 @@
             const lastMeasurement = this.state.lastMeasurement.area ? (
               <div className="last measurement">
                 Last measurement:
-                <div>{this.state.lastMeasurement.area}</div>
-                <div>{this.state.lastMeasurement.perimeter}</div>
+                <div>Area: {this.state.lastMeasurement.area}</div>
+                <div>Perimeter: {this.state.lastMeasurement.perimeter}</div>
               </div>
             ) : null;
           return (
             <div className="panel">
+              <h3>Measurement tool</h3>
               {currentMeasurement}
               {lastMeasurement}
-              <select onChange={this.changeMeasurementUnit}>
+              Units: <select onChange={this.changeMeasurementUnit}>
                 {this.props.vm.selectableUnits.map((item) => {
                   return (<option value={item} selected={this.state.unit === item}>{item}</option>)
                 })}
