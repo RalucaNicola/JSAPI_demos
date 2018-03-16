@@ -91,7 +91,7 @@
               area: null,
               perimeter: null
             },
-            units: "imperial"
+            unit: "imperial"
           };
         },
 
@@ -105,8 +105,10 @@
         componentWillMount: function() {
           this.props.vm = new AreaMeasurement3DViewModel({
               view,
-              units: this.state.units
+              unit: this.state.unit
             });
+
+            console.log(this.props.vm);
 
           watchUtils.watch(this.props.vm, 'measurement.area.text', () => {
             this.onMeasurementChange();
@@ -117,7 +119,7 @@
           const currentMeasurement = this.props.vm.measurement;
           const lastMeasurement = currentMeasurement.area.text ? this.state.lastMeasurement : this.state.currentMeasurement;
           this.setState({
-            ...this.state,
+            unit: this.props.vm.unit,
             currentMeasurement: {
               area: currentMeasurement.area.text,
               perimeter: currentMeasurement.perimeterLength.text
@@ -153,7 +155,7 @@
               {lastMeasurement}
               <select onChange={this.changeMeasurementUnit}>
                 {this.props.vm.selectableUnits.map((item) => {
-                  return (<option value={item} >{item}</option>)
+                  return (<option value={item} selected={this.state.unit === item}>{item}</option>)
                 })}
                 </select>
             </div>
