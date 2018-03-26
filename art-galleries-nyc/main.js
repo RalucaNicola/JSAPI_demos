@@ -241,7 +241,7 @@ require([
   });
 
   // Once the view is ready go to the extent of the buildings layer
-  view.then(function() {
+  view.when(function() {
     view.goTo({ target: buildingsLayer.fullExtent, tilt: 60, zoom: 15 });
   });
 
