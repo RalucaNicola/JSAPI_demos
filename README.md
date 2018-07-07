@@ -1,3 +1,18 @@
+# Urban sketch
+
+![screenshot](./urban-sketch/img/screenshot.png)
+
+**View the live app**: [Urban development](./urban-sketch/)
+
+**Technologies used**:
+
+- CityEngine for creating and publishing the data
+- SceneViewer for creating the inital webscene
+- ArcGIS API for JavaScript for creating the app
+
+**Data**:
+Original data created and published by Nik Davis and Devin Lavigne. © Houseal Lavigne Associates, LLC.
+
 # Urban development in Boston
 
 ![screenshot](./urban-development/img/screenshot.png)
