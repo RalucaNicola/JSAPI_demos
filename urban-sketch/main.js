@@ -20,7 +20,9 @@ require([
 
   view.when(function() {
 
+    view.ui.empty("top-left");
     view.environment.lighting.directShadowsEnabled = true;
+
     const sitePlanLayer = new SceneLayer({
       // Data copyright: Houseal Lavigne Associates, LLC
       url: "https://tiles.arcgis.com/tiles/74bZbbuf05Ctvbzv/arcgis/rest/services/SitePlan_Clean/SceneServer",
@@ -98,18 +100,8 @@ require([
 
     webscene.addMany([sitePlanLayer, proposedProjectLayer, buildingsLayer]);
 
-    if (isMobile()) {
-      view.ui.empty("top-left");
-    }
   })
   .catch(function() {
     document.getElementById("viewDiv").innerHTML = "<h2>Sorry, it seems your browser doesn't support WebGL :(</h2>";
   });
-
-  function isMobile() {
-    if (has("ui-mode:phone") || has("ui-mode:tablet")) {
-      return true;
-    }
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
-  }
 });

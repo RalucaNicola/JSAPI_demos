@@ -8,8 +8,13 @@ body,
   font-family: 'Cabin Sketch', cursive;
 }
 
-h1, p {
+h1 {
   margin: 5px;
+  padding: 0;
+}
+
+p {
+  margin: 0;
   padding: 0;
 }
 
