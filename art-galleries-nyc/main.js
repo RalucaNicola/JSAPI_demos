@@ -4,8 +4,8 @@ require([
 
   "esri/layers/FeatureLayer",
   "esri/layers/WebTileLayer",
-  "esri/layers/VectorTileLayer",
   "esri/layers/SceneLayer",
+  "esri/layers/ElevationLayer",
 
   "esri/renderers/ClassBreaksRenderer",
   "esri/renderers/SimpleRenderer",
@@ -22,7 +22,7 @@ require([
   "esri/config",
   "dojo/domReady!"
 ], function (WebScene, SceneView,
-  FeatureLayer, WebTileLayer, VectorTileLayer, SceneLayer,
+  FeatureLayer, WebTileLayer, SceneLayer, ElevationLayer,
   ClassBreaksRenderer, SimpleRenderer,
   MeshSymbol3D, FillSymbol3DLayer, PointSymbol3D, IconSymbol3DLayer, LineCallout3D, LabelSymbol3D, TextSymbol3DLayer,
   Search, esriConfig) {
@@ -43,14 +43,6 @@ require([
     opacity: 0.5
   });
 
-  // I don't want to have very strong colors on the watercolor basemap so I set the opacity to 0.5.
-  // This results in seing the grid under the basemap.
-  // As a trick I add a vector tile layer where all the symbols are white.
-  var whiteBackgroundLayer = new VectorTileLayer({
-    url: "https://basemaps.arcgis.com/b2/arcgis/rest/services/World_Basemap/VectorTileServer"
-  });
-  whiteBackgroundLayer.loadStyle("white.json");
-
   /*************************
    * Create view and webscene
    * and add basemap layers
@@ -59,10 +51,17 @@ require([
   var webscene = new WebScene({
     basemap: {
       // Add the white background and the watercolor basemap layers
-      baseLayers: [whiteBackgroundLayer, basemapLayer]
+      baseLayers: [basemapLayer]
     },
     // Set the ground to world elevation, otherwise buildings will float
-    ground: "world-elevation"
+    ground: {
+      layers: [
+        new ElevationLayer({
+          url: "//elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer"
+        })
+      ],
+      surfaceColor: "#ffffff"
+    }
   });
 
   var view = new SceneView({
