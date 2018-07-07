@@ -19,6 +19,7 @@ require([
   view.environment.lighting.directShadowsEnabled = true;
 
   const sitePlanLayer = new SceneLayer({
+    // Data copyright: Houseal Lavigne Associates, LLC
     url: "https://tiles.arcgis.com/tiles/74bZbbuf05Ctvbzv/arcgis/rest/services/SitePlan_Clean/SceneServer",
     renderer: {
       type: "simple",
@@ -42,6 +43,7 @@ require([
   });
 
   const buildingsLayer = new SceneLayer({
+    // Data copyright: Houseal Lavigne Associates, LLC
     url: "https://tiles.arcgis.com/tiles/74bZbbuf05Ctvbzv/arcgis/rest/services/Buildings/SceneServer",
     renderer: {
       type: "simple",
@@ -65,6 +67,7 @@ require([
   });
 
   const proposedProjectLayer = new SceneLayer({
+    // Data copyright: Houseal Lavigne Associates, LLC
     url: "https://tiles.arcgis.com/tiles/74bZbbuf05Ctvbzv/arcgis/rest/services/Option2_r/SceneServer",
     renderer: {
       type: "simple",
