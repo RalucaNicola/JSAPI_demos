@@ -39,7 +39,8 @@ require([
           }
         }]
       }
-    }
+    },
+    popupEnabled: false
   });
 
   const buildingsLayer = new SceneLayer({
@@ -63,7 +64,8 @@ require([
           }
         }]
       }
-    }
+    },
+    popupEnabled: false
   });
 
   const proposedProjectLayer = new SceneLayer({
@@ -87,7 +89,8 @@ require([
           }
         }]
       }
-    }
+    },
+    popupEnabled: false
   });
 
   webscene.addMany([sitePlanLayer, proposedProjectLayer, buildingsLayer]);
