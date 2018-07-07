@@ -2,9 +2,10 @@ require([
   "esri/WebScene",
   "esri/views/SceneView",
   "esri/layers/SceneLayer",
+  "dojo/has",
   "dojo/domReady!"
 ], function (WebScene, SceneView,
-  SceneLayer) {
+  SceneLayer, has) {
 
   var webscene = new WebScene({
     portalItem: {
@@ -35,7 +36,7 @@ require([
             type: "sketch",
             color: [0, 0, 0, 0.65],
             extensionLength: 10,
-            size: 1.5
+            size: 1
           }
         }]
       }
@@ -60,7 +61,7 @@ require([
             type: "sketch",
             color: [0, 0, 0, 0.65],
             extensionLength: 10,
-            size: 1.5
+            size: 1
           }
         }]
       }
@@ -85,7 +86,7 @@ require([
             type: "sketch",
             color: [0, 0, 0, 0.65],
             extensionLength: 10,
-            size: 1.5
+            size: 1
           }
         }]
       }
@@ -94,5 +95,15 @@ require([
   });
 
   webscene.addMany([sitePlanLayer, proposedProjectLayer, buildingsLayer]);
+
+  function isMobile() {
+    if (has("ui-mode:phone") || has("ui-mode:tablet")) {
+      return true;
+    }
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
+  }
+  if (isMobile()) {
+    view.ui.empty("top-left");
+  }
 
 });
