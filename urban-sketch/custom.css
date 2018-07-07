@@ -8,6 +8,11 @@ body,
   font-family: 'Cabin Sketch', cursive;
 }
 
+h1, p {
+  margin: 5px;
+  padding: 0;
+}
+
 footer {
   position: absolute;
   left: 10px;
@@ -38,7 +43,7 @@ footer {
   display: block;
   border: solid rgb(50, 50, 50);
   border-width: 1px;
-  padding: 1em;
+  padding: 10px;
   transform: rotate(-1deg);
 }
 
