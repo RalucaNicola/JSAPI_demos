@@ -34,7 +34,7 @@
 
      var webscene = new WebScene({
           portalItem: {
-            id: "5bc9b920f00243d99593426ece0059c3"
+            id: "e9a4025b24f4461aaf86f6d9b244a6be"
           }
         });
 
@@ -58,40 +58,46 @@
 
         var buildingsLayer = new SceneLayer({
           portalItem: {
-            id: "2f4fdd99e3104157ac98579ad5f26835"
+            id: "2d913b3b8caf4f3d87be84ff19d77ac7"
           },
           renderer: {
-          type: 'simple',
-          symbol: {
-            type: 'mesh-3d',
-            symbolLayers: [{
-              type: 'fill',
-              material: {
-                color: '#ffffff'
-              },
-              edges: {
-                type: 'solid',
-                color: [0, 0, 0, 0.4]
-              }
-            }]
-          }
-        }
+            type: 'simple',
+            symbol: {
+              type: 'mesh-3d',
+              symbolLayers: [{
+                type: 'fill',
+                material: {
+                  color: '#ffffff'
+                },
+                edges: {
+                  type: 'solid',
+                  color: [0, 0, 0, 0.4]
+                }
+              }]
+            }
+          },
+          popupEnabled: false
         });
 
         webscene.add(buildingsLayer);
 
         var projectLayer = new SceneLayer({
-          url: "https://tiles.arcgis.com/tiles/cFEFS0EWrhfDeVw9/arcgis/rest/services/KiteMasterplanSmallerMassWithAnalyticalTreesWith2Streets/SceneServer",
+          portalItem: {
+            id: "c0c27d0907b94fc29fe86b61cd72c62f"
+          },
           renderer: {
               type: 'simple',
               symbol: {
                 type: 'mesh-3d',
                 symbolLayers: [{
                   type: 'fill',
+                  material: {
+                    color: "#ffd375"
+                  },
                   edges: {
                     type: "sketch",
-                    size: 1,
-                    color: [0, 0, 0, 1],
+                    size: 2,
+                    color: [50, 50, 50, 0.9],
                     extensionLength: 10
                   }
                 }]
