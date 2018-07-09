@@ -1,3 +1,17 @@
+# World's biggest cities
+
+![screenshot](./cities-globe/img/screenshot.png)
+
+**View the live app**: [World's biggest cities](./cities-globe/)
+
+**Technologies used**:
+
+- SceneViewer for creating the inital webscene
+- ArcGIS API for JavaScript for creating the app
+
+**Original Data**:
+Cities and countries feature layers from the [Living Atlas](https://livingatlas.arcgis.com/en/).
+
 # Urban sketch
 
 ![screenshot](./urban-sketch/img/screenshot.png)
