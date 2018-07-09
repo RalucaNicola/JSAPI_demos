@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  /* background-image: linear-gradient(45deg, #f4f9ff 25%, transparent 25%, transparent 75%, #f4f9ff 75%),
+  linear-gradient(45deg, #f4f9ff 25%, transparent 25%, transparent 75%, #f4f9ff 75%);
+  background-size:100px 100px;
+  background-position: 0 0, 50px 50px; */
+  background: #a2c9e5;
+  background: -webkit-linear-gradient(150deg, #beb5ce, #a2c9e5);
+  background: linear-gradient(150deg, #beb5ce, #a2c9e5) no-repeat;
+}
+
+html {
+  background: #a2c9e5;
+}
+
+#circle {
+  height: 100%;
+  width: 100%;
+  shape-outside: circle(45%);
+  float: right;
+}
+
+#view {
+  height: 100%;
+  width: 100%;
+  filter: drop-shadow(16px 16px 10px rgba(0,0,0, 0.5));
+}
+
+#floating-text {
+  font-size: 1.1em;
+  text-align: left;
+  padding: 20px;
+  font-family: 'Open Sans', sans-serif;
+  color: #ffffff;
+}
+
+.esri-component.esri-attribution.esri-widget {
+  opacity: 0.6;
+  background-color: transparent;
+}
+
+header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+}
+
+span {
+  font-weight: bold;
+}
