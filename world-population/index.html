@@ -219,19 +219,20 @@
           view.whenLayerView(currentLayer)
             .then(function(lyrView) {
               watchUtils.whenFalseOnce(lyrView, "updating", function (value) {
-                view.environment.lighting.directShadowsEnabled = false;
                 fadeIn(currentLayer)
-                .then(function() {
-                  if (oldLayer) {
-                    fadeOut(oldLayer);
-                  }
-                });
+                  .then(function() {
+                    if (oldLayer) {
+                      oldLayer.opacity = 0;
+                      map.layers.remove(oldLayer);
+                    }
+                  });
               });
             })
         }
 
         function increaseOpacity(layer, deferred) {
-          layer.opacity += 0.1;
+          const opacity = parseFloat((layer.opacity + 0.05).toFixed(2));
+          layer.opacity = opacity;
           if (layer.opacity < 1) {
             window.requestAnimationFrame(function() {
               increaseOpacity(layer, deferred);
@@ -246,19 +247,6 @@
           const deferred = new Deferred();
           increaseOpacity(layer, deferred);
           return deferred.promise;
-        }
-
-        function fadeOut(layer) {
-          layer.opacity -= 0.1;
-          if (layer.opacity > 0) {
-            window.requestAnimationFrame(function() {
-              fadeOut(layer);
-            });
-          }
-          else {
-            map.layers.remove(layer);
-            view.environment.lighting.directShadowsEnabled = true;
-          }
         }
         displayCurrentLayer();
         document.getElementById("populationYear").addEventListener("click", function (evt) {
