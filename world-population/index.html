@@ -66,6 +66,7 @@
       "esri/symbols/ObjectSymbol3DLayer",
       "esri/widgets/Legend",
       "esri/core/watchUtils",
+      "dojo/Deferred",
       "dojo/domReady!"
     ], function (
       FeatureLayer,
@@ -75,7 +76,8 @@
       PointSymbol3D,
       ObjectSymbol3DLayer,
       Legend,
-      watchUtils
+      watchUtils,
+      Deferred
     ) {
 
 
@@ -141,14 +143,13 @@
             useSymbolValue: true // uses the width value defined in the symbol layer (50,000)
           }]
         });
-        let popLayers = {};
 
-
+        let popLayers = [];
         for (let i = 2010; i <= 2020; i += 5) {
-          const id = i.toString();
-          popLayers[id] = new FeatureLayer({
-            url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/World_population_count_" + id + "/FeatureServer",
-            renderer: renderer
+          popLayers[i] = new FeatureLayer({
+            url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/World_population_count_" + i.toString() + "/FeatureServer",
+            renderer: renderer,
+            opacity: 0
           })
         }
 
@@ -156,14 +157,16 @@
           url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/World_graticule_15deg/FeatureServer",
           opacity: 0.6
         });
-        let currentLayer = popLayers["2010"];
+        let currentLayer = popLayers[2010];
+        let oldLayer = null;
         // add the layers to a new map
         var map = new Map({
-          layers: [graticule, currentLayer],
+          layers: [graticule],
           ground: {
             surfaceColor: "#eaf2ff"
           }
         });
+
 
         // set the environment
         var view = new SceneView({
@@ -207,22 +210,67 @@
         });
         let currentLayerView;
         let currentHighlight = null;
+        window.view = view;
 
         view.ui.empty("top-left");
-        document.getElementById("populationYear").addEventListener("click", function (evt) {
-          this.getElementsByClassName("selected")[0].classList.remove("selected");
-          evt.target.className = "selected";
-          window.view = view;
-          const oldLayer = currentLayer;
-          currentLayer = popLayers[evt.target.innerHTML];
-          view.map.layers.add(currentLayer);
+
+        function displayCurrentLayer() {
+          map.add(currentLayer);
           view.whenLayerView(currentLayer)
-            .then(function (lyrView) {
-              currentLayerView = lyrView;
+            .then(function(lyrView) {
               watchUtils.whenFalseOnce(lyrView, "updating", function (value) {
-                map.layers.remove(oldLayer);
+                view.environment.lighting.directShadowsEnabled = false;
+                fadeIn(currentLayer)
+                .then(function() {
+                  if (oldLayer) {
+                    fadeOut(oldLayer);
+                  }
+                });
               });
             })
+        }
+
+        function increaseOpacity(layer, deferred) {
+          layer.opacity += 0.1;
+          if (layer.opacity < 1) {
+            window.requestAnimationFrame(function() {
+              increaseOpacity(layer, deferred);
+            });
+          }
+          else {
+            deferred.resolve(1);
+          }
+        }
+
+        function fadeIn(layer) {
+          const deferred = new Deferred();
+          increaseOpacity(layer, deferred);
+          return deferred.promise;
+        }
+
+        function fadeOut(layer) {
+          layer.opacity -= 0.1;
+          if (layer.opacity > 0) {
+            window.requestAnimationFrame(function() {
+              fadeOut(layer);
+            });
+          }
+          else {
+            map.layers.remove(layer);
+            view.environment.lighting.directShadowsEnabled = true;
+          }
+        }
+        displayCurrentLayer();
+        document.getElementById("populationYear").addEventListener("click", function (evt) {
+
+          // set selection in the menu
+          this.getElementsByClassName("selected")[0].classList.remove("selected");
+          evt.target.className = "selected";
+
+          // display selected layer and remove the old one
+          oldLayer = currentLayer;
+          currentLayer = popLayers[parseInt(evt.target.innerHTML)];
+          displayCurrentLayer();
 
         });
 
