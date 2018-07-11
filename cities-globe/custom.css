@@ -6,10 +6,6 @@ body {
   margin: 0;
   height: 100%;
   width: 100%;
-  /* background-image: linear-gradient(45deg, #f4f9ff 25%, transparent 25%, transparent 75%, #f4f9ff 75%),
-  linear-gradient(45deg, #f4f9ff 25%, transparent 25%, transparent 75%, #f4f9ff 75%);
-  background-size:100px 100px;
-  background-position: 0 0, 50px 50px; */
   background: #a2c9e5;
   background: -webkit-linear-gradient(150deg, #beb5ce, #a2c9e5);
   background: linear-gradient(150deg, #beb5ce, #a2c9e5) no-repeat;
@@ -22,8 +18,7 @@ html {
 #circle {
   height: 100%;
   width: 100%;
-  shape-outside: circle(45%);
-  float: right;
+  display: none;
 }
 
 #view {

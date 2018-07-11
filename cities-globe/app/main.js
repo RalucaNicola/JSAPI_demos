@@ -131,8 +131,10 @@ require([
   })
   webscene.addMany([graticule, countryBoundaries, population]);
 
-  view.watch('zoom', function(value) {
-    radius = (45 - 37) / (2.4 - 1.3) * (value - 1.3) + 37;
-    document.getElementById("circle").setAttribute("style", "shape-outside: circle(" + radius + "%)");
+  view.watch('zoom', function(newValue, oldValue) {
+    if (parseInt(newValue) !== parseInt(oldValue)) {
+      radius = (45 - 37) / (2.4 - 1.3) * (newValue - 1.3) + 37;
+      document.getElementById("circle").setAttribute("style", "shape-outside: circle(" + radius.toFixed(2) + "%); float: right; display: inherit;");
+    }
   })
 });
