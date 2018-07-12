@@ -16,14 +16,14 @@
       margin: 0;
       padding: 0;
     }
-
   </style>
 
   <script>
     require([
       "esri/WebScene",
       "esri/layers/SceneLayer",
-      "esri/views/SceneView",
+      "esri/views/SceneView", 
+      "esri/widgets/Legend",
       "dojo/domReady!"
     ], function (
       WebScene,
@@ -32,13 +32,13 @@
       Legend
     ) {
 
-     var webscene = new WebScene({
+        const webscene = new WebScene({
           portalItem: {
-            id: "e9a4025b24f4461aaf86f6d9b244a6be"
+            id: "03054c6a97f2423f93ff3679008658bb"
           }
         });
 
-      var view = new SceneView({
+        const view = new SceneView({
           map: webscene,
           container: "viewDiv",
           qualityProfile: "high",
@@ -56,59 +56,72 @@
 
         window.view = view;
 
-        var buildingsLayer = new SceneLayer({
+        const buildingsLayer = new SceneLayer({
           portalItem: {
-            id: "2d913b3b8caf4f3d87be84ff19d77ac7"
+            id: "f5c497819a374941b0ce8d9b0e979819"
           },
+          title: "San Francisco buildings",
           renderer: {
-            type: 'simple',
+            type: "simple",
             symbol: {
-              type: 'mesh-3d',
+              type: "mesh-3d",
               symbolLayers: [{
-                type: 'fill',
+                type: "fill",
                 material: {
-                  color: '#ffffff'
+                  color: "#ffffff",
+                  colorMixMode: "replace"
                 },
                 edges: {
-                  type: 'solid',
-                  color: [0, 0, 0, 0.65],
-                  size: 0.3
+                  type: "solid",
+                  color: [255, 255, 255, 1],
+                  size: 0.4
                 }
               }]
-            }
-          },
-          popupEnabled: false
+            },
+            visualVariables: [{
+              type: "color",
+              field: "walkTimeToStopsInService",
+              legendOptions: {
+                title: "Walking time to public transport"
+              },
+              stops: [
+                {
+                  value: 1,
+                  label: "less than 1 minute",
+                  color: [96, 109, 148, 1]
+                },
+                {
+                  value: 5,
+                  label: "5 minutes",
+                  color: [164, 141, 158, 1]
+                },
+                {
+                  value: 10,
+                  label: "10 minutes",
+                  color: [197, 156, 164, 1]
+                },
+                {
+                  value: 14,
+                  label: "14 minutes",
+                  color: [232, 201, 179, 1]
+                },
+                {
+                  value: 19,
+                  label: "more than 19 minutes",
+                  color: [233, 215, 184, 1]
+                }
+              ]
+            }]
+          }
         });
 
         webscene.add(buildingsLayer);
 
-        var projectLayer = new SceneLayer({
-          portalItem: {
-            id: "c0c27d0907b94fc29fe86b61cd72c62f"
-          },
-          renderer: {
-              type: 'simple',
-              symbol: {
-                type: 'mesh-3d',
-                symbolLayers: [{
-                  type: 'fill',
-                  material: {
-                    color: "#ffd375"
-                  },
-                  edges: {
-                    type: "sketch",
-                    size: 2,
-                    color: [50, 50, 50, 0.9],
-                    extensionLength: 10
-                  }
-                }]
-              }
-            }
+        const legend = new Legend({
+          view: view
         });
-
-        webscene.add(projectLayer);
-    });
-
+        view.ui.add(legend, "bottom-right");
+      });
   </script>
 </head>
 
