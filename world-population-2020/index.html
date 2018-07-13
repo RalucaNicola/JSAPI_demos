@@ -24,17 +24,6 @@
   </script>
   <script src="https://js.arcgis.com/4.8/"></script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      font-family: 'Open Sans Condensed', sans-serif;
-    }
-  </style>
 
   <script>
     require([
@@ -177,6 +166,9 @@
             heading: 0,
             tilt: 0
           },
+          padding: {
+            bottom: 200
+          },
           ui: {
             components: []
           },
@@ -203,15 +195,15 @@
           })
           .then((result) => {
             console.log(result);
-            const slider = utils.createSlider(result.min, 1000000);
+            const slider = utils.createSlider(10, 1000000);
 
             slider.on('end', function (values) {
-              const min = values[0];
-              const max = (values[1] >= 1000000) ? result.max : values[1];
+              const min = parseInt(values[0].replace(" persons/unit", ""));
+              const value1 = parseInt(values[1].replace(" persons/unit", ""));
+              console.log(min);
+              const max = (value1 >= 1000000) ? result.max : value1;
               populationLayer.definitionExpression =
                 `population_count >= ${min} AND population_count <= ${max}`;
-
-                console.log(max);
             });
           })
           .otherwise((err) => {
@@ -228,10 +220,15 @@
   <div id="viewDiv"></div>
   <footer>
     <h1>World population in 2020</h1>
-    <div id="populationSlider"></div>
-    <p>World population estimate for 2020 as a grid with a resolution of 110km. Each grid cell has an estimative number of persons.
-      Use the slider to filter cells based on the number of persons per grid cell.
+    <p>World population count estimate for 2020 as a grid. Each grid unit is equivalent to aproximatively 110km.
+      Use the slider to filter cells based on the number of persons per grid unit.
     </p>
+    <div id="populationSlider"></div>
+    <span class="credits">Original population raster data from 
+      <a href="http://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev10/data-download" target="_blank">SEDAC</a>.
+      This prototype was built with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JavaScript</a>.
+      The full code and a tutorial on how to build this app live on <a href="https://github.com/RalucaNicola/JSAPI_demos/tree/master/world-population-2020" target="_blank">Github</a>.
+    </span>
   </footer>
 </body>
 

@@ -13,7 +13,15 @@ define(["nouislider"], function(nouislider) {
         step: 10,
         connect: true,
         orientation: 'horizontal',
-        tooltips: true
+        tooltips: true,
+        format: {
+          to: function(value) {
+            return parseInt(value).toString() + " persons/unit";
+          },
+          from: function (value) {
+            return parseInt(value);
+          }
+        }
       });
 
       return populationSlider.noUiSlider;
