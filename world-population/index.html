@@ -232,7 +232,7 @@
         }
 
         function increaseOpacity(layer, deferred) {
-          const opacity = parseFloat((layer.opacity + 0.05).toFixed(2));
+          const opacity = parseFloat((layer.opacity + 0.2).toFixed(2));
           layer.opacity = opacity;
           if (layer.opacity < 1) {
             window.requestAnimationFrame(function() {
