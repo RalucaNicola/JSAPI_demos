@@ -18,7 +18,8 @@ html {
 #circle {
   height: 100%;
   width: 100%;
-  display: none;
+  shape-outside: circle(30%);
+  float: right;
 }
 
 #view {
