@@ -1,13 +1,19 @@
-# San Francisco public transport transit time
+# World population in 2020
 
-![screenshot](./public-transport-transit/img/screenshot.png)
+![screenshot](./world-population-2020/img/screenshot.png)
 
-**View the live app**: [San Francisco public transport transit time](./public-transport-transit/)
+**View the live app**: [World population](./world-population-2020/)
 
 **Technologies used**:
 
 - ArcGIS Pro for processing and publishing the data
 - ArcGIS API for JavaScript for creating the app
+
+**Original Data**:
+
+Gridded Population of the World, Version 4 (GPWv4) Population Count, Revision 10 consists of estimates of human population (number of persons per pixel), consistent with national censuses and population registers. The data files were produced as global rasters at 30 arc-second (~1 km at the equator) resolution. This dataset was aggregated to a resolution of ~110km at the equator. The resulting raster was converted to a point dataset. Read more about the data on [SEDAC website](http://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev10).
+
+[Raw data](http://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev10/data-download)
 
 # World population
 
@@ -73,22 +79,16 @@ Orange buildings represent urban projects in development
 
 - [Boston Planning and Development Agency (BPDA) 3D building models](http://www.bostonplans.org/3d-data-maps/3d-smart-model/3d-data-download)
 
-# A Holistic Approach to Building 3D Web Apps session demo (DevSummit 2018)
+# San Francisco public transport transit time
 
-![screenshot](./indicity/images/screenshot.png)
+![screenshot](./public-transport-transit/img/screenshot.png)
 
-**View the live app**: [Indicity](./indicity/)
+**View the live app**: [San Francisco public transport transit time](./public-transport-transit/)
 
 **Technologies used**:
 
-- ArcGIS Pro for publishing the data
-- SceneViewer for creating the webscene
+- ArcGIS Pro for processing and publishing the data
 - ArcGIS API for JavaScript for creating the app
-
-**Original data**:
-
-- [NYC Open Data - Art Galleries](https://data.cityofnewyork.us/Recreation/New-York-City-Art-Galleries/tgyc-r5jh/data) provided by [DoITT](http://www1.nyc.gov/site/doitt/index.page)
-- [NYC building data](http://www1.nyc.gov/site/doitt/initiatives/3d-building.page) provided by [DoITT](http://www1.nyc.gov/site/doitt/index.page)
 
 # Malta in contour lines
 
@@ -106,6 +106,23 @@ Displaying Malta's elevation only using contour lines.
 **Data**:
 
 - contour lines from [OpenDEM](http://www.opendem.info/download_contours.html).
+
+# A Holistic Approach to Building 3D Web Apps session demo (DevSummit 2018)
+
+![screenshot](./indicity/images/screenshot.png)
+
+**View the live app**: [Indicity](./indicity/)
+
+**Technologies used**:
+
+- ArcGIS Pro for publishing the data
+- SceneViewer for creating the webscene
+- ArcGIS API for JavaScript for creating the app
+
+**Original data**:
+
+- [NYC Open Data - Art Galleries](https://data.cityofnewyork.us/Recreation/New-York-City-Art-Galleries/tgyc-r5jh/data) provided by [DoITT](http://www1.nyc.gov/site/doitt/index.page)
+- [NYC building data](http://www1.nyc.gov/site/doitt/initiatives/3d-building.page) provided by [DoITT](http://www1.nyc.gov/site/doitt/index.page)
 
 # Scene Swiper
 
