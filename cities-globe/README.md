@@ -38,7 +38,7 @@ As usual with web things, it all starts with an `index.html` file where I import
 ```
 
 I also load a custom css file with my own styles.
-My styles format the header, the webscene view and add a nice gradient to the background of the html. I import a font from Google Fonts that I want to use it throughout the app.
+My styles format the header, the webscene view and add a nice gradient to the background of the html. I import a font from Google Fonts that I want to use for the html text and later on also for the city labels in the globe.
 
 ```css
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
@@ -85,9 +85,9 @@ At the end of this step we have the background set up like this:
 
 ## Step 2
 
-### - the one where we add the globe (with a module :sunglasses:) -
+### - the one where we create the globe :globe_with_meridians: (as a JS module :sunglasses:) -
 
-In this step we'll add the webscene with the globe visualization. We could create a new js file and load it in a script tag, but let's add it as a module instead. Dojo uses the AMD module system and it needs to know where to load the modules from, so we need to specify that in `dojoConfig`:
+In this step we'll add the webscene with the globe visualization. We could create a new `js` file and load it in a `script` tag, but let's add it as a module instead. Dojo uses the AMD module system and it needs to know where to load the modules from, so we need to specify that in `dojoConfig`:
 
 ```html
 <script>
@@ -109,11 +109,11 @@ In this step we'll add the webscene with the globe visualization. We could creat
 ----
 Sidenote:
 
-This is all you need to know about the dojo module loader configuration, but in case you're interested you can read more about it [here](https://dojotoolkit.org/documentation/tutorials/1.10/dojo_config/index.html). I would rather encourage you to read more about JavaScript modules and their evolution. [This article](https://medium.freecodecamp.org/javascript-modules-a-beginner-s-guide-783f7d7a5fcc) is great in explaining the different ways of loading modules and how it came about to have so many different ways of importing modules in JavaScript.
+This is all you need to know about the dojo module loader configuration, but in case you're interested you can read more about it [here](https://dojotoolkit.org/documentation/tutorials/1.10/dojo_config/index.html). I think it's more useful to read more about JavaScript modules and their evolution. [This article](https://medium.freecodecamp.org/javascript-modules-a-beginner-s-guide-783f7d7a5fcc) is great in explaining the different ways of loading modules and why we have so many different ways of importing modules in JavaScript.
 
 ----
 
-Back on track: now we can create an `app` folder and add a `main.js` file where we'll write the code to add the globe. For this small app, a separate folder with a js file in it is a bit of an overkill, but as soon as your app will grow you can add more modules in the `app` folder.
+Back on track: now we can create an `app` folder and add a `main.js` file where we'll write the code to add the globe. For this small app, a separate folder is a bit of an overkill, but as soon as your app will grow you can add more modules (aka JavaScript files) in the `app` folder.
 
 Now in main.js we'll create a webscene and a view:
 
@@ -127,8 +127,8 @@ define([
   "esri/layers/support/LabelClass"
 ], function (WebScene, SceneView, FeatureLayer, LabelClass) {
 
-  // the module exports an object with an init function
-  // that creates the webscene and the view
+  // the module exports an object with an init method
+  // init creates the webscene and the view
   return {
 
     init() {
@@ -152,11 +152,11 @@ define([
 });
 ```
 
-One more thing before we start creating the webscene: we also need to import the module in our app, so in the html file add one more script before the closing body tag:
+One more thing: our modules won't be loaded yet. We also need to import the module in our app, so in the html file add one more script before the closing body tag:
 
 ```html
 <script>
-  // this loads the module we are going to write
+  // this loads the main module and runs the init method
   require([
     "app/main",
     "dojo/domReady!"
@@ -172,13 +172,13 @@ And this is what our webscene currently looks like. I know what you're thinking:
 
 ## Step 3
 
-### - the one where the globe gets stylish :nail_care: -
+### - the one where we make the space disappear :sparkles: -
 
 Ok, let's get rid of the realistic dark space behind our globe so that we can see the background. This all happens in the [environment](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html#environment) of the view.
 
 First we need to enable transparency on the view by setting [alphaCompositingEnabled](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html#alphaCompositingEnabled) to `true`.
 
-Next we want to set the background to be transparent. We also need to remove the stars (doesn't that sound cool? I can remove the stars :grin:) and the atmosphere:
+Next we want to set the background to be transparent. As the background is behind the stars and the atmosphere we also need to remove them:
 
 ```js
 environment: {
@@ -228,11 +228,11 @@ So now if you check your app you should get something like this:
 
 ## Step 4
 
-### - the one where we add data -
+### - the one where we populate the :earth_americas: with countries and cities -
 
-We want to display cities with the biggest population as points. We don't need a detailed basemap, we only need the borders of the countries.
+We want to display the biggest cities as points. There's no need for a detailed basemap, we only need the borders of the countries.
 
-So we'll remove the basemap and give the ground a blue color, like this:
+So we'll remove the basemap and give the ground a blue [surfaceColor](https://developers.arcgis.com/javascript/latest/api-reference/esri-Ground.html#surfaceColor), like this:
 
 ```js
 const webscene = new WebScene({
@@ -245,7 +245,7 @@ const webscene = new WebScene({
 
 Next, we need to add data. In the Living Atlas there's a dataset with generalized borders of the countries: https://www.arcgis.com/home/item.html?id=2b93b06dc0dc4e809d3c8db5cb96ba69
 
-We'll load it as a FeatureLayer in our app and apply a different renderer to it:
+We'll load it as a FeatureLayer in our app and apply a simple renderer to it:
 
 ```js
 const countryBoundaries = new FeatureLayer({
@@ -285,7 +285,7 @@ const populationLayer = new FeatureLayer({
 // don't forget to add it to the webscene
 webscene.addMany([countryBoundaries, populationLayer]);
 ```
-To style the layer I still use a SimpleRenderer (all my points will look the same), but I'm going to spice up the 3D effect by lifting the points up vertically and connecting them to the original location using callouts.
+To style the layer I still use a SimpleRenderer (all my points will look the same), but I'm going to 3D-ify it a little by [lifting the points up vertically](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-PointSymbol3D.html#verticalOffset) and connecting them to the original location using [callouts](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-callouts-LineCallout3D.html).
 
 The code looks like this:
 ```js
@@ -304,8 +304,7 @@ populationLayer.renderer: {
       }
     }],
     verticalOffset: {
-      screenLength: 20,
-      minWorldLength: 20
+      screenLength: 20
     },
     callout: {
       type: "line", // autocasts as new LineCallout3D()
@@ -374,14 +373,14 @@ camera: {
 }
 ```
 
-Most of the times the day time also needs some adjustment, so we'll specify the date in the `environment.lighting`:
+The day time also needs some adjustment, so we'll specify the date in the `environment.lighting`:
 ```js
 lighting: {
   date: "Sun Jul 15 2018 15:30:00 GMT+0900 (W. Europe Daylight Time)"
 },
 ```
 
-It doesn't make too much sense that the user zooms in too much, so we'll set an altitude constraint on the view:
+It's not very useful to let the user zoom in too much, so we'll set an altitude constraint on the view:
 
 ```js
 constraints: {
@@ -392,7 +391,7 @@ constraints: {
 }
 ```
 
-Let's spice up that 3D effect with some shadows. Last week I discovered that [drop-shadow()](https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/drop-shadow) CSS filter works really nice with the transparency on the view. Such that my globe and all points/labels can nicely cast shadows. For this, add the filter on the view:
+Let's spice up that 3D effect with some shadows. I recently discovered that [drop-shadow()](https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/drop-shadow) CSS filter works really nice with the transparency on the view. Such that my globe and all points/labels can cast shadows on the background. For this, add the filter on the view:
 
 ```css
 #view {
@@ -402,7 +401,7 @@ Let's spice up that 3D effect with some shadows. Last week I discovered that [dr
 
 One more thing that you probably noticed in the beginning: we can't read the text. Let's make a trick to make it nicely wrap around the globe.
 
-The trick goes like this: we add a `div` with a circle shape right about where the globe is located. Then we make the text float around it.
+The trick goes like this: we add a `div` with a circle shape inside the header. Then we make the text float around it.
 
 ```css
 #circle {
@@ -415,6 +414,6 @@ The trick goes like this: we add a `div` with a circle shape right about where t
 
 Unfortunately creating a circle div is only easy in Chrome, where `shape-outside` property is already implemented. For the rest of the browsers I added [this polyfill from Adobe](https://github.com/adobe-webplatform/css-shapes-polyfill).
 
-And there we go, this is the final globe:
+And there we go, this is the final globe :tada:
 
 ![img/screenshot.png](img/screenshot.png)
