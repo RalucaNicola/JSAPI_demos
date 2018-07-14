@@ -1,6 +1,6 @@
 # World's biggest cities - how to build this app in 5 steps
 
-The app in this folder shows the most populated cities in the world. This is a step by step tutorial on how to build this app.
+The app in this folder shows the most populated cities in the world. This is a step by step tutorial on how to build this app (mostly made for cartographers eager to get started with the web).
 
 ![img/screenshot.png](img/screenshot.png)
 
@@ -8,7 +8,7 @@ The app in this folder shows the most populated cities in the world. This is a s
 
 ### - the one with the initial setup -
 
-As usual with web things, it all starts with an `index.html` file where I import the API and I create the html for the app:
+As usual with all things web, it all starts with an `index.html` file where we import the API and we create the structure of the app:
 
 ```html
 <!DOCTYPE html>
@@ -37,8 +37,8 @@ As usual with web things, it all starts with an `index.html` file where I import
 </html>
 ```
 
-I also load a custom css file with my own styles.
-My styles format the header, the webscene view and add a nice gradient to the background of the html. I import a font from Google Fonts that I want to use for the html text and later on also for the city labels in the globe.
+We also load a custom css file where we format the header, the webscene view and add a nice gradient to the background of the html.
+We import a font from Google Fonts that we use for the html text and later on we'll also use it for the city labels in the globe.
 
 ```css
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
@@ -274,7 +274,7 @@ webscene.addMany([countryBoundaries]);
 
 Let's add the points for the cities as well. Again, there's an item in the Living Atlas with world cities as points: https://www.arcgis.com/home/item.html?id=6996f03a1b364dbab4008d99380370ed
 
-I create another FeatureLayer and I only want to see the biggest cities, so I'm going to set a [definitionExpression](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html#definitionExpression) to filter out cities that have a population under 6 million.
+We create another FeatureLayer and we only want to see the biggest cities, so we're going to set a [definitionExpression](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html#definitionExpression) to filter out cities that have a population under 6 million.
 
 ```js
 const populationLayer = new FeatureLayer({
@@ -285,7 +285,7 @@ const populationLayer = new FeatureLayer({
 // don't forget to add it to the webscene
 webscene.addMany([countryBoundaries, populationLayer]);
 ```
-To style the layer I still use a SimpleRenderer (all my points will look the same), but I'm going to 3D-ify it a little by [lifting the points up vertically](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-PointSymbol3D.html#verticalOffset) and connecting them to the original location using [callouts](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-callouts-LineCallout3D.html).
+To style the layer we still use a SimpleRenderer (all my points will look the same), but we're going to 3D-ify it a little by [lifting the points up vertically](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-PointSymbol3D.html#verticalOffset) and connecting them to the original location using [callouts](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-callouts-LineCallout3D.html).
 
 The code looks like this:
 ```js
@@ -356,7 +356,7 @@ By now our map should look like this:
 
 ### - the one with the final touches -
 
-Let's focus the camera on the cities that are most populated: Shanghai, Beijing and Delhi. What I usually do is to navigate to the position I find good as initial viewpoint and then print the camera to the console.
+Let's focus the camera on the cities that are most populated: Shanghai, Beijing and Delhi. What I usually do is to navigate to the position I find good as initial viewpoint and then print the camera to the console. Then I add it to the view.
 
 ```js
 camera: {
