@@ -2,19 +2,17 @@ require([
   "esri/WebScene",
   "esri/views/SceneView",
   "esri/layers/FeatureLayer",
-  "esri/layers/MapImageLayer",
-  "esri/layers/support/LabelClass",
-  "esri/config"
-], function (WebScene, SceneView, FeatureLayer, MapImageLayer, LabelClass, esriConfig) {
+  "esri/layers/support/LabelClass"
+], function (WebScene, SceneView, FeatureLayer, LabelClass) {
 
-  var webscene = new WebScene({
+  const webscene = new WebScene({
     basemap: null,
     ground: {
       surfaceColor: [226, 240, 255]
     }
   });
 
-  var view = new SceneView({
+  const view = new SceneView({
     container: "view",
     map: webscene,
     alphaCompositingEnabled: true,
@@ -54,7 +52,7 @@ require([
   view.ui.empty("top-left");
   window.view = view;
 
-  var countryBoundaries = new FeatureLayer({
+  const countryBoundaries = new FeatureLayer({
     url: "http://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries_(Generalized)/FeatureServer",
     title: "World Countries",
     renderer: {
@@ -72,7 +70,7 @@ require([
     }
   });
 
-  var population = new FeatureLayer({
+  const population = new FeatureLayer({
     url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Cities_analysis/FeatureServer",
     definitionExpression: "POP > 6000000",
     renderer: {
@@ -125,10 +123,11 @@ require([
     ]
   });
 
-  var graticule = new FeatureLayer({
+  const graticule = new FeatureLayer({
     url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/World_graticule_15deg/FeatureServer",
     opacity: 0.8
-  })
+  });
+
   webscene.addMany([graticule, countryBoundaries, population]);
 
   view.watch('zoom', function(newValue, oldValue) {
@@ -136,5 +135,5 @@ require([
       radius = (45 - 37) / (2.4 - 1.3) * (newValue - 1.3) + 37;
       document.getElementById("circle").setAttribute("style", "shape-outside: circle(" + radius.toFixed(2) + "%); float: right; display: inherit;");
     }
-  })
+  });
 });

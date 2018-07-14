@@ -112,7 +112,7 @@ require([
             color: [255, 235, 190, 0.9]
           },
           edges: {
-            type: 'solid',
+            type: "solid",
             color: [122, 107, 78, 0.6]
           }
         })]
@@ -125,7 +125,7 @@ require([
           symbolLayers: [new FillSymbol3DLayer({
             material: { color: [187, 165, 181] },
             edges: {
-              type: 'solid',
+              type: "solid",
               color: [122, 107, 78, 0.6]
             }
           })]

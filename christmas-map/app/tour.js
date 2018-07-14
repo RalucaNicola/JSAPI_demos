@@ -19,7 +19,6 @@ define(['app/handleChange'], function (handleChange) {
       var handleTour = handleChange(store.getState, 'onTour');
 
       store.subscribe(handleTour(function (newVal, oldVal, property) {
-        console.log(newVal, oldVal);
         if (newVal) {
           container.innerHTML = 'Pause tour';
           startTour();

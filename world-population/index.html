@@ -268,7 +268,6 @@
           view.hitTest(event).then(function (response) {
             var result = response.results[0];
             if (result && result.graphic) {
-              console.log(result.graphic.attributes);
               view.whenLayerView(currentLayer)
                 .then(function (lyrView) {
                   if (currentHighlight) {

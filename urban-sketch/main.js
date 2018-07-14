@@ -2,18 +2,17 @@ require([
   "esri/WebScene",
   "esri/views/SceneView",
   "esri/layers/SceneLayer",
-  "dojo/has",
   "dojo/domReady!"
 ], function (WebScene, SceneView,
-  SceneLayer, has) {
+  SceneLayer) {
 
-  var webscene = new WebScene({
+  const webscene = new WebScene({
     portalItem: {
       id: "74904be5976b418f9a4647db3dd3e989"
     }
   });
 
-  var view = new SceneView({
+  const view = new SceneView({
     container: "viewDiv",
     map: webscene
   });
