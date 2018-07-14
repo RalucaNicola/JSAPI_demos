@@ -1,6 +1,6 @@
 # World's biggest cities - how to build this app in 5 steps
 
-The app in this folder shows the most populated cities in the world. This is a step by step tutorial on how to build this app and it's mostly destined at cartographers getting started with the web cartography :)
+The app in this folder shows the most populated cities in the world. This is a step by step tutorial on how to build this app.
 
 ![img/screenshot.png](img/screenshot.png)
 
