@@ -1,27 +1,19 @@
 require([
   "esri/layers/FeatureLayer",
-  "esri/layers/TileLayer",
   "esri/Map",
   "esri/views/SceneView",
   "esri/renderers/SimpleRenderer",
   "esri/symbols/PointSymbol3D",
   "esri/symbols/ObjectSymbol3DLayer",
-  "esri/widgets/Legend",
-  "esri/core/watchUtils",
-  "dojo/Deferred",
   "utils",
   "esri/renderers/smartMapping/statistics/summaryStatistics",
   "dojo/domReady!"
 ], function (
   FeatureLayer,
-  MapImageLayer,
   Map, SceneView,
   SimpleRenderer,
   PointSymbol3D,
   ObjectSymbol3DLayer,
-  Legend,
-  watchUtils,
-  Deferred,
   utils,
   summaryStatistics
 ) {
@@ -141,9 +133,9 @@ require([
     window.view = view;
 
     summaryStatistics({
-        layer: populationLayer,
-        field: "population_count"
-      })
+      layer: populationLayer,
+      field: "population_count"
+    })
       .then((result) => {
         const slider = utils.createSlider(10, 1000000);
 
