@@ -1,139 +1,141 @@
-require([
+define([
   "esri/WebScene",
   "esri/views/SceneView",
   "esri/layers/FeatureLayer",
   "esri/layers/support/LabelClass"
 ], function (WebScene, SceneView, FeatureLayer, LabelClass) {
 
-  const webscene = new WebScene({
-    basemap: null,
-    ground: {
-      surfaceColor: [226, 240, 255]
-    }
-  });
+  return {
 
-  const view = new SceneView({
-    container: "view",
-    map: webscene,
-    alphaCompositingEnabled: true,
-    camera: {
-      position: {
-        spatialReference: {
-          wkid: 4326
-        },
-        x: 94.28248677690586,
-        y: 21.553684553226123,
-        z: 25000000
-      },
-      heading: 0,
-      tilt: 0.12089379039103153
-    },
-    constraints: {
-      altitude: {
-        min: 18000000,
-        max: 25000000
-      }
-    },
-    environment: {
-      background: {
-        type: "color",
-        color: [255, 252, 244, 0]
-      },
-      lighting: {
-        date: "Sun Jul 15 2018 15:30:00 GMT+0900 (W. Europe Daylight Time)",
-        directShadowsEnabled: false,
-        ambientOcclusionEnabled: false
-      },
-      starsEnabled: false,
-      atmosphereEnabled: false
-    }
-  });
+    init() {
 
-  view.ui.empty("top-left");
-  window.view = view;
-
-  const countryBoundaries = new FeatureLayer({
-    url: "http://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries_(Generalized)/FeatureServer",
-    title: "World Countries",
-    renderer: {
-      type: "simple",
-      symbol: {
-        type: "polygon-3d",
-        symbolLayers: [{
-          type: "fill",  // autocasts as new FillSymbol3DLayer()
-          material: { color: [255, 250, 239, 0.8] },
-          outline: {
-            color: [70, 70, 70, 0.7]
-          }
-        }]
-      }
-    }
-  });
-
-  const population = new FeatureLayer({
-    url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Cities_analysis/FeatureServer",
-    definitionExpression: "POP > 6000000",
-    renderer: {
-      type: "simple",
-      symbol: {
-        type: "point-3d",
-        symbolLayers: [{
-          type: "icon",
-          size: 8,
-          resource: { primitive: "circle" },
-          material: { color: "#4c397f" },
-          outline: {
-            size: 1,
-            color: "white"
-          }
-        }],
-        verticalOffset: {
-          screenLength: 20,
-          minWorldLength: 20
-        },
-        callout: {
-          type: "line", // autocasts as new LineCallout3D()
-          size: 1.5,
-          color: "#4c397f"
+      const webscene = new WebScene({
+        basemap: null,
+        ground: {
+          surfaceColor: [226, 240, 255]
         }
-      }
-    },
-    screenSizePerspectiveEnabled: false,
-    labelsVisible: true,
-    labelingInfo: [
-      new LabelClass({
-        labelExpressionInfo: { expression: "$feature.CITY_NAME" },
-        symbol: {
-          type: "label-3d",
-          symbolLayers: [{
-            type: "text",  // autocasts as new TextSymbol3DLayer()
-            material: { color: "#4c397f" },
-            size: 10,
-            font: {
-              family: "Arial",
-              weight: "bold"
+      });
+
+      const view = new SceneView({
+        container: "view",
+        map: webscene,
+        alphaCompositingEnabled: true,
+        camera: {
+          position: {
+            spatialReference: {
+              wkid: 4326
             },
-            halo: {
-              color: "white",
-              size: 1
-            }
-          }]
+            x: 94.28248677690586,
+            y: 21.553684553226123,
+            z: 25000000
+          },
+          heading: 0,
+          tilt: 0.12089379039103153
+        },
+        constraints: {
+          altitude: {
+            min: 18000000,
+            max: 25000000
+          }
+        },
+        environment: {
+          background: {
+            type: "color",
+            color: [0, 0, 0, 0]
+          },
+          lighting: {
+            date: "Sun Jul 15 2018 15:30:00 GMT+0900 (W. Europe Daylight Time)",
+          },
+          starsEnabled: false,
+          atmosphereEnabled: false
         }
-      })
-    ]
-  });
+      });
+      window.view = view;
 
-  const graticule = new FeatureLayer({
-    url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/World_graticule_15deg/FeatureServer",
-    opacity: 0.8
-  });
+      view.ui.empty("top-left");
 
-  webscene.addMany([graticule, countryBoundaries, population]);
+      const countryBoundaries = new FeatureLayer({
+        url: "http://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries_(Generalized)/FeatureServer",
+        title: "World Countries",
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "polygon-3d",
+            symbolLayers: [{
+              type: "fill",  // autocasts as new FillSymbol3DLayer()
+              material: { color: [255, 250, 239, 0.8] },
+              outline: {
+                color: [70, 70, 70, 0.7]
+              }
+            }]
+          }
+        }
+      });
 
-  view.watch('zoom', function(newValue, oldValue) {
-    if (parseInt(newValue) !== parseInt(oldValue)) {
-      radius = (45 - 37) / (2.4 - 1.3) * (newValue - 1.3) + 37;
-      document.getElementById("circle").setAttribute("style", "shape-outside: circle(" + radius.toFixed(2) + "%); float: right; display: inherit;");
+      const populationLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Cities_analysis/FeatureServer",
+        definitionExpression: "POP > 6000000",
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "point-3d",
+            symbolLayers: [{
+              type: "icon",
+              size: 8,
+              resource: { primitive: "circle" },
+              material: { color: "#4c397f" },
+              outline: {
+                size: 1,
+                color: "white"
+              }
+            }],
+            verticalOffset: {
+              screenLength: 20
+            },
+            callout: {
+              type: "line", // autocasts as new LineCallout3D()
+              size: 1.5,
+              color: "#4c397f"
+            }
+          }
+        },
+        screenSizePerspectiveEnabled: false,
+        labelingInfo: [
+          new LabelClass({
+            labelExpressionInfo: { expression: "$feature.CITY_NAME" },
+            symbol: {
+              type: "label-3d",
+              symbolLayers: [{
+                type: "text",  // autocasts as new TextSymbol3DLayer()
+                material: { color: "#4c397f" },
+                size: 10,
+                font: {
+                  family: "Open Sans",
+                  weight: "bold"
+                },
+                halo: {
+                  color: "white",
+                  size: 1
+                }
+              }]
+            }
+          })
+        ]
+      });
+
+      const graticule = new FeatureLayer({
+        url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/World_graticule_15deg/FeatureServer",
+        opacity: 0.8
+      });
+
+      webscene.addMany([graticule, countryBoundaries, populationLayer]);
+
+      view.watch('zoom', function (newValue, oldValue) {
+        if (parseInt(newValue) !== parseInt(oldValue)) {
+          radius = (45 - 37) / (2.4 - 1.3) * (newValue - 1.3) + 37;
+          document.getElementById("circle").setAttribute("style", "shape-outside: circle(" + radius.toFixed(2) + "%); float: right; display: inherit;");
+        }
+      });
     }
-  });
+  }
 });
