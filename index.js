@@ -3,8 +3,8 @@ var bs = require("browser-sync").create('demos-server');
 
 // .init starts the server
 bs.init({
-    server: "./world-population/"
+    server: "./"
 });
 
 // Now call methods on bs
-bs.watch('./world-population/app/*').on('change', bs.reload);
+bs.watch('./**/*').on('change', bs.reload);
