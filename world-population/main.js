@@ -57,7 +57,7 @@ require([
         field: "pop" + year,
         stops: stops,
         legendOptions: {
-          title: "Number of persons/grid cell"
+          title: "Number of persons/grid unit"
         }
       }, {
         type: "size",

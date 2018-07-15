@@ -1,14 +1,26 @@
-# World's biggest cities - how to build this app in 5 steps
+# World's biggest cities - a how-to guide
 
-The app in this folder shows the most populated cities in the world. This is a step by step tutorial on how to build this app (mostly made for cartographers eager to get started with the web).
+The app in this folder shows the most populated cities in the world on a globe:
 
-![img/screenshot.png](img/screenshot.png)
+[![img/screenshot.png](img/screenshot.png)](https://ralucanicola.github.io/JSAPI_demos/cities-globe/)
+
+You can also view it live [here](https://ralucanicola.github.io/JSAPI_demos/cities-globe/).
+
+This is a step by step tutorial on how to build this app using ArcGIS API for JavaScript:
+
+- [Step 1: the one with the initial setup](#step-1)
+- [Step 2: the one where we create the globe 🌐 (as a JS module 😎)](#step-2)
+- [Step 3: the one where we make the space disappear ✨](#step-3)
+- [Step 4: the one where we populate the 🌎 with countries and cities](#step-4)
+- [Step 5: the one with the details that make a difference](#step-5)
+
+*Disclaimer: I mostly wrote this tutorial for map makers who are eager to get started with the web.*
 
 ## Step 1
 
 ### - the one with the initial setup -
 
-As usual with all things web, it all starts with an `index.html` file where we import the API and we create the structure of the app:
+As usual with web things, it all starts with an `index.html` file where we import the ArcGIS API for API and we create the structure of the app:
 
 ```html
 <!DOCTYPE html>
@@ -24,7 +36,6 @@ As usual with all things web, it all starts with an `index.html` file where we i
 
 <body>
   <header>
-    <div id="circle"></div>
     <div id="floating-text">
       <h2>World's biggest cities</h2>
       <p><span>Shanghai</span> seems to be the most populated city in the world with 24 million inhabitants,
@@ -38,6 +49,7 @@ As usual with all things web, it all starts with an `index.html` file where we i
 ```
 
 We also load a custom css file where we format the header, the webscene view and add a nice gradient to the background of the html.
+
 We import a font from Google Fonts that we use for the html text and later on we'll also use it for the city labels in the globe.
 
 ```css
@@ -79,7 +91,7 @@ span {
 }
 ```
 
-At the end of this step we have the background set up like this:
+At the end of this step we have the web page set up like this:
 
 ![img/step1.png](img/step1.png)
 
@@ -87,7 +99,7 @@ At the end of this step we have the background set up like this:
 
 ### - the one where we create the globe :globe_with_meridians: (as a JS module :sunglasses:) -
 
-In this step we'll add the webscene with the globe visualization. We could create a new `js` file and load it in a `script` tag, but let's add it as a module instead. Dojo uses the AMD module system and it needs to know where to load the modules from, so we need to specify that in `dojoConfig`:
+In this step we'll add the web scene with the globe visualization. We could create a new `js` file and load it in a `script` tag, but let's add it as a module instead. Dojo uses the AMD module system and it needs to know where to load the modules from, so we need to specify that in `dojoConfig`:
 
 ```html
 <script>
@@ -109,7 +121,7 @@ In this step we'll add the webscene with the globe visualization. We could creat
 ----
 Sidenote:
 
-This is all you need to know about the dojo module loader configuration, but in case you're interested you can read more about it [here](https://dojotoolkit.org/documentation/tutorials/1.10/dojo_config/index.html). I think it's more useful to read more about JavaScript modules and their evolution. [This article](https://medium.freecodecamp.org/javascript-modules-a-beginner-s-guide-783f7d7a5fcc) is great in explaining the different ways of loading modules and why we have so many different ways of importing modules in JavaScript.
+This is all you need to know about the dojo module loader configuration, but in case you're interested you can read more about it [here](https://dojotoolkit.org/documentation/tutorials/1.10/dojo_config/index.html). I think it's more useful to read about JavaScript modules and their evolution. [This article](https://medium.freecodecamp.org/javascript-modules-a-beginner-s-guide-783f7d7a5fcc) is great in explaining the different ways of loading modules in JavaScript.
 
 ----
 
@@ -174,11 +186,11 @@ And this is what our webscene currently looks like. I know what you're thinking:
 
 ### - the one where we make the space disappear :sparkles: -
 
-Ok, let's get rid of the realistic dark space behind our globe so that we can see the background. This all happens in the [environment](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html#environment) of the view.
+Ok, let's get rid of the realistic dark space behind our globe so that we can see the web page background. This all happens in the [environment](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html#environment) of the view.
 
 First we need to enable transparency on the view by setting [alphaCompositingEnabled](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html#alphaCompositingEnabled) to `true`.
 
-Next we want to set the background to be transparent. As the background is behind the stars and the atmosphere we also need to remove them:
+Next we want to set the background of the view to be transparent. As the view background is behind the stars and the atmosphere we also need to remove them:
 
 ```js
 environment: {
@@ -222,7 +234,7 @@ const view = new SceneView({
 view.ui.empty("top-left");
 ```
 
-So now if you check your app you should get something like this:
+So now if you check your app, this is what you should see:
 
 ![img/step2.png](img/step3.png)
 
@@ -354,7 +366,7 @@ By now our map should look like this:
 
 ## Step 5
 
-### - the one with the final touches -
+### - the one with the details that make a difference -
 
 Let's focus the camera on the cities that are most populated: Shanghai, Beijing and Delhi. What I usually do is to navigate to the position I find good as initial viewpoint and then print the camera to the console. Then I add it to the view.
 
