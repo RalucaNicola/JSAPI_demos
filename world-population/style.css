@@ -15,6 +15,8 @@ aside {
   bottom: 0;
   max-width: 250px;
   padding: 0.9em;
+  box-sizing: border-box;
+  overflow: scroll;
   font-family: 'Open Sans Condensed', sans-serif;
   background-color: rgba(255, 255, 255, 0.6);
 }
@@ -73,6 +75,5 @@ li:hover {
     bottom: 0;
     width: 100%;
     max-width: 100%;
-    overflow: scroll;
   }
 }
