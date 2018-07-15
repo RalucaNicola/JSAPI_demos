@@ -4,6 +4,8 @@
 
 **View the live app**: [World's biggest cities](./cities-globe/)
 
+**View a tutorial on how to build this app**: [Tutorial](./cities-globe/README.md)
+
 **Technologies used**:
 
 - SceneViewer for creating the inital webscene
