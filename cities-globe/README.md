@@ -161,7 +161,7 @@ define([
 });
 ```
 
-One more thing: our modules won't be loaded yet. We also need to import the module in our app, so in the html file add one more script before the closing body tag:
+One more thing: our module isn't loaded yet. We also need to import the module in our app, so in the html file add one more script before the closing body tag:
 
 ```html
 <script>
@@ -254,7 +254,7 @@ const webscene = new WebScene({
 
 Next, we need to add data. In the Living Atlas there's a dataset with generalized borders of the countries: https://www.arcgis.com/home/item.html?id=2b93b06dc0dc4e809d3c8db5cb96ba69
 
-We'll load it as a FeatureLayer in our app and apply a simple renderer to it:
+We'll load it as a [FeatureLayer](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html) in our app and apply a [SimpleRenderer](https://developers.arcgis.com/javascript/latest/api-reference/esri-renderers-SimpleRenderer.html) to it:
 
 ```js
 const countryBoundaries = new FeatureLayer({
@@ -277,13 +277,13 @@ const countryBoundaries = new FeatureLayer({
 });
 
 // then we add the layer to the web scene
-// I use the addMany method because we'll add some more layers
+// I use the addMany method because we'll add some more layers later
 webscene.addMany([countryBoundaries]);
 ```
 
 Let's add the points for the cities as well. Again, there's an item in the Living Atlas with world cities as points: https://www.arcgis.com/home/item.html?id=6996f03a1b364dbab4008d99380370ed
 
-We create another FeatureLayer and we only want to see the biggest cities, so we're going to set a [definitionExpression](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html#definitionExpression) to filter out cities that have a population under 6 million.
+We create another [FeatureLayer](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html) and we only want to see the biggest cities, so we're going to set a [definitionExpression](https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-FeatureLayer.html#definitionExpression) to filter out cities that have a population under 6 million.
 
 ```js
 const populationLayer = new FeatureLayer({
@@ -294,7 +294,7 @@ const populationLayer = new FeatureLayer({
 // don't forget to add it to the web scene
 webscene.addMany([countryBoundaries, populationLayer]);
 ```
-To style the layer we still use a SimpleRenderer (all my points will look the same), but we're going to 3D-ify it a little by [lifting the points up vertically](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-PointSymbol3D.html#verticalOffset) and connecting them to the original location using [callouts](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-callouts-LineCallout3D.html).
+To style the layer we still use a [SimpleRenderer](https://developers.arcgis.com/javascript/latest/api-reference/esri-renderers-SimpleRenderer.html) (all my points will look the same), but we're going to 3D-ify it a little by [lifting the points up vertically](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-PointSymbol3D.html#verticalOffset) and connecting them to the original location using [callouts](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-callouts-LineCallout3D.html).
 
 The code looks like this:
 ```js
