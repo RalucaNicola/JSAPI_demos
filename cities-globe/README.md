@@ -6,13 +6,13 @@ The app in this folder shows the most populated cities in the world on a globe:
 
 You can also view it live [here](https://ralucanicola.github.io/JSAPI_demos/cities-globe/).
 
-This is a step by step tutorial on how to build this app using ArcGIS API for JavaScript:
+This is a step by step tutorial on how to build this app using [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/):
 
 - [Step 1: the one with the initial setup](#step-1)
 - [Step 2: the one where we create the globe 🌐 (as a JS module 😎)](#step-2)
 - [Step 3: the one where we make the space disappear ✨](#step-3)
 - [Step 4: the one where we populate the 🌎 with countries and cities](#step-4)
-- [Step 5: the one with the details that make a difference](#step-5)
+- [Step 5: the one with the small details that make the big difference](#step-5)
 
 *Disclaimer: I mostly wrote this tutorial for map makers who are eager to get started with the web.*
 
@@ -20,7 +20,7 @@ This is a step by step tutorial on how to build this app using ArcGIS API for Ja
 
 ### - the one with the initial setup -
 
-As usual with web things, it all starts with an `index.html` file where we import the ArcGIS API for API and we create the structure of the app:
+As usual with web things, it all starts with an `index.html` file where we import the ArcGIS API for JavaScript and we create the structure of the app:
 
 ```html
 <!DOCTYPE html>
@@ -48,9 +48,9 @@ As usual with web things, it all starts with an `index.html` file where we impor
 </html>
 ```
 
-We also load a custom css file where we format the header, the webscene view and add a nice gradient to the background of the html.
+We also load a custom css file where we format the header, the web scene view and add a nice gradient to the background of the html.
 
-We import a font from Google Fonts that we use for the html text and later on we'll also use it for the city labels in the globe.
+We import a font from Google Fonts for the html text. Later on we'll also use it for the city labels in the web scene.
 
 ```css
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
@@ -118,16 +118,13 @@ In this step we'll add the web scene with the globe visualization. We could crea
 <script src="https://js.arcgis.com/4.8/"></script>
 ```
 
-----
-Sidenote:
+>Side note:
 
-This is all you need to know about the dojo module loader configuration, but in case you're interested you can read more about it [here](https://dojotoolkit.org/documentation/tutorials/1.10/dojo_config/index.html). I think it's more useful to read about JavaScript modules and their evolution. [This article](https://medium.freecodecamp.org/javascript-modules-a-beginner-s-guide-783f7d7a5fcc) is great in explaining the different ways of loading modules in JavaScript.
-
-----
+>This is all you need to know about the dojo module loader configuration, but in case you're interested you can read more about it [here](https://dojotoolkit.org/documentation/tutorials/1.10/dojo_config/index.html). I think it's more useful to read about JavaScript modules and their evolution. [This article](https://medium.freecodecamp.org/javascript-modules-a-beginner-s-guide-783f7d7a5fcc) is great in explaining the different ways of loading modules in JavaScript.
 
 Back on track: now we can create an `app` folder and add a `main.js` file where we'll write the code to add the globe. For this small app, a separate folder is a bit of an overkill, but as soon as your app will grow you can add more modules (aka JavaScript files) in the `app` folder.
 
-Now in main.js we'll create a webscene and a view:
+Now in main.js we'll create a web scene and a view:
 
 ```js
 
@@ -140,17 +137,17 @@ define([
 ], function (WebScene, SceneView, FeatureLayer, LabelClass) {
 
   // the module exports an object with an init method
-  // init creates the webscene and the view
+  // init creates the web scene and the view
   return {
 
     init() {
 
-      // the webscene is the data model: it contains the basemap, the ground and the layers
+      // the web scene is the data model: it contains the basemap, the ground and the layers
       const webscene = new WebScene({
         basemap: "topo"
       });
 
-      // the view is the visual representation of the webscene
+      // the view is the visual representation of the web scene
       const view = new SceneView({
         container: "view",
         map: webscene
@@ -178,7 +175,7 @@ One more thing: our modules won't be loaded yet. We also need to import the modu
 </script>
 ```
 
-And this is what our webscene currently looks like. I know what you're thinking: where is my nice background? :scream: Don't worry, we'll get it back in the next step.
+And this is what our web scene currently looks like. I know what you're thinking: where is my nice background? :scream: Don't worry, we'll get it back in the next step.
 
 ![img/step2.png](img/step2.png)
 
@@ -209,7 +206,7 @@ To remove the navigation widgets I usually just remove everything in the `view.u
 view.ui.empty("top-left");
 ```
 
-Allright, by now your code should look like this:
+Alrighty, by now your code should look like this:
 
 ```js
 
@@ -279,7 +276,7 @@ const countryBoundaries = new FeatureLayer({
   }
 });
 
-// then we add the layer to the webscene
+// then we add the layer to the web scene
 // I use the addMany method because we'll add some more layers
 webscene.addMany([countryBoundaries]);
 ```
@@ -294,7 +291,7 @@ const populationLayer = new FeatureLayer({
   definitionExpression: "POP > 6000000"
 });
 
-// don't forget to add it to the webscene
+// don't forget to add it to the web scene
 webscene.addMany([countryBoundaries, populationLayer]);
 ```
 To style the layer we still use a SimpleRenderer (all my points will look the same), but we're going to 3D-ify it a little by [lifting the points up vertically](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-PointSymbol3D.html#verticalOffset) and connecting them to the original location using [callouts](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-callouts-LineCallout3D.html).
@@ -366,7 +363,7 @@ By now our map should look like this:
 
 ## Step 5
 
-### - the one with the details that make a difference -
+### - the one with the small details that make the big difference -
 
 Let's focus the camera on the cities that are most populated: Shanghai, Beijing and Delhi. What I usually do is to navigate to the position I find good as initial viewpoint and then print the camera to the console. Then I add it to the view.
 
