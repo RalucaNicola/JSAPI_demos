@@ -16,7 +16,7 @@ aside {
   max-width: 250px;
   padding: 0.9em;
   box-sizing: border-box;
-  overflow: scroll;
+  overflow: auto;
   font-family: 'Open Sans Condensed', sans-serif;
   background-color: rgba(255, 255, 255, 0.6);
 }
