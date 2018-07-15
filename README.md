@@ -4,7 +4,7 @@
 
 **View the live app**: [World's biggest cities](./cities-globe/)
 
-**View a tutorial on how to build this app**: [Tutorial](./cities-globe/README.md)
+**View a tutorial on how to build this app**: [Tutorial](https://github.com/RalucaNicola/JSAPI_demos/tree/master/cities-globe#worlds-biggest-cities---a-how-to-guide)
 
 **Technologies used**:
 
