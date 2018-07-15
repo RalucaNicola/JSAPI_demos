@@ -204,4 +204,21 @@ require([
       layer: populationLayer
     }]
   });
+
+  const portrait = window.matchMedia("(max-width: 600px)");
+  portrait.addListener(setPadding);
+  function setPadding() {
+    console.log(portrait);
+    if (portrait.matches) {
+      view.padding = {
+        bottom: 200
+      };
+    }
+    else {
+      view.padding = {
+        left: 250
+      };
+    }
+  }
+  setPadding();
 });
