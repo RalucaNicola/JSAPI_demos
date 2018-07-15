@@ -8,299 +8,31 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
   <script src="https://js.arcgis.com/4.8/"></script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      font-family: 'Open Sans Condensed', sans-serif;
-    }
-
-    header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      padding-left: 0.9em;
-      font-family: 'Open Sans Condensed', sans-serif;
-    }
-
-    ul {
-      list-style-type: none;
-      color: #000;
-      padding: 0;
-      padding-bottom: 30px;
-    }
-
-    li.selected {
-      background-color: #000;
-      color: #fff;
-    }
-
-    li {
-      float: left;
-      padding: 5px 10px;
-      border-right: 1px solid #000;
-      cursor: pointer;
-    }
-
-    li:last-child {
-      border-right: 0px;
-    }
-
-    li:hover {
-      background-color: #000;
-      color: #fff;
-    }
-  </style>
-
-  <script>
-    require([
-      "esri/layers/FeatureLayer",
-      "esri/layers/TileLayer",
-      "esri/Map",
-      "esri/views/SceneView",
-      "esri/renderers/SimpleRenderer",
-      "esri/symbols/PointSymbol3D",
-      "esri/symbols/ObjectSymbol3DLayer",
-      "esri/widgets/Legend",
-      "esri/core/watchUtils",
-      "dojo/Deferred",
-      "dojo/domReady!"
-    ], function (
-      FeatureLayer,
-      MapImageLayer,
-      Map, SceneView,
-      SimpleRenderer,
-      PointSymbol3D,
-      ObjectSymbol3DLayer,
-      Legend,
-      watchUtils,
-      Deferred
-    ) {
-
-
-        var colorStops = [
-          {
-            value: 0,
-            color: "#FFFFE1"
-          },
-          {
-            value: 400000,
-            color: "#F3758C"
-          },
-          {
-            value: 7000000,
-            color: "#7D2898"
-          },
-          {
-            value: 30000000,
-            color: "#4C1E6E"
-          }
-        ];
-
-
-        // renderer for the population layer
-        var renderer = new SimpleRenderer({
-          symbol: new PointSymbol3D({
-            symbolLayers: [new ObjectSymbol3DLayer({
-              resource: {
-                primitive: "cube"
-              },
-              anchor: "bottom",
-              width: 80000
-            })]
-          }),
-          visualVariables: [{
-            type: "color",
-            field: "population_count",
-            stops: colorStops
-          }, {
-            type: "size",
-            field: "population_count",
-            stops: [
-              {
-                value: 0,
-                size: 100000
-              },
-              {
-                value: 1000000,
-                size: 250000
-              },
-              {
-                value: 10000000,
-                size: 1500000
-              },
-              {
-                value: 25000000,
-                size: 3500000
-              }],
-            axis: "height"
-          }, {
-            type: "size",
-            axis: "width-and-depth",
-            useSymbolValue: true // uses the width value defined in the symbol layer (50,000)
-          }]
-        });
-
-        let popLayers = [];
-        for (let i = 2010; i <= 2020; i += 5) {
-          popLayers[i] = new FeatureLayer({
-            url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/World_population_count_" + i.toString() + "/FeatureServer",
-            renderer: renderer,
-            opacity: 0
-          })
-        }
-
-        var graticule = new FeatureLayer({
-          url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/World_graticule_15deg/FeatureServer",
-          opacity: 0.6
-        });
-        let currentLayer = popLayers[2010];
-        let oldLayer = null;
-        // add the layers to a new map
-        var map = new Map({
-          layers: [graticule],
-          ground: {
-            surfaceColor: "#eaf2ff"
-          }
-        });
-
-
-        // set the environment
-        var view = new SceneView({
-          map: map,
-          container: "viewDiv",
-          constraints: {
-            collision: {
-              enabled: true
-            }
-          },
-          camera: {
-            position: {
-              spatialReference: {
-                latestWkid: 4326,
-                wkid: 4326
-              },
-              x: 50.34885653510194,
-              y: 18.68409306191745,
-              z: 19134228.85529455
-            },
-            heading: 0,
-            tilt: 0.1
-          },
-          environment: {
-            background: {
-              type: "color",
-              color: "white"
-            },
-            atmosphereEnabled: false,
-            lighting: {
-              directShadowsEnabled: true,
-              date: new Date("June 15, 2018 11:00:00"),
-              cameraTrackingEnabled: true,
-              ambientOcclusionEnabled: true
-            }
-          },
-          highlightOptions: {
-            color: "#ffee00",
-            fillOpacity: 0
-          }
-        });
-        let currentLayerView;
-        let currentHighlight = null;
-        window.view = view;
-
-        view.ui.empty("top-left");
-
-        function displayCurrentLayer() {
-          map.add(currentLayer);
-          view.whenLayerView(currentLayer)
-            .then(function(lyrView) {
-              watchUtils.whenFalseOnce(lyrView, "updating", function (value) {
-                fadeIn(currentLayer)
-                  .then(function() {
-                    if (oldLayer) {
-                      oldLayer.opacity = 0;
-                      map.layers.remove(oldLayer);
-                    }
-                  });
-              });
-            })
-        }
-
-        function increaseOpacity(layer, deferred) {
-          const opacity = parseFloat((layer.opacity + 0.2).toFixed(2));
-          layer.opacity = opacity;
-          if (layer.opacity < 1) {
-            window.requestAnimationFrame(function() {
-              increaseOpacity(layer, deferred);
-            });
-          }
-          else {
-            deferred.resolve(1);
-          }
-        }
-
-        function fadeIn(layer) {
-          const deferred = new Deferred();
-          increaseOpacity(layer, deferred);
-          return deferred.promise;
-        }
-        displayCurrentLayer();
-        document.getElementById("populationYear").addEventListener("click", function (evt) {
-
-          // set selection in the menu
-          this.getElementsByClassName("selected")[0].classList.remove("selected");
-          evt.target.className = "selected";
-
-          // display selected layer and remove the old one
-          oldLayer = currentLayer;
-          currentLayer = popLayers[parseInt(evt.target.innerHTML)];
-          displayCurrentLayer();
-
-        });
-
-
-        view.on("pointer-move", function (event) {
-          view.hitTest(event).then(function (response) {
-            var result = response.results[0];
-            if (result && result.graphic) {
-              view.whenLayerView(currentLayer)
-                .then(function (lyrView) {
-                  if (currentHighlight) {
-                    currentHighlight.remove();
-                  }
-                  currentHighlight = lyrView.highlight([result.graphic.attributes.OBJECTID]);
-                  document.getElementById("info").innerHTML = "Selected bar has a population of: " + result.graphic.attributes.population_count;
-                })
-            }
-            else {
-              if (currentHighlight) {
-                currentHighlight.remove();
-                document.getElementById("info").innerHTML = null;
-              }
-            }
-          })
-            .catch(err => console.log(err));
-        })
-      });
-  </script>
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js"></script>
 </head>
 
 <body>
   <div id="viewDiv"></div>
-  <header>
+  <aside>
     <h1>World population count</h1>
     <ul id="populationYear">
-      <li class="selected">2010</li>
+      <li class="selected">2000</li>
+      <li>2005</li>
+      <li>2010</li>
       <li>2015</li>
       <li>2020</li>
     </ul>
-    <p id="info"></p>
-  </header>
+    <p>World population count visualization based on the grid world population dataset by
+        <a href="http://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev10/data-download" target="_blank">SEDAC</a>.
+      The grid has a resolution of aproximatively 110km.
+      The height and the color of the bars represent the number of persons in the grid unit.</p>
+      <div id="legend"></div>
+      <p id="info"></p>
+    </aside>
+  <div id="loader">
+    <img src="img/loading-pop.gif"/>
+  </div>
 </body>
 
 </html>

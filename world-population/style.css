@@ -1,0 +1,78 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+aside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  max-width: 250px;
+  padding: 0.9em;
+  font-family: 'Open Sans Condensed', sans-serif;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+ul {
+  list-style-type: none;
+  color: #000;
+  padding: 0;
+  padding-bottom: 30px;
+}
+
+li.selected {
+  background-color: #000;
+  color: #fff;
+}
+
+li {
+  float: left;
+  padding: 5px 10px;
+  border-right: 1px solid #000;
+  cursor: pointer;
+}
+
+li:last-child {
+  border-right: 0px;
+}
+
+li:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+#loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.esri-legend__layer, .esri-legend__message {
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.esri-widget__header {
+  display: none;
+}
+
+.esri-widget {
+  background-color: transparent;
+}
+
+@media (max-width: 600px) {
+  aside {
+    position: absolute;
+    top: 60%;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow: scroll;
+  }
+}
