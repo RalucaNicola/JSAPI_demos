@@ -81,7 +81,8 @@ require([
   const populationLayer = new FeatureLayer({
     url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/World_population/FeatureServer",
     renderer: getRenderer(2000),
-    opacity: 0
+    opacity: 0,
+    outFields: ["*"]
   });
 
   var graticule = new FeatureLayer({
@@ -146,15 +147,9 @@ require([
   view.whenLayerView(populationLayer)
     .then(function (lyrView) {
       popLayerView = lyrView;
-      watchUtils.watch(popLayerView, "updating", function (value) {
-        if (value && !view.interacting) {
-          populationLayer.opacity = 0;
-          loader.style.display = "inherit";
-        }
-        if (!value) {
-          fadeIn(populationLayer);
-          loader.style.display = "none";
-        }
+      watchUtils.whenFalseOnce(popLayerView, "updating", function (value) {
+        fadeIn(populationLayer);
+        loader.style.display = "none";
       });
     });
 
