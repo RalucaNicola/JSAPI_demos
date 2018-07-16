@@ -140,7 +140,7 @@ define([
   // init creates the web scene and the view
   return {
 
-    init() {
+    init: function() {
 
       // the web scene is the data model: it contains the basemap, the ground and the layers
       const webscene = new WebScene({

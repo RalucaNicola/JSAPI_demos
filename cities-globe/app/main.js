@@ -7,7 +7,7 @@ define([
 
   return {
 
-    init() {
+    init: function() {
 
       const webscene = new WebScene({
         basemap: null,
