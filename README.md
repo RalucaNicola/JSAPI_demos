@@ -1,10 +1,22 @@
+# World globe by Giovanni Cassini
+
+![screenshot](./cassini-globe/img/screenshot.png)
+
+**View the live app**: [World globe by Giovanni Cassini](./cassini-globe/)
+
+
+**Original Data:**
+World Globe scanned, georeferenced and published by [David Rumsey Map Collection](https://www.davidrumsey.com/blog/2009/9/7/cassini-terrestrial-and-celestial-globes-1790)
+
+My contribution was minimal in this app, I only display the published layer using [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/). Read more about how the map was brought into digital form [here](https://www.davidrumsey.com/blog/2009/9/7/cassini-terrestrial-and-celestial-globes-1790).
+
 # World's biggest cities
 
 ![screenshot](./cities-globe/img/screenshot.png)
 
 **View the live app**: [World's biggest cities](./cities-globe/)
 
-**View a tutorial on how to build this app**: [Tutorial](https://github.com/RalucaNicola/JSAPI_demos/tree/master/cities-globe#worlds-biggest-cities---a-how-to-guide)
+**View a tutorial on how to built this app**: [Tutorial](https://github.com/RalucaNicola/JSAPI_demos/tree/master/cities-globe#worlds-biggest-cities---a-how-to-guide)
 
 **Technologies used**:
 

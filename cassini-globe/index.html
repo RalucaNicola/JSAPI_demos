@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Old globe</title>
+  <link href="https://fonts.googleapis.com/css?family=Special+Elite" rel="stylesheet">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.8/"></script>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #image {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-image:url('./background.jpg');
+      background-size: cover;
+    }
+
+    #credentials {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      line-height: 1.3em;
+      font-size: 0.9em;
+      max-width: 400px;
+      font-family: "Special Elite", cursive;
+      background-color: #ffffff;
+    }
+
+    p.title {
+      padding-left: 1em;
+      border-bottom: 4px double black;
+      margin-bottom: 0;
+    }
+
+    p.content {
+      margin:0 0 0 2em;
+      border-left: 1px solid black;
+      padding: 10px 10px 5px;
+    }
+
+    a {
+      color: black;
+    }
+  </style>
+
+<script>
+  require([
+    "esri/config",
+    "esri/WebScene",
+    "esri/views/SceneView",
+    "esri/layers/FeatureLayer",
+    "dojo/dom",
+    "dojo/on",
+    "esri/layers/GraphicsLayer",
+
+    "esri/Graphic",
+    "esri/geometry/Point",
+    "esri/geometry/Polyline",
+    "esri/geometry/Polygon",
+
+    "esri/symbols/PointSymbol3D",
+    "esri/symbols/ObjectSymbol3DLayer",
+
+    "dojo/domReady!"
+  ],
+    function (
+      esriConfig, WebScene, SceneView, FeatureLayer, dom, on,
+      GraphicsLayer,
+      Graphic, Point, Polyline, Polygon,
+      PointSymbol3D, ObjectSymbol3DLayer
+    ) {
+
+      var webscene = new WebScene({
+        portalItem: {
+          id: "09ffe34776d64c249c5c498f395aed17"
+        }
+      });
+
+      view = new SceneView({
+        container: "viewDiv",
+        map: webscene,
+        alphaCompositingEnabled: true,
+        environment: {
+          background: {
+            type: "color",
+            color: [255, 255, 255, 0]
+          },
+          atmosphereEnabled: false,
+          starsEnabled: false
+        },
+        ui: {
+          components: ["attribution"]
+        }
+      });
+
+      view.when(() => {
+        view.map.ground = {
+          surfaceColor: [255, 255, 255],
+          opacity: 1
+        }
+        view.watch('zoom', (value) => {
+          document.getElementById("image").style.filter = getBlur(value);
+        })
+      });
+
+      function getBlur(value) {
+        return `blur(${Math.min(4, Math.exp(value - 3))}px)`;
+      }
+
+    });
+</script>
+</head>
+
+<body>
+  <div id="image"></div>
+  <div id="viewDiv"></div>
+  <div id="credentials">
+    <p class="title">World globe by Giovanni Cassini, 1790</p>
+    <p class="content">This globe was made by Giovanni Cassini, a noted geographer and publisher in Rome.
+    </p>
+    <p class="content">
+      The globe gores were scanned, georeferenced and published by
+      <a href="https://www.davidrumsey.com/blog/2009/9/7/cassini-terrestrial-and-celestial-globes-1790" target="_blank">David Rumsey Historical Map Collection</a>.
+    </p>
+  </div>
+</body>
+
+</html>
