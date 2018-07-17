@@ -15,10 +15,10 @@ define(["nouislider"], function(nouislider) {
         tooltips: true,
         format: {
           to: function(value) {
-            return parseInt(Math.exp(value)).toString() + " persons/unit";
+            return parseInt(Math.exp(value)).toLocaleString() + " persons/unit";
           },
           from: function (value) {
-            return parseInt(value);
+            return value;
           }
         }
       });
