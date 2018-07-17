@@ -71,7 +71,7 @@ require([
             material: { color: [255, 250, 239, 0] },
             outline: {
               color: "#00E9FF",
-              size: 2
+              size: 1
             },
           }]
         }

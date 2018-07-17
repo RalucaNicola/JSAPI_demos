@@ -17,6 +17,7 @@ footer {
   width: 80%;
   margin: 5px auto;
   color: white;
+  background-color: rgba(5, 50, 56, 0.7);
 }
 
 #populationSlider {
