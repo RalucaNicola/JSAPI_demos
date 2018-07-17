@@ -124,7 +124,7 @@ require([
         starsEnabled: false,
         lighting: {
           directShadowsEnabled: true,
-          date: new Date("Sun Jul 15 2018 23:47:59 GMT+0200 (Central European Summer Time)"),
+          date: "Sun Jul 15 2018 23:47:59 GMT+0200 (Central European Summer Time)",
           cameraTrackingEnabled: true,
           ambientOcclusionEnabled: true
         }
