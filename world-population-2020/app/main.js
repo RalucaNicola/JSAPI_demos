@@ -137,12 +137,11 @@ require([
       field: "population_count"
     })
       .then((result) => {
-        const slider = utils.createSlider(10, 1000000);
+        const slider = utils.createSlider(2.3070849534189377, Math.log(result.max));
 
         slider.on('end', function (values) {
           const min = parseInt(values[0].replace(" persons/unit", ""));
-          const value1 = parseInt(values[1].replace(" persons/unit", ""));
-          const max = (value1 >= 1000000) ? result.max : value1;
+          const max = parseInt(values[1].replace(" persons/unit", ""));
           populationLayer.definitionExpression =
             `population_count >= ${min} AND population_count <= ${max}`;
         });

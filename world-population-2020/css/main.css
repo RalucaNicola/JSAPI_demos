@@ -20,9 +20,9 @@ footer {
 }
 
 #populationSlider {
-  width: 100%;
+  width: 80%;
   height: 10px;
-  margin: 10px 0 10px 0;
+  margin:10px auto;
 }
 
 footer>p {

@@ -10,13 +10,12 @@ define(["nouislider"], function(nouislider) {
           'min': min,
           'max': max
         },
-        step: 10,
         connect: true,
         orientation: 'horizontal',
         tooltips: true,
         format: {
           to: function(value) {
-            return parseInt(value).toString() + " persons/unit";
+            return parseInt(Math.exp(value)).toString() + " persons/unit";
           },
           from: function (value) {
             return parseInt(value);
