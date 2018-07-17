@@ -167,7 +167,7 @@ require([
     view.whenLayerView(currentLayer)
       .then(function (lyrView) {
         popLayerView = lyrView;
-        watchUtils.whenFalseOnce(popLayerView, "updating", function (value) {
+        watchUtils.whenFalseOnce(popLayerView, "updating", function () {
           fadeIn(currentLayer);
           currentLayer.legendEnabled = true;
           loader.style.display = "none";
@@ -196,7 +196,7 @@ require([
         view.whenLayerView(currentLayer)
           .then(function (layerView) {
             popLayerView = layerView;
-          })
+          });
         oldLayer.opacity = 0;
         oldLayer.legendEnabled = false;
       }
@@ -210,7 +210,7 @@ require([
             currentHighlight.remove();
           }
           currentHighlight = popLayerView.highlight([result.graphic.attributes.OBJECTID]);
-          document.getElementById("info").innerHTML = "Selected bar has a population of: " + result.graphic.attributes[`pop${currentYear}`];
+          document.getElementById("info").innerHTML = "Selected bar has a population of: " + result.graphic.attributes[`pop${currentYear}`].toLocaleString();
         }
         else {
           if (currentHighlight) {
