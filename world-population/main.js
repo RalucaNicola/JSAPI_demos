@@ -61,10 +61,10 @@ require([
         },
         atmosphereEnabled: false,
         lighting: {
-          directShadowsEnabled: true,
+          directShadowsEnabled: false,
           date: "Sun Jul 15 2018 11:00:00 GMT+0200 (W. Europe Daylight Time)",
           cameraTrackingEnabled: true,
-          ambientOcclusionEnabled: true
+          ambientOcclusionEnabled: false
         }
       },
       highlightOptions: {
