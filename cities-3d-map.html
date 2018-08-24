@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>3D MapImageLayer w/ Popups</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/themes/dark/main.css">
+  <script src="https://js.arcgis.com/4.8/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <script>
+
+    require([
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/MapImageLayer",
+        "esri/layers/VectorTileLayer",
+        "esri/symbols/WebStyleSymbol",
+        "dojo/promise/all",
+        "dojo/domReady!"
+      ],
+      function(
+WebScene, SceneView, MapImageLayer, VectorTileLayer, WebStyleSymbol, all
+      ) {
+
+        /*****************************************************************
+         * Create a MapImageLayer instance pointing to a Map Service
+         * containing data about World Cities.
+         *****************************************************************/
+
+        const mlayer = new MapImageLayer({
+          url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer",
+          sublayers: [
+          {
+            id: 0,
+            opacity: 1,
+            visible: true,
+            title: "Cities"
+          }]
+        });
+
+        const template = {
+          title: "{CITY_NAME}",
+          content: "There are {POP} people living in {CITY_NAME}, with a Population Rank of {POP_RANK}."
+        };
+
+        const map = new WebScene({
+          portalItem: {
+            //id: "071dfcb36ffc417f94d6cf512c88025e" // local
+            id: "fdfbb37fd7ff4a7c8bbb28afb345c95d" // global
+          }
+        });
+
+        const view = new SceneView({
+          container: "viewDiv",
+          map: map
+        });
+
+        view.when(function() {
+
+          const mSublayer = mlayer.findSublayerById(0);
+          const mSublayerFeatureLayer = mSublayer.createFeatureLayer();
+          map.add(mSublayerFeatureLayer);
+
+          mSublayerFeatureLayer.load().then(function (){
+            mSublayerFeatureLayer.popupTemplate = template;
+            mSublayerFeatureLayer.labelingInfo = [ {
+              labelExpressionInfo: { expression: "$feature.CITY_NAME" },
+              where: "POP > 7000000",
+              symbol: {
+                type: "text",  // autocasts as new TextSymbol()
+                color: [136,65,157],
+                haloSize: 1,
+                haloColor: "white",
+                font: {
+                  size: 13
+                }
+              }
+            },
+            {
+              labelExpressionInfo: { expression: "$feature.CITY_NAME" },
+              where: "POP > 2000000",
+              symbol: {
+                type: "text",  // autocasts as new TextSymbol()
+                color: [91, 100, 140],
+                haloSize: 1,
+                haloColor: "white",
+                font: {
+                  size: 12
+                }
+              }
+            }]
+
+            function rankByPop(feature){
+              // a number field representing total population
+              const population = feature.attributes.POP;
+              // var used to classify features by population
+              var rank;
+
+              if(population < 500000){
+                rank = "low";
+              } else if (population > 500000 && population < 2000000){
+                rank = "medium";
+              } else if (population > 2000000 && population < 7000000){
+                rank = "high";
+              } else if (population > 7000000){
+                rank = "very_high";
+              }
+              return rank;
+            };
+
+            // Esri Web Style Symbols
+            // https://developers.arcgis.com/javascript/latest/guide/esri-web-style-symbols/index.html
+            function getLowSymbol(symbol) {
+              const objSymbolLayer = symbol.symbolLayers.getItemAt(0).clone();
+              objSymbolLayer.width = 20000;
+              objSymbolLayer.depth = 20000;
+              objSymbolLayer.height = 70000;
+              objSymbolLayer.material = {
+                color: [237,248,251]
+              }
+              objSymbolLayer.heading = Math.random() * 360;
+              symbol.symbolLayers = [ objSymbolLayer ];
+              return symbol;
+            }
+
+            function getMediumSymbol(symbol) {
+              const objSymbolLayer = symbol.symbolLayers.getItemAt(0).clone();
+              objSymbolLayer.width = 75000;
+              objSymbolLayer.depth = 75000;
+              objSymbolLayer.height = 200000;
+              objSymbolLayer.material = {
+                color: [179,205,227]
+              }
+              objSymbolLayer.heading = Math.random() * 360;
+              symbol.symbolLayers = [ objSymbolLayer ];
+              return symbol;
+            }
+
+            function getLargeSymbol(symbol) {
+              const objSymbolLayer = symbol.symbolLayers.getItemAt(0).clone();
+              objSymbolLayer.width = 100000;
+              objSymbolLayer.depth = 100000;
+              objSymbolLayer.height = 450000;
+              objSymbolLayer.material = {
+                color: [140,150,198]
+              }
+              objSymbolLayer.heading = Math.random() * 360;
+              symbol.symbolLayers = [ objSymbolLayer ];
+              return symbol;
+            }
+
+            function getVeryLargeSymbol(symbol) {
+              const objSymbolLayer = symbol.symbolLayers.getItemAt(0).clone();
+              objSymbolLayer.width = 150000;
+              objSymbolLayer.depth = 150000;
+              objSymbolLayer.height = 750000;
+              objSymbolLayer.material = {
+                color: [136,65,157]
+              }
+              objSymbolLayer.heading = Math.random() * 360;
+              symbol.symbolLayers = [ objSymbolLayer ];
+              return symbol;
+            }
+
+            const styleUrl = "https://jsapi.maps.arcgis.com/sharing/rest/content/items/8d0e9fc4b8574e57ab926ed31570fa67/data"
+            new WebStyleSymbol({
+                styleUrl: styleUrl,
+                name: "TallBuilding"
+              }).fetchSymbol()
+              .then((symbol) => {
+
+               const uniqueValueInfos = [/* {
+                  value: "low",
+                  symbol: getLowSymbol(symbol.clone()),
+                  label: "Town"
+                },  */{
+                  value: "medium",
+                  symbol: getMediumSymbol(symbol.clone()),
+                  label: "City"
+                }, {
+                  value: "high",
+                  symbol: getLargeSymbol(symbol.clone()),
+                  label: "Big City"
+                }, {
+                  value: "very_high",
+                  symbol: getVeryLargeSymbol(symbol.clone()),
+                  label: "Big City"
+                }];
+
+                const renderer = {
+                  type: "unique-value",
+                  field: rankByPop,
+                  uniqueValueInfos: uniqueValueInfos
+                };
+
+                mSublayerFeatureLayer.renderer = renderer;
+              })
+              .catch(console.error);
+
+          })
+          .catch(console.error);
+        });
+
+      });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>
