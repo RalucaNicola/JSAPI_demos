@@ -137,6 +137,9 @@
               const renderer = {
                 type: "class-breaks",
                 field: "POP",
+                legendOptions: {
+                  title: "Major cities classified by population"
+                },
                 classBreakInfos: [{
                   minValue: 500000,
                   maxValue: 2000000,
@@ -146,9 +149,9 @@
                     height: 200000,
                     color: [237, 248, 251]
                   }),
-                  label: "City"
+                  label: "City (500,000 < population < 2,000,000)"
                 }, {
-                  minValue: 2000000,
+                  minValue: 2000001,
                   maxValue: 7000000,
                   symbol: getSymbol(symbol.clone(), {
                     width: 100000,
@@ -156,9 +159,9 @@
                     height: 450000,
                     color: [140, 150, 198]
                   }),
-                  label: "Big City"
+                  label: "Big City (2,000,000 < population < 7,000,000)"
                 }, {
-                  minValue: 7000000,
+                  minValue: 7000001,
                   maxValue: 100000000,
                   symbol: getSymbol(symbol.clone(), {
                     width: 150000,
@@ -166,7 +169,7 @@
                     height: 750000,
                     color: [136, 65, 157]
                   }),
-                  label: "Metropolis"
+                  label: "Metropolis (7,000,000 < population)"
                 }]
               };
 
