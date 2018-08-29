@@ -166,21 +166,22 @@
                     height: 750000,
                     color: [136, 65, 157]
                   }),
-                  label: "Big City"
+                  label: "Metropolis"
                 }]
               };
 
               mSublayerFeatureLayer.renderer = renderer;
+
+              // add legend after renderer is set
+              const legend = new Legend({
+                view: view
+              });
+
+              view.ui.add(legend, "bottom-right");
             })
             .catch(console.error);
         });
 
-        // add legend
-        const legend = new Legend({
-          view: view
-        });
-
-        view.ui.add(legend, "bottom-right");
 
       });
   </script>
