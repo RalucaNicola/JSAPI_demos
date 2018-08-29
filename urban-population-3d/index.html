@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>3D MapImageLayer w/ Popups</title>
+
+  <link rel="stylesheet" href="https://jsdev.arcgis.com/4.9/esri/themes/dark-purple/main.css">
+  <script src="https://jsdev.arcgis.com/4.9/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <script>
+
+    require([
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/layers/MapImageLayer",
+      "esri/symbols/WebStyleSymbol",
+      "esri/widgets/Legend",
+      "dojo/domReady!"
+    ],
+      function (
+        WebScene, SceneView, MapImageLayer, WebStyleSymbol, Legend
+      ) {
+
+        /*****************************************************************
+         * Create a MapImageLayer instance pointing to a Map Service
+         * containing data about World Cities.
+         *****************************************************************/
+
+        const mlayer = new MapImageLayer({
+          url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer",
+          sublayers: [
+            {
+              id: 0,
+              opacity: 1,
+              visible: true,
+              title: "Cities"
+            }]
+        });
+
+        const params = (new URL(document.location)).searchParams;
+        const mode = params.get("mode");
+
+        if (mode === "local") {
+          id = "071dfcb36ffc417f94d6cf512c88025e"
+        } else {
+          id = "fdfbb37fd7ff4a7c8bbb28afb345c95d"
+        }
+
+        const map = new WebScene({
+          portalItem: {
+            id: id
+          }
+        });
+
+        const view = new SceneView({
+          container: "viewDiv",
+          map: map
+        });
+
+        const mSublayer = mlayer.findSublayerById(0);
+        const mSublayerFeatureLayer = mSublayer.createFeatureLayer();
+        map.add(mSublayerFeatureLayer);
+
+        mSublayerFeatureLayer.when(function () {
+
+          // define popup template
+          mSublayerFeatureLayer.popupTemplate = {
+            title: "{CITY_NAME}",
+            content: "There are {POP} people living in {CITY_NAME}, with a Population Rank of {POP_RANK}."
+          };
+
+          // define labels for the biggest cities
+          mSublayerFeatureLayer.labelingInfo = [{
+            labelExpressionInfo: { expression: "$feature.CITY_NAME" },
+            where: "POP > 7000000",
+            symbol: {
+              type: "text",
+              color: [136, 65, 157],
+              haloSize: 1,
+              haloColor: "white",
+              font: {
+                size: 13
+              }
+            }
+          },
+          {
+            labelExpressionInfo: { expression: "$feature.CITY_NAME" },
+            where: "POP > 2000000",
+            symbol: {
+              type: "text",
+              color: [91, 100, 140],
+              haloSize: 1,
+              haloColor: "white",
+              font: {
+                size: 12
+              }
+            }
+          }]
+
+          // helper function to change color and size of web style symbols
+          function getSymbol(symbol, options) {
+            const objSymbolLayer = symbol.symbolLayers.getItemAt(0).clone();
+            objSymbolLayer.width = options.width;
+            objSymbolLayer.depth = options.depth;
+            objSymbolLayer.height = options.height;
+            objSymbolLayer.material = {
+              color: options.color
+            }
+            objSymbolLayer.heading = Math.random() * 360;
+            symbol.symbolLayers = [objSymbolLayer];
+            return symbol;
+          }
+
+          // Esri Web Style Symbols
+          // https://developers.arcgis.com/javascript/latest/guide/esri-web-style-symbols/index.html
+
+          new WebStyleSymbol({
+            styleUrl: "https://jsapi.maps.arcgis.com/sharing/rest/content/items/8d0e9fc4b8574e57ab926ed31570fa67/data",
+            name: "TallBuilding"
+          }).fetchSymbol()
+            .then((symbol) => {
+
+              // define renderer using the web style symbol
+              const renderer = {
+                type: "class-breaks",
+                field: "POP",
+                classBreakInfos: [{
+                  minValue: 500000,
+                  maxValue: 2000000,
+                  symbol: getSymbol(symbol.clone(), {
+                    width: 75000,
+                    depth: 75000,
+                    height: 200000,
+                    color: [237, 248, 251]
+                  }),
+                  label: "City"
+                }, {
+                  minValue: 2000000,
+                  maxValue: 7000000,
+                  symbol: getSymbol(symbol.clone(), {
+                    width: 100000,
+                    depth: 100000,
+                    height: 450000,
+                    color: [140, 150, 198]
+                  }),
+                  label: "Big City"
+                }, {
+                  minValue: 7000000,
+                  maxValue: 100000000,
+                  symbol: getSymbol(symbol.clone(), {
+                    width: 150000,
+                    depth: 150000,
+                    height: 750000,
+                    color: [136, 65, 157]
+                  }),
+                  label: "Big City"
+                }]
+              };
+
+              mSublayerFeatureLayer.renderer = renderer;
+            })
+            .catch(console.error);
+        });
+
+        // add legend
+        const legend = new Legend({
+          view: view
+        });
+
+        view.ui.add(legend, "bottom-right");
+
+      });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>
