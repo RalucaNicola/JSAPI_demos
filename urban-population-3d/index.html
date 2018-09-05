@@ -46,7 +46,7 @@
               id: 0,
               opacity: 1,
               visible: true,
-              title: "Cities"
+              title: "The largest cities of the world, colored by population"
             }]
         });
 
@@ -138,7 +138,7 @@
                 type: "class-breaks",
                 field: "POP",
                 legendOptions: {
-                  title: "Major cities classified by population"
+                  title: " "
                 },
                 classBreakInfos: [{
                   minValue: 500000,
@@ -149,7 +149,7 @@
                     height: 200000,
                     color: [237, 248, 251]
                   }),
-                  label: "City (500,000 < population < 2,000,000)"
+                  label: "City (500,000 to 2 million inhabitants)"
                 }, {
                   minValue: 2000001,
                   maxValue: 7000000,
@@ -159,7 +159,7 @@
                     height: 450000,
                     color: [140, 150, 198]
                   }),
-                  label: "Big City (2,000,000 < population < 7,000,000)"
+                  label: "Big City (2 million to 7 million inhabitants)"
                 }, {
                   minValue: 7000001,
                   maxValue: 100000000,
@@ -169,7 +169,7 @@
                     height: 750000,
                     color: [136, 65, 157]
                   }),
-                  label: "Metropolis (7,000,000 < population)"
+                  label: "Metropolis (more than 7 million inhabitants)"
                 }]
               };
 
