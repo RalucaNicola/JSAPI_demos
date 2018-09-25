@@ -1,3 +1,27 @@
+# Largest cities in the world
+
+![screenshot](./urban-population-3d/screenshot.png)
+
+**View the live app**:
+
+[Largest cities in 3D - local scene](./urban-population-3d/index.html?mode=local)
+
+[Largest cities in 3D - global scene](./urban-population-3d/index.html)
+
+This app came about by playing around with 3D symbols on a map for Noah's [blog post on visualizing MapImageLayers in 3D](https://www.esri.com/arcgis-blog/products/js-api-arcgis/3d-gis/now-showing-in-3d-mapimagelayer/).
+
+# World population
+
+![screenshot](./world-population/img/screenshot.png)
+
+**View the live app**: [World population](./world-population/)
+
+**Original Data**:
+
+Gridded Population of the World, Version 4 (GPWv4) Population Count, Revision 10 consists of estimates of human population (number of persons per pixel), consistent with national censuses and population registers. The data files were produced as global rasters at 30 arc-second (~1 km at the equator) resolution. This dataset was aggregated to a resolution of ~110km at the equator. The resulting raster was converted to a point dataset. Read more about the data on [SEDAC website](http://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev10).
+
+[Raw data](http://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev10/data-download)
+
 # World population in 2020
 
 ![screenshot](./world-population-2020/img/screenshot.png)
