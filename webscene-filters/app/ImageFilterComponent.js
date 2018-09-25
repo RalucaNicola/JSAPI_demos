@@ -3,7 +3,7 @@ define([
   "app/imageFilters"
 ], function(Accessor, imageFilters) {
 
-  const filters = ["NONE", "OIL", "SEPIA", "DESATURATE",  "PIXEL",];
+  const filters = ["NONE", "OIL", "SEPIA", "DESATURATE",  "PIXEL", "EDGES"];
 
   let ImageFilterComponent = Accessor.createSubclass({
 
@@ -60,6 +60,8 @@ define([
           return imageFilters.pixel(imageData);
         case "STARS":
           return imageFilters.stars(imageData);
+        case "EDGES":
+          return imageFilters.edges(imageData);
         default:
           return imageData;
         }
