@@ -9,6 +9,7 @@ body {
 }
 
 #screenshot {
+  position: relative;
   flex: 0.5;
   text-align: center;
   background-color: #ffecba;
@@ -59,4 +60,40 @@ body {
   body {
     flex-direction: column;
   }
+}
+
+#filters {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 224, 104, 1);
+  /* background-color: white; */
+}
+
+.image-filters-container {
+  box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.7);
+  overflow-x: auto;
+}
+
+.filter-btn {
+  border: 0.5px solid black;
+  box-shadow: none;
+  height: 50px;
+  width: 70px;
+  margin: 10px;
+  cursor: pointer;
+  font-size: 0.6em;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.filter-btn.initial {
+  color: white;
+  background-color: rgb(0, 0, 0);
+}
+
+.filter-btn:hover {
+  box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.7);
 }
