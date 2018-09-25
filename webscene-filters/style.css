@@ -45,6 +45,11 @@ body {
   color: white;
 }
 
+#image-container>p {
+  margin: 0;
+  padding: 10px;
+}
+
 .polaroid-image-frame {
   height: 400px;
   width: 350px;
@@ -68,7 +73,6 @@ body {
   left: 0;
   right: 0;
   background-color: rgba(255, 224, 104, 1);
-  /* background-color: white; */
 }
 
 .image-filters-container {
@@ -87,6 +91,11 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.filter-btn>span {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 3px;
 }
 
 .filter-btn.initial {

@@ -31,42 +31,36 @@ define([
       }.bind(this));
     },
 
-    applyImage(screenshot) {
+    applyImage(imageData) {
 
       this.__activeFilter = "NONE";
 
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = imageData.height;
+      canvas.width = imageData.width;
       for (let i = 0; i < filters.length; i++) {
-        const imageData = screenshot.data;
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = imageData.height;
-        canvas.width = imageData.width;
-        let clonedImageData = Object.assign(imageData, {});
-        const filteredImageData = this.__getFilteredImage(filters[i], clonedImageData);
+        const inputData = new ImageData(new Uint8ClampedArray(imageData.data), imageData.width, imageData.height);
+        const filteredImageData = this.__getFilteredImage(filters[i], inputData);
         context.putImageData(filteredImageData, 0, 0);
         this.__buttons[filters[i]].style.backgroundImage = "url(" + canvas.toDataURL() + ")";
         this.__images[filters[i]] = canvas.toDataURL();
       }
-
     },
 
     __getFilteredImage(filter, imageData) {
-      let filteredImageData = imageData;
       switch (filter) {
         case "DESATURATE":
-          filteredImageData = imageFilters.desaturate(imageData);
-          break;
+          return imageFilters.desaturate(imageData);
         case "SEPIA":
-          filteredImageData = imageFilters.sepia(imageData);
-          break;
+          return imageFilters.sepia(imageData);
         case "OIL":
-        filteredImageData = imageFilters.oil(imageData);
-          break;
+          return imageFilters.oil(imageData);
         case "PIXEL":
-          filteredImageData = imageFilters.pixel(imageData);
-          break;
+          return imageFilters.pixel(imageData);
+        default:
+          return imageData;
         }
-        return filteredImageData;
     },
 
     __createButton(filter) {

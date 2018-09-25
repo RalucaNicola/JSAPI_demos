@@ -37,7 +37,7 @@ define([], function () {
 
       const width = imageData.width, height = imageData.height;
       let outputData = [];
-      range = 3;
+      range = 1;
       const rHistogram = [];
       const gHistogram = [];
       const bHistogram = [];
@@ -105,7 +105,7 @@ define([], function () {
 
     pixel(imageData) {
       var width = imageData.width, height = imageData.height;
-      size = 5;
+      size = 3;
       for (var y = 0; y < height; y += size) {
         for (var x = 0; x < width; x += size) {
           var pixel = (y * width + x) * 4;
@@ -131,8 +131,6 @@ define([], function () {
           }
         }
       }
-
-      console.log(imageData);
 
       return imageData;
 
