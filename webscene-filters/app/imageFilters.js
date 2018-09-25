@@ -134,6 +134,32 @@ define([], function () {
 
       return imageData;
 
+    },
+
+    stars(imageData) {
+      var img = new Image();
+      img.src = './assets/bokeh-stars.png';
+      img.onload = function() {
+        const canvas = document.createElement("canvas");
+        canvas.width =this.width;
+        canvas.height =this.height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(this, 0, 0);
+
+        starsImageData = ctx.getImageData(0, 0, this.width, this.height);
+
+        for (let y = 0; y < imageData.height; y++) {
+          for (let x = 0; x < imageData.width; x++) {
+            const i = (y * 4) * imageData.width + x * 4;
+            imageData.data[i] += starsImageData.data[i];
+            imageData.data[i + 1] += starsImageData.data[i + 1];
+            imageData.data[i + 2] += starsImageData.data[i + 2];
+          }
+        }
+
+        console.log(imageData);
+      };
     }
   }
 

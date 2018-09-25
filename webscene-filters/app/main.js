@@ -35,7 +35,6 @@ require([
   screenshotButton.addEventListener("click", function() {
     view.takeScreenshot({ width: 350, height: 300 })
       .then(function(screenshot) {
-        console.log(screenshot);
         document.getElementById("image-container").innerHTML = "<img src='" + screenshot.dataUrl + "'>";
         imageFilterComponent.applyImage(screenshot.data);
       })
