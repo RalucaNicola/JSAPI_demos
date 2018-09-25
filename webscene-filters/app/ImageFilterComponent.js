@@ -3,7 +3,7 @@ define([
   "app/imageFilters"
 ], function(Accessor, imageFilters) {
 
-  const filters = ["NONE", "OIL", "SEPIA", "DESATURATE",  "PIXEL", "EDGES"];
+  const filters = ["NONE", "OIL", "SEPIA", "GRAY",  "PIXEL", "EDGES"];
 
   let ImageFilterComponent = Accessor.createSubclass({
 
@@ -50,7 +50,7 @@ define([
 
     __getFilteredImage(filter, imageData) {
       switch (filter) {
-        case "DESATURATE":
+        case "GRAY":
           return imageFilters.desaturate(imageData);
         case "SEPIA":
           return imageFilters.sepia(imageData);
