@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1">
+  <title>WebScene filters</title>
+  <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
+
+  <script>
+    var dojoConfig = {
+      packages: [{
+        name: "app",
+        location: location.pathname.replace(/\/[^/]+$/, "") + "app"
+      }],
+      async: true
+    };
+  </script>
+  <script src="https://js.arcgis.com/4.9/"></script>
+  <script>
+    require([
+      "app/main",
+      "dojo/domReady!"
+    ]);
+  </script>
+  </head>
+
+  <body>
+    <div id="scene-view">
+      <button id="screenshot-btn" class="action-btn">
+        <img src="camera-retro-solid.svg" alt="take screenshot">
+      </button>
+    </div>
+    <div id="screenshot">
+      <div class="polaroid-image-frame">
+        <div id="image-container">
+          <p>
+            Take a screenshot of the webscene and apply a filter to the image.
+          </p>
+        </div>
+        <p id="image-title"></p>
+      </div>
+      <div id="filters"></div>
+    </div>
+   </body>
+  </html>
