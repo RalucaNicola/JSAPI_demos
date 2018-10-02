@@ -27,7 +27,7 @@ define([
 
     onFilterChange(callback) {
       this.watch("__activeFilter", function(value) {
-        callback(this.__images[value]);
+        callback(this.__images[value], value);
       }.bind(this));
     },
 

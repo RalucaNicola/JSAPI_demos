@@ -31,9 +31,23 @@ body {
   box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.7);
 }
 
-#screenshot-btn>img {
+#screenshot-btn>img, .download>img {
   height: 40px;
   width: 40px;
+}
+
+.download {
+  height: 40px;
+  width: 40px;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.hide {
+  display: none;
 }
 
 #scene-view {
