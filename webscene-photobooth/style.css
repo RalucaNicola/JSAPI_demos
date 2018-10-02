@@ -15,7 +15,7 @@ body {
   text-align: center;
   background-color: #ffecba;
   font-size: 1.1em;
-  padding: 2em;
+  padding: 0.3em;
 }
 
 #screenshot-btn {
@@ -128,5 +128,6 @@ body {
 }
 
 .social-media {
-  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: right;
 }

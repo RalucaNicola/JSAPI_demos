@@ -10,7 +10,7 @@ require([
   // load webscene from ArcGIS Online
   const webscene = new WebScene({
     portalItem: {
-      id: websceneId || "f19c17eb035a471fb7c6cded65eab9f0"
+      id: websceneId || "0614ea1f9dd043e9ba157b9c20d3c538"
     }
   });
 
@@ -37,7 +37,6 @@ require([
     view.takeScreenshot({ width: 350, height: 300 })
       .then(function(screenshot) {
         document.getElementById("image-container").innerHTML = "<img src='" + screenshot.dataUrl + "'>";
-        document.querySelector("meta[property='og:image']").content = screenshot.dataUrl;
         imageFilterComponent.applyImage(screenshot.data);
       })
       .catch(function(err) {
