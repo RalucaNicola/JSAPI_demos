@@ -15,7 +15,8 @@ body {
   text-align: center;
   background-color: #ffecba;
   font-size: 1.1em;
-  padding: 0.3em;
+  padding: 0.3em 0.3em 100px;
+  overflow: auto;
 }
 
 #screenshot-btn {
@@ -74,12 +75,6 @@ body {
   transform: rotate(3deg);
   padding: 10px 10px 0 10px;
   font-family: 'Shadows Into Light', cursive;
-}
-
-@media (max-width: 600px) {
-  body {
-    flex-direction: column;
-  }
 }
 
 #filters {
@@ -144,4 +139,13 @@ body {
 .social-media {
   margin-bottom: 20px;
   text-align: right;
+}
+
+@media (max-width: 600px) {
+  body {
+    flex-direction: column;
+  }
+  #filters {
+    position: fixed;
+  }
 }
