@@ -10,7 +10,7 @@ require([
   // load webscene from ArcGIS Online
   const webscene = new WebScene({
     portalItem: {
-      id: websceneId || "f19c17eb035a471fb7c6cded65eab9f0"
+      id: websceneId || "0614ea1f9dd043e9ba157b9c20d3c538"
     }
   });
 
