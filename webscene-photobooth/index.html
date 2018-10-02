@@ -11,7 +11,7 @@
   <meta name="twitter:creator" content="@nicolaraluk">
   <meta name="twitter:title" content="WebScene Photobooth">
   <meta name="twitter:description" content="Create a screenshot of your webscene and apply filters.">
-  <meta name="twitter:image" content="./assets/screenshot.png"></meta>
+  <meta name="twitter:image" content="https://ralucanicola.github.io/JSAPI_demos/webscene-photobooth/assets/screenshot.png"></meta>
   <script>
     var dojoConfig = {
       packages: [{
@@ -32,14 +32,6 @@
   </head>
 
   <body>
-      <div id="fb-root"></div>
-      <script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.1';
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));</script>
     <div id="scene-view">
       <button id="screenshot-btn" class="action-btn">
         <img src="./assets/camera-retro-solid.svg" alt="take screenshot">
@@ -63,7 +55,6 @@
       </div>
       <div class="social-media">
         <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" id="twitter-link" class="twitter-share-button" data-show-count="false">Tweet</a>
-        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
       </div>
       <div id="filters"></div>
     </div>
