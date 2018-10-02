@@ -73,6 +73,9 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
   background-color: rgba(255, 224, 104, 1);
 }
 
