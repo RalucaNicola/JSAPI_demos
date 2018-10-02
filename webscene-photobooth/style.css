@@ -126,3 +126,7 @@ body {
   color: rgba(255, 224, 104, 1);
   font-weight: bold;
 }
+
+.social-media {
+  margin-top: 20px;
+}

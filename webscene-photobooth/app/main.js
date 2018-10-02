@@ -37,15 +37,12 @@ require([
     view.takeScreenshot({ width: 350, height: 300 })
       .then(function(screenshot) {
         document.getElementById("image-container").innerHTML = "<img src='" + screenshot.dataUrl + "'>";
+        document.querySelector("meta[name='twitter:image']").content = screenshot.dataUrl;
         imageFilterComponent.applyImage(screenshot.data);
       })
       .catch(function(err) {
         console.log(err);
       });
   });
-
-  function setImage(screenshot) {
-    document.getElementById("image-container").innerHTML = "<img src='" + screenshot.dataUrl + "'>";
-  }
 
 });
