@@ -169,8 +169,8 @@ define([], function () {
         0, 0, 0,
         1, 2, 1];
       var matrixV = [-1, 0, 1,
-        -2, 0, 2,
-        -1, 0, 1];
+      -2, 0, 2,
+      -1, 0, 1];
       for (var y = 0; y < height; y++) {
         for (var x = 0; x < width; x++) {
           var pixel = (y * width + x) * 4;
@@ -218,6 +218,29 @@ define([], function () {
         imageData.data[k] = outputData[k];
       }
       return imageData;
+    },
+
+    solarize(imageData) {
+
+      const width = imageData.width, height = imageData.height;
+      const inputData = imageData.data;
+      const table = [];
+      for (let i = 0; i < 256; i++) {
+        const val = (i / 255 > 0.5) ? 2 * (i / 255 - 0.5) : 2 * (0.5 - i / 255)
+        table[i] = parseInt(255 * val);
+      }
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          let pixel = (y * width + x) * 4;
+          for (let i = 0; i < 3; i++) {
+            inputData[pixel + i] = table[inputData[pixel + i]];
+          }
+        }
+      }
+
+      return imageData;
+
     }
   }
 
