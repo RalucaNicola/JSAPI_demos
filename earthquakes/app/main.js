@@ -2,16 +2,10 @@ require([
   "esri/layers/FeatureLayer",
   "esri/WebScene",
   "esri/views/SceneView",
-  "esri/renderers/SimpleRenderer",
-  "esri/symbols/PointSymbol3D",
-  "esri/symbols/IconSymbol3DLayer",
   "dojo/domReady!"
 ], function (
   FeatureLayer,
   WebScene, SceneView,
-  SimpleRenderer,
-  PointSymbol3D,
-  IconSymbol3DLayer
 ) {
 
     // renderer for the population layer
@@ -20,24 +14,24 @@ require([
       field: "mag",
       classBreakInfos: [{
         minValue: 2.5,
-        maxValue: 4.0,
+        maxValue: 4.3,
         symbol: {
           type: "point-3d",
           symbolLayers: [{
             type: "icon",
             resource: { primitive: "circle" },
-            material: { color: "#57db48" }
+            material: { color: "#83e478" }
           }]
         }
       }, {
-        minValue: 4.01,
+        minValue: 4.31,
         maxValue: 7.0,
         symbol: {
           type: "point-3d",
           symbolLayers: [{
             type: "icon",
             resource: { primitive: "circle" },
-            material: { color: "#00E9FF" }
+            material: { color: "#7af3ff" }
           }]
         }
       }, {
@@ -87,13 +81,12 @@ require([
 
     const earthquakesLayer = new FeatureLayer({
       url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/ArcGIS/rest/services/World_Earthquakes/FeatureServer/0/",
-      //definitionExpression: "mag > 5",
       renderer: renderer,
       outfields: ["dateTime", "mag", "depthSigM", "latitude", "longitude"],
       elevationInfo: {
         mode: "absolute-height",
         featureExpressionInfo: {
-          expression: "-Geometry($feature).z * 10"
+          expression: "-Geometry($feature).z * 7"
         }
       },
       popupTemplate: template
@@ -118,7 +111,7 @@ require([
         }
       },
       padding: {
-        bottom: 200
+        bottom: 100
       },
       highlightOptions: {
         color: "#b096ff"
@@ -127,6 +120,7 @@ require([
         components: []
       }
     });
+    view.environment.starsEnabled = false;
     window.view = view;
 
   });
