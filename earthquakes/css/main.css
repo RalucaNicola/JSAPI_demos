@@ -1,0 +1,32 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-size: 0.9em;
+  font-family: 'Roboto Mono', monospace, sans-serif;
+  background: rgb(0,0,0);
+}
+
+footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: white;
+  text-align: center;
+  padding: 0.1em 2em;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.credits {
+  font-size: 0.8em;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  border-bottom: 1px dashed white;
+}
