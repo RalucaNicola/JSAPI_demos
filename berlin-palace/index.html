@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1">
   <title>Berlin Palace</title>
-  <link href="https://fonts.googleapis.com/css?family=Monsieur+La+Doulaise" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
   <script src="https://js.arcgis.com/4.9/"></script>
 
@@ -17,14 +17,15 @@
       margin: 0;
       padding: 0;
       text-align: center;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: 'Roboto', Arial, Helvetica, sans-serif;
     }
 
     h1 {
-      font-size: 3em;
+      font-size: 2em;
       margin: 0;
       max-height: 70px;
-      font-family: 'Monsieur La Doulaise', Arial, Helvetica, sans-serif;
+      padding-top: 0.5em;
+      font-weight: normal;
     }
 
     #viewDiv {
@@ -35,9 +36,9 @@
       right: 0;
     }
 
-    /* .esri-overlay-surface {
+    .esri-overlay-surface {
       box-shadow: inset 0 0 20px 20px #fff;
-    } */
+    }
 
     .radio-list {
       position: absolute;
@@ -155,26 +156,6 @@
           palaceLayer = webscene.layers.filter(function (layer) {
             return layer.title === "Berlin Palace";
           }).getItemAt(0);
-
-          palaceLayer.renderer = {
-                type: 'simple',
-                symbol: {
-                  type: 'mesh-3d',
-                  symbolLayers: [{
-                    type: 'fill',
-                    material: {
-                      color: "#efe8da",
-                      colorMixMode: 'replace'
-                    },
-                    edges: {
-                      type: 'sketch',
-                      color: "#534026",
-                      size: 1,
-                      extensionLength: 2
-                    }
-                  }]
-                }
-              };
         });
 
         const options = document.getElementsByClassName("radio-item");
@@ -263,9 +244,9 @@
 </head>
 
 <body>
-  <!-- <h1>Berlin Palace</h1> -->
+  <h1>Berlin Palace</h1>
   <div id="viewDiv"></div>
-  <!-- <div class="radio-list">
+  <div class="radio-list">
     <span>Realistic</span>
     <div class="radio-list-container">
       <div class='radio-item' data-style="realistic"></div>
@@ -274,7 +255,7 @@
       <div class='radio-item' data-style="sketch"></div>
     </div>
     <span>Abstract</span>
-  </div> -->
+  </div>
 </body>
 
 </html>
