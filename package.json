@@ -8,8 +8,8 @@
     "start": "node index.js"
   },
   "devDependencies": {
-    "browser-sync": "^2.18.13",
-    "jshint": "^2.9.5"
+    "browser-sync": "^2.26.3",
+    "jshint": "^2.9.6"
   },
   "repository": {
     "type": "git",
