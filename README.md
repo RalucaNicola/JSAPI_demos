@@ -1,3 +1,29 @@
+# Berlin Palace
+
+![screenshot](./berlin-palace/img/screenshot.png)
+
+**View the live app**: [Berlin Palace](./berlin-palace/)
+
+Data provided by [Berlin's Senatsverwaltung für Stadtentwicklung und Wohnen ](https://www.stadtentwicklung.berlin.de/planen/stadtmodelle/de/digitale_innenstadt/3d/download/index.shtml) and processed in CityEngine by [Stefan Arisona](https://robotized.arisona.ch) in [this project](https://github.com/arisona/berlin_3d). [Link to the license for using the data](http://www.stadtentwicklung.berlin.de/geoinformation/download/nutzIII.pdf)
+
+# Earthquakes
+
+![screenshot](./earthquakes/img/screenshot.png)
+
+**View the live app**: [Earthquakes](./earthquakes/)
+
+Data from [USGS](https://earthquake.usgs.gov/earthquakes/search/).
+
+# WebScene Photobooth
+
+![screenshot](./webscene-photobooth/assets/screenshot-paris.jpg)
+
+**View the live app**: [WebScene Photobooth](./webscene-photobooth/)
+
+Add your own webscene in the webscene url parameters [https://ralucanicola.github.io/JSAPI_demos/webscene-photobooth/index.html?webscene=0614ea1f9dd043e9ba157b9c20d3c538](https://ralucanicola.github.io/JSAPI_demos/webscene-photobooth/index.html?webscene=0614ea1f9dd043e9ba157b9c20d3c538).
+
+This app uses the screenshot API to take a screenshot of a webscene and apply some filters on it. The filters were created by Joel Besada in the [JSManipulate](http://joelb.me/jsmanipulate/) library. The icons are from [FontAwesome](https://fontawesome.com/icons/).
+
 # Largest cities in the world
 
 ![screenshot](./urban-population-3d/screenshot.png)
@@ -26,7 +52,7 @@ Gridded Population of the World, Version 4 (GPWv4) Population Count, Revision 10
 
 ![screenshot](./world-population-2020/img/screenshot.png)
 
-**View the live app**: [World population](./world-population-2020/)
+**View the live app**: [World population in 2020](./world-population-2020/)
 
 **Original Data**:
 
