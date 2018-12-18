@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1">
+  <title>Population USA</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+  <link rel="stylesheet" href="style.css">
+  <script>
+      var dojoConfig = {
+        packages: [{
+          name: "app",
+          location: location.pathname.replace(/\/[^/]+$/, "") + "/app"
+        }],
+        async: true
+      };
+    </script>
+  <script src="https://js.arcgis.com/4.10/"></script>
+</head>
+
+<body>
+  <div id="mapDiv"></div>
+  <div id="sceneDiv"></div>
+  <script>
+  require([
+      "app/main",
+      "dojo/domReady!"
+    ]);
+  </script>
+</body>
+</html>
