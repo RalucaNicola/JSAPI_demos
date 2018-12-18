@@ -83,6 +83,7 @@ require([
       url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/ArcGIS/rest/services/World_Earthquakes/FeatureServer/0/",
       renderer: renderer,
       outfields: ["dateTime", "mag", "depthSigM", "latitude", "longitude"],
+      //definitionExpression: "'hello' = 1",
       elevationInfo: {
         mode: "absolute-height",
         featureExpressionInfo: {
@@ -122,5 +123,12 @@ require([
     });
     view.environment.starsEnabled = false;
     window.view = view;
+
+    view.whenLayerView(earthquakesLayer)
+      .then(function(lyrView) {
+        lyrView.watch('updatingPercentage', (value) => {
+          console.log(value);
+        });
+      });
 
   });
