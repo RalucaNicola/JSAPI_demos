@@ -1,0 +1,162 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Data-driven extrusion - 4.9</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.10/"></script>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <script>
+    require([
+      "esri/WebScene",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Legend"
+    ], function(
+      WebScene, SceneView, FeatureLayer, Legend
+    ) {
+
+      var renderer = {
+        type: "simple", // autocasts as new SimpleRenderer()
+        symbol: {
+          type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+          style: "solid",
+          outline: {  // autocasts as new SimpleLineSymbol()
+            color: [150, 150, 150, 0.7],
+            width: 0.1
+          }
+        },
+        visualVariables: [
+        {
+          type: "color",
+          valueExpression: "Round($feature.TOTPOP_CY/$feature.AREA, 2)",
+          legendOptions: {
+            title: "Population density"
+          },
+          stops: [
+            {
+              value: 10,
+              color: "#fff3e0",
+              label: "10 pers/sqmi"
+            },
+            {
+              value: 100,
+              color: "#F0B5AD",
+              label: "50 pers/sqmi"
+            },
+            {
+              value: 2000,
+              color: "#B9A0C7",
+              label: "2000 pers/sqmi"
+            },
+            {
+              value: 50000,
+              color: "#7a558e",
+              label: "50000 pers/sqmi"
+            }
+          ]
+        }]
+      };
+
+      var countyPopLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/jIL9msH9OI208GCb/arcgis/rest/services/USA_Daytime_Population_2016/FeatureServer/1",
+        renderer: renderer,
+        title: "Population density by county in USA - 2016",
+        minScale: 0,
+        maxScale: 0,
+        popupTemplate: { // autocasts as new PopupTemplate()
+          title: "{NAME}, {STATE_NAME}",
+          content: "{expression/density} people/sqmi",
+          expressionInfos: [{
+            name: "density",
+            expression: "Round($feature.TOTPOP_CY/$feature.AREA, 2)"
+          }]
+        }
+      });
+
+      const states = new FeatureLayer({
+        url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_States_Generalized/FeatureServer",
+        renderer: {
+          type: "simple",
+          symbol:{
+            type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+            color: [ 255, 255, 255, 0 ],
+            style: "solid",
+            outline: {  // autocasts as new SimpleLineSymbol()
+              color: [50, 50, 50, 0.7],
+              width: 0.1
+            }
+          }
+        },
+        legendEnabled: false,
+        labelingInfo: [{
+          // When using callouts on labels, "above-center" is the only allowed position
+          labelPlacement: "above-center",
+          labelExpressionInfo: {
+            value: "{STATE_NAME}"
+          },
+          symbol: {
+          type: "text", // autocasts as new TextSymbol()
+          color: "black",
+          haloColor: [255, 255, 255, 0.7],
+          haloSize: 2,
+          font: {
+            size: 12,
+          }
+          }
+        }]
+      })
+
+      const webscene = new WebScene({
+        portalItem: {
+          id: "dfdcdaef528b4f94b951262b4df38c86"
+        }
+      });
+
+      webscene.addMany([countyPopLayer, states]);
+
+      var view = new SceneView({
+        container: "viewDiv",
+        map: webscene,
+        qualityProfile: "high",
+        highlightOptions: {
+          fillOpacity: 0,
+          color: "#42d2ff"
+        },
+        constraints: {
+          altitude: {
+            min: 400000
+          }
+        }
+      });
+
+      var legend = new Legend({
+        view: view
+      });
+
+      view.ui.add(legend, "bottom-right");
+      window.view = view;
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>
