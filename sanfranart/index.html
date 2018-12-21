@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>Add edges to a SceneLayer - 4.10</title>
+  <title>San Fran Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Reenie+Beanie" rel="stylesheet">
   <style>
     html,
     body,
@@ -26,10 +27,19 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background-image:url('./background-2.jpg');
+      background-image:url('./background.jpg');
       background-size: cover;
+      opacity: 0.7;
     }
 
+    #artist {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-family: 'Reenie Beanie', cursive;
+      transform: rotate(-5deg);
+      font-size: 1.1em;
+    }
 
   </style>
   <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
@@ -39,15 +49,8 @@
     require([
       "esri/WebScene",
       "esri/views/SceneView",
-      "esri/layers/SceneLayer",
-      "esri/widgets/Legend"
-    ], function(WebScene, SceneView, SceneLayer, Legend) {
-
-      var solidEdges = {
-        type: "solid",
-        color: [0, 0, 0, 0.6],
-        size: 1
-      };
+      "esri/layers/SceneLayer"
+    ], function(WebScene, SceneView, SceneLayer) {
 
       var sketchEdges = {
         type: "sketch",
@@ -67,7 +70,7 @@
               color: [255, 255, 255, 0.2],
               colorMixMode: "replace"
             },
-            edges: solidEdges
+            edges: sketchEdges
           }]
         }
       };
@@ -82,48 +85,19 @@
 
       var webscene = new WebScene({
         portalItem: {
-          id: "12d629fc946845628011f17a963373a9"
+          id: "df4deb734f8d49d1a441d2fccd752628"
         },
-        layers: [ sceneLayer ],
-        basemap: null,
-        ground: {
-          opacity: 0
-        }
+        layers: [ sceneLayer ]
       });
 
       var view = new SceneView({
         container: "viewDiv",
         map: webscene,
-        alphaCompositingEnabled: true
-      });
-
-      var legend = new Legend({
-        view: view
-      });
-      view.ui.add(legend, "bottom-right");
-
-      // Add a toggle button for the edges
-
-      document.getElementById("controls").addEventListener("click", function(event) {
-        var edges;
-
-        if (event.target.id === "sketchEdges") {
-          edges = sketchEdges;
-        }
-        else if (event.target.id === "solidEdges") {
-          edges = solidEdges;
-        }
-        else if (event.target.id === "noEdges") {
-          edges = null;
-        }
-        if (event.target.checked) {
-          var renderer = sceneLayer.renderer.clone();
-          renderer.symbol.symbolLayers.getItemAt(0).edges = edges;
-          sceneLayer.renderer = renderer;
+        alphaCompositingEnabled: true,
+        ui: {
+          components: []
         }
       });
-
-      view.ui.add(document.getElementById("controls"), "top-right");
 
       window.view = view;
     });
@@ -134,12 +108,8 @@
 <body>
   <div id="image"></div>
   <div id="viewDiv"></div>
-  <div id="controls">
-    <input type="radio" id="solidEdges" name="edges" checked> <label for="solidEdges">Solid
-      edges</label>
-    <input type="radio" id="sketchEdges" name="edges"> <label for="sketchEdges">Sketch
-      edges</label>
-    <input type="radio" id="noEdges" name="edges"><label for="noEdges">No edges</label>
+  <div id="artist">
+    <span>San Francisco - ArcGIS API for JavaScript 2018</span>
   </div>
 </body>
 
