@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Add edges to a SceneLayer - 4.10</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #controls {
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    #image {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-image:url('./background-2.jpg');
+      background-size: cover;
+    }
+
+
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.10/"></script>
+
+  <script>
+    require([
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/layers/SceneLayer",
+      "esri/widgets/Legend"
+    ], function(WebScene, SceneView, SceneLayer, Legend) {
+
+      var solidEdges = {
+        type: "solid",
+        color: [0, 0, 0, 0.6],
+        size: 1
+      };
+
+      var sketchEdges = {
+        type: "sketch",
+        color: [0, 0, 0, 0.8],
+        size: 2,
+        extensionLength: 10
+      };
+
+      // Create the renderer and configure visual variables
+      var renderer = {
+        type: "simple", // autocasts as new SimpleRenderer()
+        symbol: {
+          type: "mesh-3d",
+          symbolLayers: [{
+            type: "fill",
+            material: {
+              color: [255, 255, 255, 0.2],
+              colorMixMode: "replace"
+            },
+            edges: solidEdges
+          }]
+        }
+      };
+
+      var sceneLayer = new SceneLayer({
+        portalItem: {
+          id: "f5c497819a374941b0ce8d9b0e979819"
+        },
+        title: "San Francisco buildings",
+        renderer: renderer // Set the renderer to sceneLayer
+      });
+
+      var webscene = new WebScene({
+        portalItem: {
+          id: "12d629fc946845628011f17a963373a9"
+        },
+        layers: [ sceneLayer ],
+        basemap: null,
+        ground: {
+          opacity: 0
+        }
+      });
+
+      var view = new SceneView({
+        container: "viewDiv",
+        map: webscene,
+        alphaCompositingEnabled: true
+      });
+
+      var legend = new Legend({
+        view: view
+      });
+      view.ui.add(legend, "bottom-right");
+
+      // Add a toggle button for the edges
+
+      document.getElementById("controls").addEventListener("click", function(event) {
+        var edges;
+
+        if (event.target.id === "sketchEdges") {
+          edges = sketchEdges;
+        }
+        else if (event.target.id === "solidEdges") {
+          edges = solidEdges;
+        }
+        else if (event.target.id === "noEdges") {
+          edges = null;
+        }
+        if (event.target.checked) {
+          var renderer = sceneLayer.renderer.clone();
+          renderer.symbol.symbolLayers.getItemAt(0).edges = edges;
+          sceneLayer.renderer = renderer;
+        }
+      });
+
+      view.ui.add(document.getElementById("controls"), "top-right");
+
+      window.view = view;
+    });
+
+  </script>
+</head>
+
+<body>
+  <div id="image"></div>
+  <div id="viewDiv"></div>
+  <div id="controls">
+    <input type="radio" id="solidEdges" name="edges" checked> <label for="solidEdges">Solid
+      edges</label>
+    <input type="radio" id="sketchEdges" name="edges"> <label for="sketchEdges">Sketch
+      edges</label>
+    <input type="radio" id="noEdges" name="edges"><label for="noEdges">No edges</label>
+  </div>
+</body>
+
+</html>
