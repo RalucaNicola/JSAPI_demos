@@ -49,8 +49,9 @@
     require([
       "esri/WebScene",
       "esri/views/SceneView",
-      "esri/layers/SceneLayer"
-    ], function(WebScene, SceneView, SceneLayer) {
+      "esri/layers/SceneLayer",
+      "esri/core/watchUtils"
+    ], function(WebScene, SceneView, SceneLayer, watchUtils) {
 
       var sketchEdges = {
         type: "sketch",
@@ -97,6 +98,26 @@
         ui: {
           components: []
         }
+      });
+
+      let updatedLayers = 0;
+      view.when(function() {
+        view.map.allLayers.forEach(function(layer) {
+          view.whenLayerView(layer)
+            .then( function(layerView) {
+              watchUtils.whenFalseOnce(layerView, "updating", function(value) {
+                updatedLayers += 1;
+                if (updatedLayers === view.map.allLayers.length) {
+                  view.goTo(webscene.presentation.slides.getItemAt(0).viewpoint,
+                  {
+                    speedFactor: 0.001,
+                    easing: "linear"
+                  })
+                }
+              });
+            })
+            .catch(err => {console.log(err)});
+        });
       });
 
       window.view = view;
