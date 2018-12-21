@@ -17,7 +17,7 @@
     }
 
     #viewDiv {
-      filter: drop-shadow(1px 1px 3px rgba(0,0,0,0.3));
+      filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
     }
 
     #controls {
@@ -57,15 +57,18 @@
       "esri/core/watchUtils"
     ], function(WebScene, SceneView, SceneLayer, watchUtils) {
 
-      var sketchEdges = {
+      // you can tweak these parameters to change
+      // the style of the edges
+      const sketchEdges = {
         type: "sketch",
         color: [0, 0, 0, 0.8],
         size: 2,
         extensionLength: 10
       };
 
-      // Create the renderer and configure visual variables
-      var renderer = {
+      // this renderers all the layers with semi-transparent white faces
+      // and displays the geometry with sketch edges
+      const renderer = {
         type: "simple", // autocasts as new SimpleRenderer()
         symbol: {
           type: "mesh-3d",
@@ -80,49 +83,51 @@
         }
       };
 
-      var sceneLayer = new SceneLayer({
+      // load the scene layer from ArcGIS Online
+      // and set the renderer we defined above
+      const sceneLayer = new SceneLayer({
         portalItem: {
           id: "f5c497819a374941b0ce8d9b0e979819"
         },
-        title: "San Francisco buildings",
-        renderer: renderer // Set the renderer to sceneLayer
+        renderer: renderer
       });
 
-      var webscene = new WebScene({
+      // I've created a webscene in ArcGIS Online
+      // the webscene has a transparent background,
+      // so that I can display the paper background
+      const webscene = new WebScene({
         portalItem: {
           id: "df4deb734f8d49d1a441d2fccd752628"
         },
-        layers: [ sceneLayer ]
+        layers: [sceneLayer]
       });
 
-      var view = new SceneView({
+      // define the view
+      const view = new SceneView({
         container: "viewDiv",
         map: webscene,
+        // this property should be set to true
+        // so that we can set a transparent background
         alphaCompositingEnabled: true,
         ui: {
           components: []
         }
       });
 
-      let updatedLayers = 0;
-      view.when(function() {
-        view.map.allLayers.forEach(function(layer) {
-          view.whenLayerView(layer)
-            .then( function(layerView) {
-              watchUtils.whenFalseOnce(layerView, "updating", function(value) {
-                updatedLayers += 1;
-                if (updatedLayers === view.map.allLayers.length) {
-                  view.goTo(webscene.presentation.slides.getItemAt(0).viewpoint,
-                  {
-                    speedFactor: 0.005,
-                    easing: "linear"
-                  })
-                }
-              });
-            })
-            .catch(err => {console.log(err)});
+      // this part makes sure that the sceneLayer is rendered
+      // when we start the animation in the begining
+      view.whenLayerView(sceneLayer)
+        .then(function(layerView) {
+          watchUtils.whenFalseOnce(layerView, "updating", function(value) {
+            view.goTo(webscene.presentation.slides.getItemAt(0).viewpoint,
+            {
+              // make the animation really slow
+              speedFactor: 0.005,
+              // use the same speed all the time during the animation
+              easing: "linear"
+            });
+          });
         });
-      });
 
       window.view = view;
     });
