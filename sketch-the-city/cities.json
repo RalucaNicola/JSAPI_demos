@@ -1,0 +1,26 @@
+{
+  "cities": [
+    {
+      "title": "San Francisco",
+      "id": "8cc1826ea7b448da9b1ca2aa9946e056",
+      "attribution": "City of San Francisco"
+    },
+    {
+      "title": "New York - Manhattan",
+      "id": "9eea926653b84bc093760d4b08d84190",
+      "attribution": "DoITT"
+    },
+    {
+      "title": "Zurich",
+      "id": "055c058436fc4616a6662ffa21b5170a"
+    },
+    {
+      "title": "Paris",
+      "id": "52b69ab1909d4f60801e9131555e8926"
+    },
+    {
+      "title": "Berlin",
+      "id": "c5ea2c766162440bb7df630c4984a790"
+    }
+  ]
+}

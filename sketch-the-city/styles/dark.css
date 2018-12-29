@@ -1,0 +1,34 @@
+
+#viewDiv {
+  filter: drop-shadow(1px 1px 3px rgba(255, 255, 255, 0.3));
+}
+
+#image {
+  background-image: url('./background-black.jpg');
+  background-size: cover;
+  opacity: 1;
+}
+
+#cities>button {
+  background: #2C2C2C;
+  color: white;
+  border-bottom: 1px solid white;
+}
+
+.esri-attribution, #intro, #loading, #error {
+  color: white;
+}
+
+a:hover {
+  color: #f5d3bc;
+}
+
+#mode {
+  background: #2C2C2C;
+  color: white;
+  border-bottom: 1px solid white;
+}
+
+#loading>img {
+  filter: brightness(5);
+}

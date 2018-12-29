@@ -1,0 +1,28 @@
+
+#viewDiv {
+  filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
+}
+
+#image {
+  background-image: url('./background.jpg');
+  background-size: cover;
+  opacity: 0.7;
+}
+
+#cities>button {
+  background: #F1EFE6;
+  border-bottom: 1px solid black;
+}
+
+a {
+  color: #d62273;
+}
+
+a:hover {
+  color: #96154f;
+}
+
+#mode {
+  background: #F1EFE6;
+  border-bottom: 1px solid black;
+}
