@@ -92,7 +92,40 @@ a {
 }
 
 #loading>img {
-  height: 20px;
+  height: 15px;
   vertical-align: middle;
 }
+
+#slides {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+ul {
+  list-style:none;
+  padding: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.slide{
+  font-size: 0.8em;
+  padding: 0px 10px;
+  transform: skew(-45deg);
+  border-width: 1px;
+  border-style: solid;
+  border-top: none;
+  border-left: none;
+  margin: 2px 2px;
+  cursor: pointer;
+}
+
+.slide>div {
+  transform: skew(45deg);
+}
+
+
 

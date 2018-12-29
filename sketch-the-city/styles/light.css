@@ -14,6 +14,10 @@
   border-bottom: 1px solid black;
 }
 
+#cities>button:hover, #mode:hover, .slide:hover {
+  background: #ddd;
+}
+
 a {
   color: #d62273;
 }
@@ -25,4 +29,9 @@ a:hover {
 #mode {
   background: #F1EFE6;
   border-bottom: 1px solid black;
+}
+
+.slide {
+  background: #F1EFE6;
+  border-color: black;
 }

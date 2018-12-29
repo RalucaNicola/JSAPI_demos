@@ -53,7 +53,7 @@ require([
         type: "sketch",
         color: outlineColor,
         size: 2,
-        extensionLength: 0
+        extensionLength: 5
       };
 
       // this renderers all the layers with semi-transparent white faces
@@ -74,6 +74,31 @@ require([
       };
       layer.renderer = renderer;
     }
+  }
+
+  function createPresentation(slides) {
+
+    const slideContainer = document.getElementById("slides");
+
+    if (slides.length) {
+      const slideList = document.createElement("ul");
+      slideContainer.appendChild(slideList);
+      slides.forEach(function(slide) {
+        let slideElement = document.createElement("li");
+        slideElement.id = slide.id;
+        slideElement.classList.add("slide");
+        let title = document.createElement("div");
+        title.innerHTML = slide.title.text;
+        slideElement.appendChild(title);
+
+        slideElement.addEventListener("click", function() {
+          view.goTo(slide.viewpoint);
+        }.bind(slide));
+
+        slideList.appendChild(slideElement);
+      });
+    }
+
   }
 
   function setScene(id) {
@@ -116,11 +141,11 @@ require([
       }
     });
 
-    origWebscene.load().then(function () {
-
-      console.log(origWebscene.allLayers);
-
+    origWebscene.loadAll().then(function () {
+      console.log(origWebscene.toJSON());
+      console.log("*****");
       origWebscene.allLayers.forEach(function (layer) {
+        console.log(layer);
         if (layer && layer.type === "scene") {
           setRenderer(layer);
           layer.popupEnabled = false;
@@ -133,7 +158,10 @@ require([
         loading.classList.add("hide");
       });
 
-      setId(id);
+      //setId(id);
+
+      webscene.presentation = origWebscene.presentation.clone();
+      createPresentation(webscene.presentation.slides);
     })
     .catch(function(err) {
       loading.classList.add("hide");
@@ -144,7 +172,7 @@ require([
   }
 
   document.getElementById("mode").addEventListener("click", function (evt) {
-    console.log("hello");
+
     if (mode === "light") {
       mode = "dark";
       evt.target.innerHTML = "Pencil";

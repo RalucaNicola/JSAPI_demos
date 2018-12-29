@@ -19,6 +19,10 @@
   color: white;
 }
 
+#cities>button:hover, #mode:hover, .slide:hover {
+  background: #555;
+}
+
 a:hover {
   color: #f5d3bc;
 }
@@ -31,4 +35,10 @@ a:hover {
 
 #loading>img {
   filter: brightness(5);
+}
+
+.slide {
+  background: #2C2C2C;
+  color: white;
+  border-color: white;
 }
