@@ -118,6 +118,8 @@ require([
 
     origWebscene.load().then(function () {
 
+      console.log(origWebscene.allLayers);
+
       origWebscene.allLayers.forEach(function (layer) {
         if (layer && layer.type === "scene") {
           setRenderer(layer);
@@ -137,7 +139,6 @@ require([
       loading.classList.add("hide");
       error.classList.remove("hide");
     });
-
 
     window.view = view;
   }
