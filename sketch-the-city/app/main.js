@@ -103,6 +103,9 @@ require([
 
   function setScene(id) {
 
+    const slideContainer = document.getElementById("slides");
+    slideContainer.innerHTML = "";
+
     if (!intro.classList.contains("hide")) {
       intro.classList.add("hide");
     }
@@ -144,7 +147,7 @@ require([
     origWebscene.loadAll().then(function () {
       console.log(origWebscene.toJSON());
       console.log("*****");
-      origWebscene.allLayers.forEach(function (layer) {
+      origWebscene.layers.forEach(function (layer) {
         console.log(layer);
         if (layer && layer.type === "scene") {
           setRenderer(layer);
