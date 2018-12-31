@@ -37,6 +37,10 @@ require([
         button.innerHTML = city.title;
         button.addEventListener("click", function (evt) {
           setScene(city.id);
+          if (city.attribution) {
+            document.getElementById("attribution").innerHTML = `${city.attribution}.
+            Made with <a href="" target="_blank">ArcGIS API for JavaScript</a>.`;
+          }
         }.bind(city));
         cityContainer.appendChild(button);
       }
@@ -103,8 +107,8 @@ require([
 
   function setScene(id) {
 
-    const slideContainer = document.getElementById("slides");
-    slideContainer.innerHTML = "";
+    document.getElementById("slides").innerHTML = "";
+    document.getElementById("attribution").innerHTML = `Made with <a href="" target="_blank">ArcGIS API for JavaScript</a>.`;
 
     if (!intro.classList.contains("hide")) {
       intro.classList.add("hide");

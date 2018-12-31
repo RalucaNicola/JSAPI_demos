@@ -98,7 +98,7 @@ a {
 
 #slides {
   position: absolute;
-  bottom: 10px;
+  bottom: 30px;
   left: 0;
   right: 0;
   text-align: center;
@@ -127,5 +127,14 @@ ul {
   transform: skew(45deg);
 }
 
+#attribution {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  font-size: 0.7em;
+  text-align: right;
+  padding-right: 2px;
+}
 
 

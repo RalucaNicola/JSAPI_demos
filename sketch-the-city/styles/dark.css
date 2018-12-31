@@ -1,4 +1,8 @@
 
+body {
+  color: white;
+}
+
 #viewDiv {
   filter: drop-shadow(1px 1px 3px rgba(255, 255, 255, 0.3));
 }
