@@ -51,13 +51,14 @@ require([
 
     const outlineColor = mode === "dark" ? [255, 255, 255, 0.8] : [0, 0, 0, 0.8];
     const fillColor = mode === "dark" ? [10, 10, 10, 0.1] : [255, 255, 255, 0.1];
+    const size = mode === "dark" ? 2 : 1;
 
     if (layer.type === "scene") {
       const sketchEdges = {
         type: "sketch",
         color: outlineColor,
-        size: 2,
-        extensionLength: 5
+        size: size,
+        extensionLength: 2
       };
 
       // this renderers all the layers with semi-transparent white faces
