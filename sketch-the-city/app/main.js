@@ -150,16 +150,17 @@ require([
     });
 
     origWebscene.loadAll().then(function () {
-      console.log(origWebscene.toJSON());
-      console.log("*****");
-      origWebscene.layers.forEach(function (layer) {
-        console.log(layer);
+      const sceneLayers = origWebscene.layers.filter(function(layer) {
+        return (layer.type === "scene");
+      });
+      sceneLayers.forEach(function (layer) {
         if (layer && layer.type === "scene") {
           setRenderer(layer);
           layer.popupEnabled = false;
-          webscene.add(layer);
         }
       });
+
+      webscene.addMany(sceneLayers);
 
       view.goTo(origWebscene.initialViewProperties.viewpoint)
       .then(function() {
