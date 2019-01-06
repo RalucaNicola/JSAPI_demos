@@ -1,11 +1,11 @@
 # Creating a choropleth map of unemployment in the US
 
-- [Purpose of the map](purpose-of-the-map)
-- [The data](the-data)
-- [Map design](map-design)
-- [Webby requirements](webby-requirements)
+- [Purpose of the map](#purpose-of-the-map)
+- [The data](#the-data)
+- [Map design](#map-design)
+- [Webby requirements](#webby-requirements)
 
-## Purpose of the map
+# Purpose of the map
 
 This map shows the evolution of unemployment rate in the US, from 1990 to 2018. An interactive map on this time period at county level doesn't exist yet. This map is aimed at anybody interested in the topic. The audience is very broad so it should be easily read and understood by anyone.
 
