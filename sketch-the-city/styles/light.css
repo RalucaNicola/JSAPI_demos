@@ -35,3 +35,7 @@ a:hover {
   background: #F1EFE6;
   border-color: black;
 }
+
+.esri-attribution, #attribution {
+  background-color: #F1EFE6;
+}

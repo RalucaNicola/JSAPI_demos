@@ -3,10 +3,6 @@ body {
   color: white;
 }
 
-#viewDiv {
-  filter: drop-shadow(1px 1px 3px rgba(255, 255, 255, 0.3));
-}
-
 #image {
   background-image: url('./background-black.jpg');
   background-size: cover;
@@ -21,6 +17,10 @@ body {
 
 .esri-attribution, #intro, #loading, #error {
   color: white;
+}
+
+.esri-attribution, #attribution {
+  background-color: #2C2C2C;
 }
 
 #menu button:hover, #mode:hover, .slide:hover {
