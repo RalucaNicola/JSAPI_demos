@@ -22,16 +22,65 @@ The Bureau of Labor Statistics has data on labor force available at: https://www
 The geographic data for the counties can be found at:
 https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
 
+And the geographic data for the states can be found at:
+https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html
+
 ### Licenses for the data
 
 to do
 
 ### Generalization level
-to do
+
+This is important for 2 reasons:
+
+ 1. The detail level of a dataset needs to be adjusted to the scale of the map, so that the user understands the data and can easily orient himself.
+ 2. Generalization is important for performance. A smaller number of vertices usually means that the application will perform better.
+
+For this map I could choose between 3 generalization levels:
+
+  - 1: 500,000 - blue border
+  - 1: 5,000,000 - red border
+  - 1: 20,000,000 (`cb_2017_us_county_20m.shp`) - green border
+
+  ![generalization-levels](./images/generalization-levels.PNG)
+
+At this scale you can clearly see the difference between the datasets, but we're actually interested in an overview map of the US. So probably the users will navigate in the map somewhere in between 1:5,000,000 and 1:30,000,000, where as you can see below the differences between the datasets aren't visible anymore:
+
+![generalization-levels](./images/generalization-5m.PNG)
+![generalization-levels](./images/generalization-30m.PNG)
+
+Another metric for choosing the generalization level is performance. The fewer vertices, the better! So let's count them. I'm using a small script that you can run in the Python console in ArcGIS Pro to print how many vertices a layer has:
+
+```py
+def getVertexCount(input):
+  count = 0
+  with arcpy.da.SearchCursor(input, 'SHAPE@') as cursor:
+      for row in cursor:
+          if (row[0].type == "point"):
+              count += 1
+          else:
+              count += row[0].pointCount
+  print(count)
+
+# and the results for my datasets:
+
+getVertexCount(r'C:\data\USA_counties\cb_2017_us_county_500k.shp')
+1040321
+
+getVertexCount(r'C:\data\USA_counties\cb_2017_us_county_5m.shp')
+214908
+
+getVertexCount(r'C:\data\USA_counties\cb_2017_us_county_20m.shp')
+55906
+```
+
+So, the winner is clearly the most generalized dataset the one with data vectorized at 1:20,000,000.
 
 ### Other data needed for context information
 
-Boundaries of the states (also used for labeling)
+I want to display also the borders of the states, so I will download and use the 20m dataset for states. Like this, I also make sure that the borders match the borders of the counties.
+
+[State level data](https://www.census.gov/geo/maps-data/data/cbf/cbf_state.html)
 
 ### Data normalization
 
@@ -40,6 +89,22 @@ Choropleth maps should never depict absolute values. For this map we will use th
 ### Data processing
 
 Join of attribute data and geographical data based on id.
+
+Load in unemployment data:
+
+```py
+import pandas as pd
+
+#todo: make a unique key from state and county...hopefully that works for the join
+data = pd.read_excel(r"C:\Users\rauc8872\Desktop\laucnty17.xlsx", header=None, names=['county_code', 'county_name', 'labor_force', 'employed', 'unemployed', 'rate'],skiprows=[0,1,2,3,4,5], usecols=[2,3,6,7,8,9], skipfooter=3, dtype={'county_code': object}, converters={'unemployed': int, 'labor_force': int, 'employed': int})
+
+# code: https://my.usgs.gov/confluence/display/cdi/pandas.DataFrame+to+ArcGIS+Table
+x = np.array(np.rec.fromrecords(data.values))
+names = data.dtypes.index.tolist()
+x.dtype.names = tuple(names)
+arcpy.da.NumPyArrayToTable(x, r'E:\Workspace\testData.gdb\testTable')
+```
+
 
 ### Map projection
 
