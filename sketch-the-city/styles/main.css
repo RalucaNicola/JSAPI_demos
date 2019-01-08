@@ -48,7 +48,7 @@ body,
   cursor: pointer;
   padding: 0 1em;
   font-family: "Roboto", sans-serif;
-  font-size: 0.8em;
+
   margin: -1em 0;
   padding: 0 1em;
 }
@@ -59,13 +59,13 @@ body,
   cursor: pointer;
   padding: 0 1em;
   font-family: "Roboto", sans-serif;
-  font-size: 0.8em;
+
 }
 
 .esri-attribution {
   background: transparent;
   font-family: "Roboto", sans-serif;
-  font-size: 0.8em;
+
 }
 
 a {
@@ -112,7 +112,7 @@ ul {
 }
 
 .slide{
-  font-size: 0.8em;
+
   padding: 0px 10px;
   transform: skew(-45deg);
   border-width: 1px;
