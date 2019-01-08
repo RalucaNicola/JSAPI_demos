@@ -11,12 +11,14 @@ require([
   const loading = document.getElementById("loading");
   const error = document.getElementById("error");
 
-  const params = (new URL(document.location)).searchParams;
-  const id = params.get("id");
+  const queryParams = document.location.search.substr(1);
+  const result = {};
 
-  function setId(id) {
-    window.history.pushState("", "", window.location.pathname + "?id=" + id);
-  }
+  queryParams.split("&").forEach(function(part) {
+    var item = part.split("=");
+    result[item[0]] = decodeURIComponent(item[1]);
+  });
+  const id = result.id;
 
   if (id) {
     setScene(id);
@@ -53,32 +55,31 @@ require([
     const fillColor = mode === "dark" ? [10, 10, 10, 0.1] : [255, 255, 255, 0.1];
     const size = mode === "dark" ? 2 : 1;
 
-    if (layer.type === "scene") {
-      const sketchEdges = {
-        type: "sketch",
-        color: outlineColor,
-        size: size,
-        extensionLength: 2
-      };
+    const sketchEdges = {
+      type: "sketch",
+      color: outlineColor,
+      size: size,
+      extensionLength: 2
+    };
 
-      // this renderers all the layers with semi-transparent white faces
-      // and displays the geometry with sketch edges
-      const renderer = {
-        type: "simple", // autocasts as new SimpleRenderer()
-        symbol: {
-          type: "mesh-3d",
-          symbolLayers: [{
-            type: "fill",
-            material: {
-              color: fillColor,
-              colorMixMode: "replace"
-            },
-            edges: sketchEdges
-          }]
-        }
-      };
-      layer.renderer = renderer;
-    }
+    // this renderers all the layers with semi-transparent white faces
+    // and displays the geometry with sketch edges
+    const renderer = {
+      type: "simple", // autocasts as new SimpleRenderer()
+      symbol: {
+        type: "mesh-3d",
+        symbolLayers: [{
+          type: "fill",
+          material: {
+            color: fillColor,
+            colorMixMode: "replace"
+          },
+          edges: sketchEdges
+        }]
+      }
+    };
+    layer.renderer = renderer;
+
   }
 
   function createPresentation(slides) {
@@ -169,8 +170,6 @@ require([
       .catch(function(err) {
         console.log(err);
       });
-
-      //setId(id);
 
       webscene.presentation = origWebscene.presentation.clone();
       createPresentation(webscene.presentation.slides);
