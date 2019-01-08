@@ -13,7 +13,7 @@ body {
   opacity: 1;
 }
 
-#cities>button {
+#menu button {
   background: #2C2C2C;
   color: white;
   border-bottom: 1px solid white;
@@ -23,7 +23,7 @@ body {
   color: white;
 }
 
-#cities>button:hover, #mode:hover, .slide:hover {
+#menu button:hover, #mode:hover, .slide:hover {
   background: #555;
 }
 

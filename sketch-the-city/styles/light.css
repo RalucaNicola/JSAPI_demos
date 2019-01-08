@@ -9,12 +9,12 @@
   opacity: 0.7;
 }
 
-#cities>button {
+#menu button {
   background: #F1EFE6;
   border-bottom: 1px solid black;
 }
 
-#cities>button:hover, #mode:hover, .slide:hover {
+#menu button:hover, #mode:hover, .slide:hover {
   background: #ddd;
 }
 

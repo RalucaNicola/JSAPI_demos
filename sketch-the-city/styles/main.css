@@ -18,14 +18,14 @@ body,
 
 #intro {
   font-family: 'Reenie Beanie', cursive;
-  font-size: 2em;
+  font-size: 2.5em;
   position: absolute;
   top: 50px;
   left: 0;
   right: 0;
   bottom: 0;
   text-align: center;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 1em;
 }
@@ -48,24 +48,23 @@ body,
   cursor: pointer;
   padding: 0 1em;
   font-family: "Roboto", sans-serif;
-
   margin: -1em 0;
   padding: 0 1em;
 }
 
-#cities>button {
+#menu button {
   background: none;
   border: none;
   cursor: pointer;
   padding: 0 1em;
   font-family: "Roboto", sans-serif;
-
+  font-size: 1em;
 }
 
 .esri-attribution {
   background: transparent;
   font-family: "Roboto", sans-serif;
-
+  font-size: 0.8em;
 }
 
 a {
