@@ -8,17 +8,17 @@
     {
       "title": "New York - Manhattan",
       "id": "9eea926653b84bc093760d4b08d84190",
-      "attribution": "Open data building 3D model provided by <a href='https://www1.nyc.gov/site/doitt/initiatives/3d-building.page' target='_blank'>DoITT</a>."
+      "attribution": "Open data building 3D model provided by <a href='https://www1.nyc.gov/site/doitt/initiatives/3d-building.page' target='_blank'>DoITT</a>"
     },
     {
       "title": "Paris",
       "id": "52b69ab1909d4f60801e9131555e8926",
-      "attribution": "Paris Buildings Open Data provided by <a href='https://www.apur.org/en/about-us' target='_blank'>APUR</a>. WebScene created by <a href='https://www.esrifrance.fr/' target='_blank'>ESRI France</a>."
+      "attribution": "Paris Buildings Open Data provided by <a href='https://www.apur.org/en/about-us' target='_blank'>APUR</a>. WebScene created by <a href='https://www.esrifrance.fr/' target='_blank'>ESRI France</a>"
     },
     {
       "title": "Berlin",
       "id": "fa3ac1d65f174050ad31009feaaa9974",
-      "attribution": "Geoportal Berlin / Gebaeudegeschosse, Senatsverwaltung für Stadtentwicklung und Umwelt Berlin - <a href='http://www.stadtentwicklung.berlin.de/geoinformation/download/nutzIII.pdf' target='_blank'>Data licence</a>"
+      "attribution": "<a href='http://www.stadtentwicklung.berlin.de/geoinformation/download/nutzIII.pdf' target='_blank'>Data licence</a>"
     }
   ]
 }
