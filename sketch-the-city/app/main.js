@@ -150,7 +150,7 @@ require([
     });
 
     origWebscene.loadAll().then(function () {
-      const sceneLayers = origWebscene.layers.filter(function(layer) {
+      const sceneLayers = origWebscene.allLayers.filter(function(layer) {
         return (layer.type === "scene");
       });
       sceneLayers.forEach(function (layer) {
@@ -165,6 +165,9 @@ require([
       view.goTo(origWebscene.initialViewProperties.viewpoint)
       .then(function() {
         loading.classList.add("hide");
+      })
+      .catch(function(err) {
+        console.log(err);
       });
 
       //setId(id);
