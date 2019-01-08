@@ -34,20 +34,22 @@ require([
       const cities = response.data.cities;
       const cityContainer = document.getElementById("cities");
 
-      for (let city of cities) {
+      for (let i = 0; i < cities.length; i++) {
+        const city = cities[i];
         const button = document.createElement("button");
         button.innerHTML = city.title;
         button.addEventListener("click", function (evt) {
           setScene(city.id);
           if (city.attribution) {
-            document.getElementById("attribution").innerHTML = `${city.attribution}.
-            Made with <a href="" target="_blank">ArcGIS API for JavaScript</a>.`;
+            document.getElementById("attribution").innerHTML = city.attribution + '. Made with <a href="" target="_blank">ArcGIS API for JavaScript</a>';
           }
         }.bind(city));
         cityContainer.appendChild(button);
       }
     })
-    .catch(err => console.err());
+    .catch(function(err) {
+      console.log(err);
+    });
 
   function setRenderer(layer) {
 
@@ -110,7 +112,7 @@ require([
   function setScene(id) {
 
     document.getElementById("slides").innerHTML = "";
-    document.getElementById("attribution").innerHTML = `Made with <a href="" target="_blank">ArcGIS API for JavaScript</a>.`;
+    document.getElementById("attribution").innerHTML = 'Made with <a href="" target="_blank">ArcGIS API for JavaScript</a>.';
 
     if (!intro.classList.contains("hide")) {
       intro.classList.add("hide");
@@ -174,7 +176,7 @@ require([
       webscene.presentation = origWebscene.presentation.clone();
       createPresentation(webscene.presentation.slides);
     })
-    .catch(function(err) {
+    .catch(function() {
       loading.classList.add("hide");
       error.classList.remove("hide");
     });
