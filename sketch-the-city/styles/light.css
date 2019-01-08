@@ -3,10 +3,9 @@
   filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
 }
 
-#image {
-  background-image: url('./background.jpg');
+body {
+  background-image: url('./background-pencil.jpg');
   background-size: cover;
-  opacity: 0.7;
 }
 
 #menu button {

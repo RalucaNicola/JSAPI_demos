@@ -3,10 +3,9 @@ body {
   color: white;
 }
 
-#image {
-  background-image: url('./background-black.jpg');
+body {
+  background-image: url('./background-chalk.jpg');
   background-size: cover;
-  opacity: 1;
 }
 
 #menu button {
