@@ -105,7 +105,6 @@ x.dtype.names = tuple(names)
 arcpy.da.NumPyArrayToTable(x, r'E:\Workspace\testData.gdb\testTable')
 ```
 
-
 ### Map projection
 
 For a choropleth map it's important to preserve the areas, so we're going to reproject the data in Albers Conic Equal-Area.
