@@ -26,6 +26,11 @@ require([
 
   const id = getIdParam();
 
+  // function to set an id once a scene was selected
+  function setId(id) {
+    window.history.pushState("", "", window.location.pathname + "?id=" + id);
+  }
+
   // if user loaded scene by setting an id in the url, load that scene
   if (id) {
     setScene(id);
@@ -51,6 +56,7 @@ require([
         button.innerHTML = city.title;
         button.addEventListener("click", function() {
           setScene(city.id);
+          setId(city.id);
           if (city.attribution) {
             document.getElementById("attribution").innerHTML = city.attribution + '. Made with <a href="" target="_blank">ArcGIS API for JavaScript</a>';
           }
