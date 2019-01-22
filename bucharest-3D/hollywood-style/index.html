@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>SceneView</title>
+
+<style>
+  html, body, #viewDiv {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  }
+</style>
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/themes/dark/main.css">
+<script src="https://js.arcgis.com/4.10/"></script>
+
+<script>
+  var map, view;
+
+  require({
+    packages: [{
+      name: "app",
+      location: document.location.pathname + "js/"
+    }, {
+      name: "lib",
+      location: document.location.pathname + "lib/"
+    }]
+  }, [
+    "esri/WebScene",
+    "esri/views/SceneView",
+    "esri/views/3d/support/debugFlags",
+    "esri/Graphic",
+    "esri/layers/SceneLayer",
+    "esri/geometry",
+    "app/font",
+    "app/fontmesh",
+    "dojo/domReady!"
+  ], function (WebScene, SceneView, debugFlags, Graphic, SceneLayer, geometry, font, fontmesh) {
+
+    map = new WebScene({
+      portalItem: {
+        id: "51a38bb522d34e179f50de3f9c4f5351"
+      }
+    });
+
+    view = new SceneView({
+      container: "viewDiv",
+      map: map,
+      qualityProfile: "high"
+    });
+
+    var graphic = null;
+
+    font.create("./font.ttf")
+        .then(font => {
+          const origin = new geometry.Point(26.090427, 44.427418, 85);
+          const text = "BUCHAREST";
+
+          const fullMesh = fontmesh.fromString(font, text, origin, { size: 40, alignment: { x: "center" } });
+
+          function makeGraphic(s, vangle) {
+            if (vangle == null) {
+              vangle = 90;
+            }
+
+            if (graphic) {
+              view.graphics.remove(graphic);
+            }
+
+            const mesh = s === text ? fullMesh : fontmesh.fromString(font, s, origin, { size: 40, alignment: { x: "center" } });
+
+            // Rotate so it stands up
+            mesh.rotate(vangle, 0, 87, { origin });
+
+            graphic = new Graphic({
+              geometry: mesh,
+              symbol: {
+                type: "mesh-3d",
+                symbolLayers: [
+                  {
+                    type: "fill",
+                    material: { color: "#fff8ed" }
+                  }
+                ]
+              }
+            });
+
+            view.graphics.add(graphic);
+          }
+
+          {
+            let i = 0;
+
+            window.typeIt = function typeIt() {
+              i += 1;
+
+              makeGraphic(text.slice(0, i));
+
+              if (i !== text.length) {
+                setTimeout(typeIt, 1);
+              }
+            }
+          }
+
+          {
+            let start = -90;
+            let stop = 90;
+            let t = 0;
+
+            let direction = 1;
+
+            window.rotateIt = function rotateIt() {
+              t = Math.max(0, Math.min(1, t + direction * 0.05));
+
+              const te = 1 - ((1 - t) * (1 - t) * (1 - t));
+
+              makeGraphic(text, te * (stop - start) + start);
+
+              if (direction > 0 && t < 1 || direction < 0 && t > 0) {
+                setTimeout(rotateIt, 1);
+              }
+              else {
+                setTimeout(() => {
+                  direction = -direction;
+                  rotateIt();
+                }, 2000);
+              }
+            }
+          }
+
+          makeGraphic(text);
+        })
+        .otherwise(err => {
+          console.error(err);
+        });
+  });
+</script>
+</head>
+<body>
+  <div id="viewDiv">
+  </div>
+</body>
+</html>
