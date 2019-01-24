@@ -28,20 +28,20 @@
     }
 
     ul {
-      list-style:none;
+      list-style: none;
       padding: 0;
       display: inline-flex;
       flex-wrap: wrap;
     }
 
-    .slide{
+    .slide {
       padding: 0px 10px;
       margin: 2px 2px;
       cursor: pointer;
       border-right: 1px solid black;
     }
 
-    ul>li:last-of-type{
+    ul>li:last-of-type {
       border-right: none;
     }
 
@@ -49,13 +49,14 @@
 
   <script>
     require([
-      "esri/WebScene",
-      "esri/Basemap",
-      "esri/views/SceneView",
-      "esri/layers/VectorTileLayer",
-      "dojo/domReady!"
+        "esri/WebScene",
+        "esri/Basemap",
+        "esri/views/SceneView",
+        "esri/layers/VectorTileLayer",
+        "esri/widgets/Search",
+        "dojo/domReady!"
       ],
-      function (WebScene, Basemap, SceneView, VectorTileLayer) {
+      function (WebScene, Basemap, SceneView, VectorTileLayer, Search) {
 
         const webscene = new WebScene({
           portalItem: {
@@ -69,7 +70,7 @@
           qualityProfile: "high"
         });
 
-        view.when(function() {
+        view.when(function () {
           createPresentation(webscene.presentation.slides);
         });
 
@@ -82,7 +83,7 @@
             // create list using plain old vanilla JS
             const slideList = document.createElement("ul");
             slideContainer.appendChild(slideList);
-            slides.forEach(function(slide) {
+            slides.forEach(function (slide) {
 
               let slideElement = document.createElement("li");
               slideElement.id = slide.id;
@@ -91,7 +92,7 @@
               title.innerHTML = slide.title.text;
               slideElement.appendChild(title);
 
-              slideElement.addEventListener("click", function() {
+              slideElement.addEventListener("click", function () {
                 slide.applyTo(view);
               }.bind(slide));
 
@@ -100,8 +101,16 @@
           }
 
         }
+        const search = new Search({
+          view: view,
+          maxSuggestions: 100
+        });
 
+        view.ui.add(search, {
+          position: "top-right"
+        });
       });
+
   </script>
 </head>
 

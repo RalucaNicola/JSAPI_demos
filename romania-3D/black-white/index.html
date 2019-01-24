@@ -61,10 +61,11 @@
     "esri/Graphic",
     "esri/layers/SceneLayer",
     "esri/geometry",
+    "esri/widgets/Search",
     "app/font",
     "app/fontmesh",
     "dojo/domReady!"
-  ], function (WebScene, SceneView, Graphic, SceneLayer, geometry, font, fontmesh) {
+  ], function (WebScene, SceneView, Graphic, SceneLayer, geometry, Search, font, fontmesh) {
 
     const webscene = new WebScene({
       portalItem: {
@@ -109,6 +110,15 @@
       }
 
     }
+
+    const search = new Search({
+      view: view,
+      maxSuggestions: 100
+    });
+
+    view.ui.add(search, {
+      position: "top-right"
+    });
 
     var graphic = null;
 
