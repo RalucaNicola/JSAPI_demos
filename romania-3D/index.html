@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Malta in contour lines</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.10/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #slides {
+      position: absolute;
+      bottom: 30px;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+
+    ul {
+      list-style:none;
+      padding: 0;
+      display: inline-flex;
+      flex-wrap: wrap;
+    }
+
+    .slide{
+      padding: 0px 10px;
+      margin: 2px 2px;
+      cursor: pointer;
+      border-right: 1px solid black;
+    }
+
+    ul>li:last-of-type{
+      border-right: none;
+    }
+
+  </style>
+
+  <script>
+    require([
+      "esri/WebScene",
+      "esri/Basemap",
+      "esri/views/SceneView",
+      "esri/layers/VectorTileLayer",
+      "dojo/domReady!"
+      ],
+      function (WebScene, Basemap, SceneView, VectorTileLayer) {
+
+        const webscene = new WebScene({
+          portalItem: {
+            id: "1e2765e700774e5b809d5bbd768be6a0"
+          }
+        });
+
+        const view = new SceneView({
+          container: "viewDiv",
+          map: webscene,
+          qualityProfile: "high"
+        });
+
+        view.when(function() {
+          createPresentation(webscene.presentation.slides);
+        });
+
+        function createPresentation(slides) {
+
+          const slideContainer = document.getElementById("slides");
+
+          if (slides.length) {
+
+            // create list using plain old vanilla JS
+            const slideList = document.createElement("ul");
+            slideContainer.appendChild(slideList);
+            slides.forEach(function(slide) {
+
+              let slideElement = document.createElement("li");
+              slideElement.id = slide.id;
+              slideElement.classList.add("slide");
+              let title = document.createElement("div");
+              title.innerHTML = slide.title.text;
+              slideElement.appendChild(title);
+
+              slideElement.addEventListener("click", function() {
+                slide.applyTo(view);
+              }.bind(slide));
+
+              slideList.appendChild(slideElement);
+            });
+          }
+
+        }
+
+      });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+  <div id="slides" class="esri-widget"></div>
+</body>
+
+</html>
