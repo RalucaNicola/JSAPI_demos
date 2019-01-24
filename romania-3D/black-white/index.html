@@ -7,10 +7,38 @@
 
 <style>
   html, body, #viewDiv {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #slides {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background-color: #3E3C42;
+    color: white;
+  }
+
+  ul {
+    list-style:none;
+    padding: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+
+  .slide{
+    padding: 0px 10px;
+    margin: 2px 2px;
+    cursor: pointer;
+    border-right: 1px solid white;
+  }
+
+  ul>li:last-of-type{
+    border-right: none;
   }
 </style>
 
@@ -18,7 +46,6 @@
 <script src="https://js.arcgis.com/4.10/"></script>
 
 <script>
-  var map, view;
 
   require({
     packages: [{
@@ -31,31 +58,63 @@
   }, [
     "esri/WebScene",
     "esri/views/SceneView",
-    "esri/views/3d/support/debugFlags",
     "esri/Graphic",
     "esri/layers/SceneLayer",
     "esri/geometry",
     "app/font",
     "app/fontmesh",
     "dojo/domReady!"
-  ], function (WebScene, SceneView, debugFlags, Graphic, SceneLayer, geometry, font, fontmesh) {
+  ], function (WebScene, SceneView, Graphic, SceneLayer, geometry, font, fontmesh) {
 
-    map = new WebScene({
+    const webscene = new WebScene({
       portalItem: {
         id: "51a38bb522d34e179f50de3f9c4f5351"
       }
     });
 
-    view = new SceneView({
+    const view = new SceneView({
       container: "viewDiv",
-      map: map,
+      map: webscene,
       qualityProfile: "high"
     });
+
+    view.when(function() {
+      createPresentation(webscene.presentation.slides);
+    });
+
+    function createPresentation(slides) {
+
+      const slideContainer = document.getElementById("slides");
+
+      if (slides.length) {
+
+        // create list using plain old vanilla JS
+        const slideList = document.createElement("ul");
+        slideContainer.appendChild(slideList);
+        slides.forEach(function(slide) {
+
+          let slideElement = document.createElement("li");
+          slideElement.id = slide.id;
+          slideElement.classList.add("slide");
+          let title = document.createElement("div");
+          title.innerHTML = slide.title.text;
+          slideElement.appendChild(title);
+
+          slideElement.addEventListener("click", function() {
+            slide.applyTo(view);
+          }.bind(slide));
+
+          slideList.appendChild(slideElement);
+        });
+      }
+
+    }
 
     var graphic = null;
 
     font.create("./font.ttf")
         .then(font => {
+
           const origin = new geometry.Point(26.090427, 44.427418, 85);
           const text = "BUCHAREST";
 
@@ -140,7 +199,7 @@
 </script>
 </head>
 <body>
-  <div id="viewDiv">
-  </div>
+  <div id="viewDiv"></div>
+  <div id="slides" class="esri-widget"></div>
 </body>
 </html>
