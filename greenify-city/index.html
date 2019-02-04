@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Query a SceneLayer's associated FeatureLayer - 4.10</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    h1 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: #7ba592;
+      font-family: sans-serif;
+      padding: 0.4em 3em 0.4em 0.2em;
+      background: linear-gradient(to right, white 50%, transparent);
+    }
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.10/"></script>
+  <script>
+    require([
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/layers/SceneLayer",
+      "esri/layers/FeatureLayer",
+      "esri/symbols/WebStyleSymbol",
+      "esri/geometry/Point",
+      "esri/Graphic",
+      "esri/layers/GraphicsLayer",
+      "esri/geometry/geometryEngine",
+      "esri/tasks/support/Query"
+    ], function(WebScene, SceneView, SceneLayer, FeatureLayer,
+    WebStyleSymbol, Point, Graphic, GraphicsLayer, geometryEngine, Query) {
+
+      // Create Map
+      var map = new WebScene({
+        portalItem: {
+          id: "bf1fce3512534b9a946b75c30d9e5b61"
+        }
+      });
+
+      // Create the SceneView
+      var view = new SceneView({
+        container: "viewDiv",
+        map: map
+      });
+
+      const treesLayer = new GraphicsLayer({
+        elevationInfo: {
+          mode: "relative-to-scene"
+        }
+      });
+      map.add(treesLayer);
+
+      window.treesLayer = treesLayer;
+
+      // Create the linked FeatureLayer instance that contains the attributes.
+      // This layer must also contain a field with the SceneLayer
+      // features' objectid, since we will use it for linking both layers
+
+      var featureLayer = new FeatureLayer({
+        url: "https://services2.arcgis.com/z2tnIkrLQ2BRzr6P/arcgis/rest/services/New_York_OBJECTID/FeatureServer/0",
+      });
+
+      // we don't need to add the FeatureLayer to the map, as
+      // it won't be displayed and we won't click on its features,
+      // however in this case we need to explicitly load the layer
+      // before we execute any queries
+
+      featureLayer.load().then(attributesReady);
+
+      function attributesReady() {
+
+        // capture click events on the view
+        view.on("click", function(event) {
+
+          // get the returned screen x, y coordinates and use it
+          // with hitTest to find if any graphics were clicked
+          // (using promise chaining for cleaner code and error handling)
+          view.hitTest(event).then(function(response) {
+
+            // we're only interested in the first result
+            var result = response.results[0];
+            if (result && result.graphic) {
+              return result.graphic;
+            }
+          }).then(function(graphic) {
+
+            // now extract the object id from the graphic
+            var objectid = graphic.attributes.objectid;
+
+            var query = new Query();
+
+            // the feature layer must contain a field with the
+            // objectid values of the scenelayer buildings in
+            // order to execute this query correctly
+            query.where = "objectid = " + objectid;
+            query.returnGeometry = true;
+
+            // execute the query
+            return featureLayer.queryFeatures(query);
+
+          }).then(function(results) {
+
+            // process the feature service query results
+            if (results && results.features.length > 0) {
+
+              // show the popup with all attributes coming from the
+              // feature layer query, at the original click position
+              const trees = getRandomTrees(results.features[0].geometry);
+
+              treesLayer.addMany(trees);
+            }
+          }).catch(function(error) {
+            console.error(error);
+          });
+        });
+
+        window.view = view;
+        view.ui.empty("top-left");
+
+        function getRandomTrees(polygon) {
+          const treeSymbols = [new WebStyleSymbol({
+            name: "Ulmus",
+            styleName: "EsriRealisticTreesStyle"
+          }), new WebStyleSymbol({
+            name: "Acer",
+            styleName: "EsriRealisticTreesStyle"
+          }), new WebStyleSymbol({
+            name: "Quercus",
+            styleName: "EsriRealisticTreesStyle"
+          }), new WebStyleSymbol({
+            name: "Acer",
+            styleName: "EsriRealisticTreesStyle"
+          }), new WebStyleSymbol({
+            name: "Cornus",
+            styleName: "EsriRealisticTreesStyle"
+          }), new WebStyleSymbol({
+            name: "Agave",
+            styleName: "EsriRealisticTreesStyle"
+          })];
+          const ext = polygon.extent;
+          let i = 0;
+          const trees = [];
+          while (i < ext.height * ext.width / 1000) {
+            const y = ext.ymin + (Math.random() * (ext.ymax - ext.ymin));
+            const x = ext.xmin + (Math.random() * (ext.xmax - ext.xmin));
+            const point = new Point({
+              x,
+              y,
+              spatialReference: {
+                wkid: 3857
+              }
+            });
+            if (geometryEngine.within(point, polygon)) {
+              i++;
+              const graphic = new Graphic({
+                geometry: point,
+                symbol: treeSymbols[Math.floor(Math.random() * 5)]
+              });
+              trees.push(graphic);
+            }
+          }
+          return trees;
+        }
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+  <h1 id="title">Greenify your city</h1>
+</body>
+
+</html>
