@@ -1,0 +1,45 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+aside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  max-width: 250px;
+  padding: 0.5em;
+  box-sizing: border-box;
+  overflow: auto;
+  font-family: 'Open Sans Condensed', sans-serif;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+ul {
+  list-style-type: none;
+  color: #000;
+  padding: 0;
+  padding-bottom: 30px;
+}
+
+li.selected {
+  background-color: #000;
+  color: #fff;
+}
+
+
+@media (max-width: 600px) {
+  aside {
+    position: absolute;
+    top: 60%;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+}

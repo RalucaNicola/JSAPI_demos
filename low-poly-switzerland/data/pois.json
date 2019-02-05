@@ -1,0 +1,428 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "palm-tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.00054931640625,
+          46.038922598236
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "palm-tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.06097412109375,
+          46.08847179577592
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "palm-tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.99505615234375,
+          46.097995389276704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "palm-tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.84124755859375,
+          46.010316293096196
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "palm-tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.0252685546875,
+          45.882360730184025
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.1136474609375,
+          46.44164232762498
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.223510742187499,
+          46.437856895024204
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.3333740234375,
+          46.57019056757178
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.5635986328125,
+          46.62303384721474
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.4097900390625,
+          46.65697731621612
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.67919921875,
+          47.0439255239614
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.85498046875,
+          47.09630525444073
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.965087890625,
+          46.830133640447386
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.06396484375,
+          46.848921470800455
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.162841796875,
+          46.93526088057719
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.992553710937499,
+          46.97275640318636
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.778076171875,
+          47.03643850299412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.3109130859375,
+          47.17477833929903
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.217529296875,
+          47.178512264439085
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.728393554687498,
+          46.89023157359399
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.656982421875,
+          46.88647742351024
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.481201171875,
+          46.604167162931844
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "tree"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.7613525390625,
+          46.86770273172814
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "balloon"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.699798583984375,
+          46.88741598566432
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "big-city",
+        "name": "Zurich"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.536376953125,
+          47.3704545156932
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "big-city",
+        "name": "Bern"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.470703125,
+          46.95213711682888
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "medium-city",
+        "name": "Lausanne"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.59454345703125,
+          46.53619267489863
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "big-city",
+        "name": "Geneva"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.15509033203125,
+          46.21595132425726
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "small-city",
+        "name": "Davos"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.8382568359375,
+          46.800059446787316
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "small-city",
+        "name": "Lugano"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.946990966796875,
+          46.00554713642256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "medium-city",
+        "name": "Basel"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62451171875,
+          47.56911375866714
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "cow"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.6025390625,
+          46.5607488448596
+        ]
+      }
+    }
+  ]
+}
