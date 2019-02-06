@@ -19,6 +19,11 @@
       "title": "Berlin",
       "id": "fa3ac1d65f174050ad31009feaaa9974",
       "attribution": "<a href='http://www.stadtentwicklung.berlin.de/geoinformation/download/nutzIII.pdf' target='_blank'>Data license</a>"
+      },
+    {
+      "title": "Washington D.C.",
+      "id": "3c647dba420a4f3da9091ae83772e78e",
+      "attribution": "Open data building 3D model provided by <a href='http://opendata.dc.gov/datasets?q=buildings%203Df' target='_blank'>DCGISopendata</a>"
     }
   ]
 }
