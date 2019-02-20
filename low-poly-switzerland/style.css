@@ -5,7 +5,6 @@ body,
   margin: 0;
   height: 100%;
   width: 100%;
-  font-family: 'Open Sans Condensed', sans-serif;
 }
 
 aside {
@@ -17,7 +16,6 @@ aside {
   padding: 0.5em;
   box-sizing: border-box;
   overflow: auto;
-  font-family: 'Open Sans Condensed', sans-serif;
   background-color: rgba(255, 255, 255, 0.6);
 }
 

@@ -10,12 +10,15 @@ require([
   "esri/geometry/Multipoint",
   "esri/geometry/Mesh",
   "esri/geometry/support/MeshComponent",
+  "esri/geometry/SpatialReference",
   "esri/core/promiseUtils",
+  "esri/layers/GraphicsLayer",
   "esri/layers/ElevationLayer",
   "lib/poly2tri"
 ],
   function (
-    Map, Color, SceneView, esriRequest, Graphic, Polygon, Point, Multipoint, Mesh, MeshComponent, promiseUtils, ElevationLayer, poly2tri
+    Map, Color, SceneView, esriRequest, Graphic, Polygon, Point, Multipoint, Mesh, MeshComponent,
+    SpatialReference, promiseUtils, GraphicsLayer, ElevationLayer, poly2tri
   ) {
 
     // create elevation layer for sampling height info
@@ -23,12 +26,13 @@ require([
       url: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer"
     });
 
+
+
     var map = new Map({
       basemap: null,
       ground: {
-        layers: [elevationLayer],
-        surfaceColor: "white"
-      }
+        opacity: 0
+      },
     });
 
     var view = new SceneView({
@@ -44,13 +48,28 @@ require([
         tilt: 47.75
       },
       environment: {
+        background: {
+          type: "color",
+          color: "#ffffff"
+        },
         lighting: {
-          directShadowsEnabled: true
-        }
-      }
+          directShadowsEnabled: true,
+        },
+        starsEnabled: false,
+        atmosphereEnabled: false
+      },
+      spatialReference: SpatialReference.WebMercator
     });
 
     window.view = view;
+
+    var poiLayer = new GraphicsLayer({
+      elevationInfo: {
+        mode: "absolute-height"
+      }
+    });
+
+    map.add(poiLayer);
 
     const urls = [
       "./data/country.json",
@@ -206,15 +225,12 @@ require([
 
       const multipoint = new Multipoint({ points });
 
-      return elevationLayer.when(function () {
-        return elevationLayer.queryElevation(multipoint/* , {demResolution: "finest-contiguous"} */)
-          .then(function (result) {
-            return result.geometry.points.map(function (p) {
-              return [p[0], p[1], p[2] * exaggerationFactor];
-            });
-          })
-          .catch(console.error);
-      })
+      return elevationLayer.queryElevation(multipoint/* , {demResolution: "finest-contiguous"} */)
+        .then(function (result) {
+          return result.geometry.points.map(function (p) {
+            return [p[0], p[1], p[2] * exaggerationFactor];
+          });
+        })
         .catch(console.error);
     }
 
@@ -230,7 +246,7 @@ require([
           pois.forEach(function (poi, index) {
             const symbol = getSymbol(poi.properties.type);
             point = pointsWithZValues[index];
-            zValue = poi.properties.type === "balloon" ? 30000 : point[2] * exaggerationFactor;
+            zValue = poi.properties.height ? poi.properties.height : point[2] * exaggerationFactor;
             const graphic = new Graphic({
               geometry: new Point({
                 longitude: point[0],
@@ -240,7 +256,7 @@ require([
               symbol
             });
 
-            view.graphics.add(graphic);
+            poiLayer.add(graphic);
 
             if (poi.properties.name) {
               addLabel(poi, zValue);
@@ -282,6 +298,37 @@ require([
               anchor: "bottom"
             }]
           };
+        case "pine-tree":
+          return {
+            type: "point-3d",
+            symbolLayers: [{
+              type: "object",
+              resource: {
+                href: "./3d-models/pine-tree/scene.gltf"
+              },
+              height: 5000,
+              material: {
+                color: "green",
+                colorMixMode: "replace"
+              },
+              heading: Math.random() * 360,
+              anchor: "bottom"
+            }]
+          };
+        case "peak":
+          return {
+            type: "point-3d",
+            symbolLayers: [{
+              type: "icon",
+              resource: {
+                primitive: "circle"
+              },
+              material: {
+                color: "black"
+              },
+              size: 4
+            }]
+          };
         case "big-city":
           return {
             type: "point-3d",
@@ -306,6 +353,22 @@ require([
                   href: "./3d-models/House16.json"
                 },
                 height: 10000,
+                anchor: "bottom"
+              }
+            ]
+          };
+
+        case "ski-resort":
+          return {
+            type: "point-3d",
+            symbolLayers: [
+              {
+                type: "object",
+                resource: {
+                  href: "./3d-models/snowcat/scene.gltf"
+                },
+                height: 6000,
+                heading: 180,
                 anchor: "bottom"
               }
             ]
@@ -339,7 +402,6 @@ require([
               }
             ]
           };
-        // https://sketchfab.com/models/0dd5290dd6fe472ba1ded81d27adcd96
         case "cow":
           return {
             type: "point-3d",
@@ -348,6 +410,39 @@ require([
                 type: "object",
                 resource: {
                   href: "./3d-models/cow/scene.gltf"
+                },
+                height: 6000,
+                anchor: "bottom"
+              }
+            ]
+          };
+        case "cheese":
+          return {
+            type: "point-3d",
+            symbolLayers: [
+              {
+                type: "object",
+                resource: {
+                  href: "./3d-models/cheese/scene.gltf"
+                },
+                height: 4000,
+                heading: 250,
+                anchor: "bottom"
+              }
+            ]
+          };
+        // https://sketchfab.com/models/0dd5290dd6fe472ba1ded81d27adcd96
+        case "deer":
+          return {
+            type: "point-3d",
+            symbolLayers: [
+              {
+                type: "object",
+                resource: {
+                  href: "./3d-models/deer/scene.gltf"
+                },
+                material: {
+                  color: "#59341e"
                 },
                 height: 10000,
                 anchor: "bottom"
@@ -359,11 +454,13 @@ require([
 
     function addLabel(poi, zValue) {
       let callout = null;
-      if (poi.properties.type === "small-city") {
+
+      color = poi.properties.type === "peak" ? [0, 0, 0] : [74, 29, 109];
+      if (poi.properties.callout) {
         callout = {
           type: "line", // autocasts as new LineCallout3D()
           size: 0.5,
-          color: [74, 29, 109],
+          color: color,
           border: {
             color: [255, 255, 255, 0.7]
           }
@@ -375,7 +472,7 @@ require([
           symbolLayers: [{
             type: "text", // autocasts as new TextSymbol3DLayer()
             material: {
-              color: [74, 29, 109]
+              color: color
             },
             halo: {
               color: [255, 255, 255, 0.7],
@@ -388,7 +485,7 @@ require([
           verticalOffset: {
             screenLength: 150,
             maxWorldLength: 15000,
-            minWorldLength: 15000
+            minWorldLength: 7000
           },
           // The callout has to have a defined type (currently only line is possible)
           // The size, the color and the border color can be customized

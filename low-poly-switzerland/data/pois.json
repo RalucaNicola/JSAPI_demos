@@ -4,6 +4,21 @@
     {
       "type": "Feature",
       "properties": {
+        "type": "cheese",
+        "name": "Emmental Valley",
+        "callout": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.744085,
+          46.978661
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "type": "palm-tree"
       },
       "geometry": {
@@ -108,26 +123,29 @@
     {
       "type": "Feature",
       "properties": {
-        "type": "tree"
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "type": "pine-tree"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.5635986328125,
-          46.62303384721474
+          10.2667236328125,
+          46.73044845188485
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "type": "tree"
+        "type": "pine-tree"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.4097900390625,
-          46.65697731621612
+          10.17608642578125,
+          46.67582559793001
         ]
       }
     },
@@ -251,65 +269,78 @@
     {
       "type": "Feature",
       "properties": {
-        "type": "tree"
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "type": "pine-tree"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.728393554687498,
-          46.89023157359399
+          10.17059326171875,
+          46.72291755083757
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "type": "tree"
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "type": "pine-tree"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.656982421875,
-          46.88647742351024
+          10.294189453125,
+          46.65509212658214
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "type": "tree"
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "type": "pine-tree"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.481201171875,
-          46.604167162931844
+          10.3271484375,
+          46.685247274319565
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "type": "tree"
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "type": "pine-tree"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          9.7613525390625,
-          46.86770273172814
+          10.26397705078125,
+          46.67394106549699
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "type": "balloon"
+        "type": "balloon",
+        "height": 20000
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          8.699798583984375,
-          46.88741598566432
+          7.126295,
+          46.470716
         ]
       }
     },
@@ -372,8 +403,10 @@
     {
       "type": "Feature",
       "properties": {
-        "type": "small-city",
-        "name": "Davos"
+        "type": "ski-resort",
+        "name": "Davos",
+        "height": 10000,
+        "callout": true
       },
       "geometry": {
         "type": "Point",
@@ -387,7 +420,8 @@
       "type": "Feature",
       "properties": {
         "type": "small-city",
-        "name": "Lugano"
+        "name": "Lugano",
+        "callout": true
       },
       "geometry": {
         "type": "Point",
@@ -414,13 +448,42 @@
     {
       "type": "Feature",
       "properties": {
+        "type": "deer",
+        "height": 8000
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.569580078124999,
+          46.221652456379104
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "type": "cow"
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          7.6025390625,
-          46.5607488448596
+          7.211151123046874,
+          46.84140712700584
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "type": "peak",
+        "name": "Matterhorn",
+        "callout": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.657899856567383,
+          45.975641117240215
         ]
       }
     }
