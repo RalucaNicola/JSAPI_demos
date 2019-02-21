@@ -1,0 +1,27 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(36, 36, 36);
+}
+
+#description {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  font-family: sans-serif;
+  max-width: 400px;
+  font-size: 0.8em;
+  background-color: rgba(36, 36, 36, 0.5);
+  padding: 0.5em;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  border-bottom: 1px dashed white;
+}
