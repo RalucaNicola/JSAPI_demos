@@ -183,17 +183,15 @@ require([
     // once all resources are loaded...
     origWebscene.loadAll().then(function () {
 
-      // select the scene layers only
+      // select the 3D object scene layers only
       const sceneLayers = origWebscene.allLayers.filter(function (layer) {
-        return (layer.type === "scene");
+        return (layer.type === "scene" && layer.geometryType === "mesh");
       });
 
       // apply the sketch renderer and disable popup
       sceneLayers.forEach(function (layer) {
-        if (layer && layer.type === "scene") {
           setSketchRenderer(layer);
           layer.popupEnabled = false;
-        }
       });
 
       // add these layers to the empty webscene
