@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -13,6 +14,7 @@
       height: 100%;
       width: 100%;
     }
+
     h1 {
       position: absolute;
       top: 0;
@@ -22,9 +24,10 @@
       padding: 0.4em 3em 0.4em 0.2em;
       background: linear-gradient(to right, white 50%, transparent);
     }
+
   </style>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.10/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.11/"></script>
   <script>
     require([
       "esri/WebScene",
@@ -37,20 +40,25 @@
       "esri/layers/GraphicsLayer",
       "esri/geometry/geometryEngine",
       "esri/tasks/support/Query"
-    ], function(WebScene, SceneView, SceneLayer, FeatureLayer,
-    WebStyleSymbol, Point, Graphic, GraphicsLayer, geometryEngine, Query) {
+    ], function (WebScene, SceneView, SceneLayer, FeatureLayer,
+      WebStyleSymbol, Point, Graphic, GraphicsLayer, geometryEngine, Query) {
 
       // Create Map
-      var map = new WebScene({
+      const map = new WebScene({
         portalItem: {
           id: "bf1fce3512534b9a946b75c30d9e5b61"
         }
       });
 
       // Create the SceneView
-      var view = new SceneView({
+      const view = new SceneView({
         container: "viewDiv",
-        map: map
+        map: map,
+        highlightOptions: {
+          color: "#7ba592",
+          haloOpacity: 0.6,
+          fillOpacity: 0.2
+        }
       });
 
       const treesLayer = new GraphicsLayer({
@@ -62,123 +70,99 @@
 
       window.treesLayer = treesLayer;
 
-      // Create the linked FeatureLayer instance that contains the attributes.
-      // This layer must also contain a field with the SceneLayer
-      // features' objectid, since we will use it for linking both layers
+      let sceneLayer = null,
+        sceneLayerView = null;
 
-      var featureLayer = new FeatureLayer({
-        url: "https://services2.arcgis.com/z2tnIkrLQ2BRzr6P/arcgis/rest/services/New_York_OBJECTID/FeatureServer/0",
+      const treeSymbol = new WebStyleSymbol({
+        name: "Ulmus",
+        styleName: "EsriRealisticTreesStyle"
       });
 
-      // we don't need to add the FeatureLayer to the map, as
-      // it won't be displayed and we won't click on its features,
-      // however in this case we need to explicitly load the layer
-      // before we execute any queries
+      view.when(function () {
+        view.map.layers.filter(function (layer) {
+          if (layer.title === "Buildings Manhattan") {
+            sceneLayer = layer;
 
-      featureLayer.load().then(attributesReady);
+            view.whenLayerView(sceneLayer)
+              .then(function (lyrView) {
+                sceneLayerView = lyrView;
+              });
+          }
+        });
 
-      function attributesReady() {
+        addHitEvent();
+      });
 
-        // capture click events on the view
-        view.on("click", function(event) {
+      function addHitEvent() {
 
-          // get the returned screen x, y coordinates and use it
-          // with hitTest to find if any graphics were clicked
-          // (using promise chaining for cleaner code and error handling)
-          view.hitTest(event).then(function(response) {
+        view.on("click", function (event) {
 
-            // we're only interested in the first result
-            var result = response.results[0];
-            if (result && result.graphic) {
-              return result.graphic;
-            }
-          }).then(function(graphic) {
+          view.hitTest(event, {
+            include: [sceneLayer]
+          }).then(function (response) {
 
-            // now extract the object id from the graphic
-            var objectid = graphic.attributes.objectid;
+            response.results.forEach(function (result) {
+              const objectid = result.graphic.attributes.OBJECTID;
 
-            var query = new Query();
+              const highlight = sceneLayerView.highlight(objectid);
+              /* window.setTimeout(function () {
+                highlight.remove();
+              }, 5000); */
 
-            // the feature layer must contain a field with the
-            // objectid values of the scenelayer buildings in
-            // order to execute this query correctly
-            query.where = "objectid = " + objectid;
-            query.returnGeometry = true;
+              const distance = result.distance;
+              const query = new Query({
+                objectIds: [objectid]
+              });
+              sceneLayerView.queryExtent(query)
+                .then(function (result) {
+                  if (result && result.extent) {
 
-            // execute the query
-            return featureLayer.queryFeatures(query);
+                    const trees = getRandomTrees(result.extent, distance);
+                    treesLayer.addMany(trees);
+                  }
+                });
 
-          }).then(function(results) {
-
-            // process the feature service query results
-            if (results && results.features.length > 0) {
-
-              // show the popup with all attributes coming from the
-              // feature layer query, at the original click position
-              const trees = getRandomTrees(results.features[0].geometry);
-
-              treesLayer.addMany(trees);
-            }
-          }).catch(function(error) {
+            })
+          }).catch(function (error) {
             console.error(error);
           });
         });
+      }
 
-        window.view = view;
-        view.ui.empty("top-left");
+      window.view = view;
+      view.ui.empty("top-left");
 
-        function getRandomTrees(polygon) {
-          const treeSymbols = [new WebStyleSymbol({
-            name: "Ulmus",
-            styleName: "EsriRealisticTreesStyle"
-          }), new WebStyleSymbol({
-            name: "Acer",
-            styleName: "EsriRealisticTreesStyle"
-          }), new WebStyleSymbol({
-            name: "Quercus",
-            styleName: "EsriRealisticTreesStyle"
-          }), new WebStyleSymbol({
-            name: "Acer",
-            styleName: "EsriRealisticTreesStyle"
-          }), new WebStyleSymbol({
-            name: "Cornus",
-            styleName: "EsriRealisticTreesStyle"
-          }), new WebStyleSymbol({
-            name: "Agave",
-            styleName: "EsriRealisticTreesStyle"
-          })];
-          const ext = polygon.extent;
-          let i = 0;
-          const trees = [];
-          while (i < ext.height * ext.width / 1000) {
-            const y = ext.ymin + (Math.random() * (ext.ymax - ext.ymin));
-            const x = ext.xmin + (Math.random() * (ext.xmax - ext.xmin));
-            const point = new Point({
-              x,
-              y,
-              spatialReference: {
-                wkid: 3857
-              }
-            });
-            if (geometryEngine.within(point, polygon)) {
-              i++;
-              const graphic = new Graphic({
-                geometry: point,
-                symbol: treeSymbols[Math.floor(Math.random() * 5)]
-              });
-              trees.push(graphic);
+      function getRandomTrees(extent, distance) {
+        let i = 0;
+        const trees = [];
+        const treeCount = parseInt(extent.height * extent.width / distance * 2) ;
+        while (i < treeCount) {
+          const y = extent.ymin + (Math.random() * (extent.ymax - extent.ymin));
+          const x = extent.xmin + (Math.random() * (extent.xmax - extent.xmin));
+          const point = new Point({
+            x,
+            y,
+            spatialReference: {
+              wkid: 3857
             }
-          }
-          return trees;
+          });
+          i++;
+          const graphic = new Graphic({
+            geometry: point,
+            symbol: treeSymbol
+          });
+          trees.push(graphic);
         }
+        return trees;
       }
     });
+
   </script>
 </head>
 
 <body>
   <div id="viewDiv"></div>
-  <h1 id="title">Greenify your city</h1>
+  <h1 id="title">Greenify Manhattan</h1>
 </body>
 
 </html>
