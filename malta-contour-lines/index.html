@@ -71,12 +71,12 @@
         view = new SceneView({
           container: "viewDiv",
           map: webscene,
-          viewingMode: 'local',
+          viewingMode: 'global',
           qualityProfile: "high",
 
           environment: {
             lighting: {
-              directShadowsEnabled: false,
+              directShadowsEnabled: true,
               ambientOcclusionEnabled: true
             }
           },
@@ -158,8 +158,8 @@
                 }],
                 // Labels need a small vertical offset that will be used by the callout
                 verticalOffset: {
-                  screenLength: 150,
-                  maxWorldLength: 2000,
+                  screenLength: 100,
+                  maxWorldLength: 1000,
                   minWorldLength: 30
                 },
                 // The callout has to have a defined type (currently only line is possible)
