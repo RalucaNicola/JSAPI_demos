@@ -12,6 +12,9 @@ html, body {
 #view {
   height: 100%;
   width: 100%;
+}
+
+#view canvas {
   filter: drop-shadow(16px 16px 10px rgba(0,0,0, 0.5));
 }
 
