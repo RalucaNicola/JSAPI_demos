@@ -403,7 +403,7 @@ constraints: {
 Let's spice up that 3D effect with some shadows. I recently discovered that [drop-shadow()](https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/drop-shadow) CSS filter works really nice with the transparency on the view. Such that my globe and all points/labels can cast shadows on the background. For this, add the filter on the view:
 
 ```css
-#view {
+#view canvas{
   filter: drop-shadow(16px 16px 10px rgba(0,0,0, 0.5));
 }
 ```
