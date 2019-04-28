@@ -1,0 +1,47 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Press Start 2P', cursive;
+}
+
+body {
+  background-color: black;
+}
+
+#viewDiv canvas {
+  filter: drop-shadow(0 0 5px rgb(0, 255, 255));
+}
+
+button {
+  position: absolute;
+  bottom: 20px;
+  border: none;
+  color: white;
+  background-color: transparent;
+  font-size: 1.5em;
+  font-family: 'Press Start 2P', cursive;
+  transition: color .3s ease-in-out;
+  cursor: pointer;
+}
+
+button:hover {
+  animation: change-color 3s infinite;
+}
+
+@keyframes change-color {
+ 0%, 100% {
+   color: #fff;
+ }
+
+ 30% {
+   color: #2fff00;
+ }
+ 60% {
+   color: #00fff2;
+ }
+
+}
