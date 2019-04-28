@@ -24,12 +24,12 @@ button {
   background-color: transparent;
   font-size: 1.5em;
   font-family: 'Press Start 2P', cursive;
-  transition: color .3s ease-in-out;
+  transition: color .2s ease-in-out;
   cursor: pointer;
 }
 
 button:hover {
-  animation: change-color 3s infinite;
+  animation: change-color 2s infinite;
 }
 
 @keyframes change-color {

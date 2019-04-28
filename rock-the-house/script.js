@@ -13,7 +13,10 @@ require([
     container: "viewDiv",
     map: webscene,
     alphaCompositingEnabled: true,
-    qualityProfile: "high"
+    qualityProfile: "high",
+    ui: {
+      components: []
+    }
   });
 
   window.view = view;
