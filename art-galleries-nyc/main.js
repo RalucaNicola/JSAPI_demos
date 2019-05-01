@@ -19,21 +19,19 @@ require([
   "esri/symbols/TextSymbol3DLayer",
 
   "esri/widgets/Search",
-  "esri/config",
   "dojo/domReady!"
 ], function (WebScene, SceneView,
   FeatureLayer, WebTileLayer, SceneLayer, ElevationLayer,
   ClassBreaksRenderer, SimpleRenderer,
   MeshSymbol3D, FillSymbol3DLayer, PointSymbol3D, IconSymbol3DLayer, LineCallout3D, LabelSymbol3D, TextSymbol3DLayer,
-  Search, esriConfig) {
+  Search) {
 
   /************************
    * Create basemap layers
    ***********************/
 
   // create watercolor basemap from Stamen as a WebTileLayer
-  esriConfig.request.corsEnabledServers.push("a.tile.stamen.com", "b.tile.stamen.com", "c.tile.stamen.com", "d.tile.stamen.com");
-  var basemapLayer = new WebTileLayer({
+  const basemapLayer = new WebTileLayer({
     urlTemplate: "http://{subDomain}.tile.stamen.com/watercolor/{level}/{col}/{row}.png",
     subDomains: ["a", "b", "c", "d"],
     copyright: "Map tiles by <a href=\"http://stamen.com/\">Stamen Design</a>, " +
@@ -48,7 +46,7 @@ require([
    * and add basemap layers
    *************************/
 
-  var webscene = new WebScene({
+  const webscene = new WebScene({
     basemap: {
       // Add the white background and the watercolor basemap layers
       baseLayers: [basemapLayer]
@@ -64,7 +62,7 @@ require([
     }
   });
 
-  var view = new SceneView({
+  const view = new SceneView({
     container: "viewDiv",
     map: webscene,
     environment: {
@@ -97,7 +95,7 @@ require([
    * Create and add the buildings layer
    ***********************************/
 
-  var buildingsLayer = new SceneLayer({
+  const buildingsLayer = new SceneLayer({
     url: "https://tiles.arcgis.com/tiles/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Buildings_NewYork_Galleries/SceneServer",
     // Popups are not needed for the buildings
     popupEnabled: false,
@@ -141,7 +139,7 @@ require([
    ***************************************/
 
   // Set the popup template to display more information about each art gallery
-  var popupTemplate = {
+  const popupTemplate = {
     title: "{name}",
     content: "<p><b>Address:</b> {address1}, {city}</p>" +
     "<p><b>Telephone:</b> {tel}</p>" +
@@ -151,7 +149,7 @@ require([
   window.view = view;
 
   // Create Feature Layer from the points
-  var artGalleriesLayer = new FeatureLayer({
+  const artGalleriesLayer = new FeatureLayer({
     url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/art_galleries_nyc/FeatureServer",
     renderer: new SimpleRenderer({
       symbol: new PointSymbol3D({
@@ -215,7 +213,7 @@ require([
    * Create and add search widget
    *****************************/
 
-  var search = new Search({
+  const search = new Search({
     view: view,
     sources: [{
       // the widget will only use the art galleries layer for the search
@@ -229,10 +227,13 @@ require([
       popupTemplate: popupTemplate,
       popupOpenOnSelect: true
     }],
+    suggestionsEnabled: true,
     maxResults: 10,
+    searchAllEnabled: true,
     popupOpenOnSelect: true,
     resultGraphicEnabled: false,
-    popUpEnabled: true
+    popUpEnabled: true,
+    includeDefaultSources: false
   });
 
   view.ui.add(search, {
