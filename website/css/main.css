@@ -1743,7 +1743,7 @@ body.is-preload #header {
   pointer-events: none;
   bottom: 1em;
   background: rgba(36, 38, 41, 0.9);
-  left: 1em;
+  left: 0;
   margin: 0;
   padding: 0 2px;
   position: absolute;
