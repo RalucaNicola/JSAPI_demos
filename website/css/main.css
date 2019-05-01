@@ -1741,9 +1741,9 @@ body.is-preload #header {
 
 #main .thumb>h2 {
   pointer-events: none;
-  bottom: 1.875em;
+  bottom: 1em;
   background: rgba(36, 38, 41, 0.9);
-  left: 2.1875em;
+  left: 1em;
   margin: 0;
   padding: 0 2px;
   position: absolute;
