@@ -18,7 +18,7 @@ body {
 
 button {
   position: absolute;
-  bottom: 20px;
+  bottom: 40px;
   border: none;
   color: white;
   background-color: transparent;
@@ -36,7 +36,6 @@ button:hover {
  0%, 100% {
    color: #fff;
  }
-
  30% {
    color: #2fff00;
  }
@@ -44,4 +43,22 @@ button:hover {
    color: #00fff2;
  }
 
+}
+
+footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: white;
+  text-align: center;
+  padding: 0.1em 2em;
+  background-color: rgba(0, 0, 0, 0.7);
+  font-size: 0.9em;
+  font-family: monospace;
+}
+
+a {
+  text-decoration: none;
+  font-weight: bold;
 }

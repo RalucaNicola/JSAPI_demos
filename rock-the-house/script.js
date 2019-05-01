@@ -108,7 +108,7 @@ require([
     }
     else {
       document.getElementById("music").play();
-      playButton.innerHTML = "Stop that music...";
+      playButton.innerHTML = "Stop the music...";
       musicPlaying = true;
     }
   })
