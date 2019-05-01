@@ -1,7 +1,8 @@
 require([
   "esri/WebScene",
-  "esri/views/SceneView"
-], function (WebScene, SceneView) {
+  "esri/views/SceneView",
+  "esri/geometry/Point"
+], function (WebScene, SceneView, Point) {
 
   const webscene = new WebScene({
     portalItem: {
@@ -20,6 +21,24 @@ require([
   });
 
   window.view = view;
+
+  const center = new Point({
+    spatialReference: {
+      wkid: 102100
+    },
+    x: -13045182.321891023,
+    y: 4036862.056950253,
+    z: 413.5498616974801
+  });
+
+  function rotate(now) {
+    if (!view.interacting) {
+      const heading = view.camera.heading;
+      view.goTo({heading: heading + 0.5, center}, {animate: false});
+    } else {
+      isRotating = false;
+    }
+  }
 
   view.when(function () {
 
@@ -90,7 +109,12 @@ require([
           const hue = 50 + avg * 2 % 310;
           container.style.filter = "drop-shadow(0 0 5px hsl(" + hue + ",100%,50%)";
 
-          requestAnimationFrame(glow);
+          requestAnimationFrame(function() {
+            glow();
+            if (isRotating) {
+              rotate();
+            }
+          });
         }
         requestAnimationFrame(glow);
       });
@@ -99,6 +123,7 @@ require([
     .catch(console.error);
 
   let musicPlaying = false;
+  let isRotating = false;
   let playButton = document.getElementById("play");
   playButton.addEventListener("click", function() {
     if (musicPlaying) {
@@ -108,6 +133,7 @@ require([
     }
     else {
       document.getElementById("music").play();
+      isRotating = true;
       playButton.innerHTML = "Stop the music...";
       musicPlaying = true;
     }

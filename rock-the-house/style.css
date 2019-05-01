@@ -18,7 +18,7 @@ body {
 
 button {
   position: absolute;
-  bottom: 40px;
+  top: 40px;
   border: none;
   color: white;
   background-color: transparent;
