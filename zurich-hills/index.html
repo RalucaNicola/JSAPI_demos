@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Zurich's hills</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.11/"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      background-color: #f4efe3;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    canvas {
+      filter: drop-shadow(0px 0px 5px #56481f);
+    }
+
+    #layerToggle {
+      top: 20px;
+      right: 20px;
+      position: absolute;
+      z-index: 99;
+      background-color: white;
+      border-radius: 8px;
+      padding: 10px;
+      opacity: 0.75;
+    }
+
+    .esri-widget {
+      background-color: transparent;
+    }
+
+    .esri-widget--button {
+      background-color: transparent;
+    }
+
+    .esri-ui-corner .esri-component {
+      box-shadow: none;
+    }
+
+    .esri-zoom .esri-widget--button:last-child {
+      border-top: 1px solid #56481f;
+    }
+
+    .esri-widget--button {
+      color: #56481f;
+      border: 1px solid #56481f;
+      border-radius: 50%;
+      margin-top: 3px;
+    }
+
+    .esri-widget--button:hover {
+      background-color: #cfc5a8;
+      color: #56481f;
+    }
+
+    .esri-navigation-toggle:hover,
+    .esri-navigation-toggle:focus {
+      background-color: transparent;
+    }
+
+    #contentDiv {
+      position: absolute;
+      top: 0;
+      right: 0;
+      min-width: 300px;
+      width: 30%;
+      max-height: 100%;
+      background-color: #f4efe3;
+      color: #56481f;
+      padding: 1em;
+      line-height: 1.8em;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .title {
+      background-color: #56481f;
+      cursor: pointer;
+      color: #f4efe3;
+      display: inline;
+      padding: 0 3px;
+    }
+
+  </style>
+
+  <script>
+    require([
+        "esri/config",
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/FeatureLayer",
+        "dojo/dom",
+        "dojo/on",
+        "esri/layers/GraphicsLayer",
+
+        "esri/Graphic",
+        "esri/geometry/Point",
+        "esri/geometry/Polyline",
+        "esri/geometry/Polygon",
+
+        "esri/renderers/SimpleRenderer",
+
+        "esri/symbols/PointSymbol3D",
+        "esri/symbols/TextSymbol3DLayer",
+
+        "dojo/domReady!"
+      ],
+      function (
+        esriConfig, WebScene, SceneView, FeatureLayer, dom, on,
+        GraphicsLayer,
+        Graphic, Point, Polyline, Polygon,
+        SimpleRenderer,
+        PointSymbol3D, TextSymbol3DLayer
+      ) {
+
+        const webscene = new WebScene({
+          portalItem: {
+            id: "78c30bad75594188b2176b32bd0ad1de"
+          }
+        });
+
+        webscene.when(function () {
+          webscene.ground.opacity = 0;
+        })
+
+        const view = new SceneView({
+          container: "viewDiv",
+          map: webscene,
+          viewingMode: 'global',
+          qualityProfile: "high",
+          alphaCompositingEnabled: true,
+          environment: {
+            background: {
+              type: "color",
+              color: [0, 0, 0, 0]
+            },
+            starsEnabled: false,
+            atmosphereEnabled: false
+          },
+          constraints: {
+            altitude: {
+              min: 5000,
+              max: 100000
+            }
+          }
+        });
+
+        // add contour lines layer
+        const contourLayer = new FeatureLayer({
+          url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/Zurich_contourLines/FeatureServer",
+          elevationInfo: {
+            mode: "absolute-height",
+            featureExpressionInfo: {
+              expression: "$feature.elevation * 3"
+            }
+          },
+          renderer: {
+            type: "simple",
+            symbol: {
+              type: "line-3d",
+              symbolLayers: [{
+                type: "line",
+                size: "1px"
+              }]
+            },
+            visualVariables: [{
+              type: 'color',
+              field: 'elevation',
+              stops: [{
+                value: 0,
+                color: '#fff6db'
+              }, {
+                value: 800,
+                color: "#56481f"
+              }]
+            }]
+          }
+        });
+        webscene.add(contourLayer);
+
+        const water = new FeatureLayer({
+          url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/waterZurich/FeatureServer/4",
+          elevationInfo: {
+            mode: "relative-to-ground",
+            offset: 700
+          },
+          renderer: {
+            type: "simple",
+            symbol: {
+              type: "polygon-3d",
+              symbolLayers: [{
+                type: "extrude",
+                material: {
+                  color: "#56481f"
+                },
+                size: 50
+              }]
+            }
+          },
+          labelingInfo: [{
+            labelExpressionInfo: {
+              expression: "$feature.NAME"
+            },
+            where: "name <> Zürichsee AND name <> Limmat",
+            symbol: {
+              type: "label-3d",
+              symbolLayers: [{
+                type: "text",
+                material: {
+                  color: [255, 246, 219]
+                },
+                font: {
+                  weight: "bold"
+                },
+                size: 10
+              }]
+            }
+          }]
+        });
+
+        webscene.add(water);
+
+        const peaks = new FeatureLayer({
+          url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/hillsZurich/FeatureServer",
+          elevationInfo: {
+            mode: "absolute-height",
+            featureExpressionInfo: {
+              expression: "Geometry($feature).Z * 3"
+            }
+          },
+          renderer: {
+            type: "simple", // autocasts as new SimpleRenderer()
+            symbol: {
+              type: "point-3d", // autocasts as new PointSymbol3D()
+              symbolLayers: [{
+                type: "icon", // autocasts as new IconSymbol3DLayer()
+                resource: {
+                  primitive: "circle"
+                },
+                material: {
+                  color: "#56481f"
+                },
+                size: "4px"
+              }]
+            }
+          },
+          outFields: ["*"],
+          screenSizePerspectiveEnabled: false,
+          // Add labels with callouts of type line to the icons
+          labelingInfo: [{
+            labelPlacement: "above-center",
+            labelExpressionInfo: {
+              value: "{NAME}"
+            },
+            symbol: {
+              type: "label-3d",
+              symbolLayers: [{
+                type: "text",
+                material: {
+                  color: "#56481f"
+                },
+                halo: {
+                  color: [255, 246, 219, 0.6],
+                  size: 2
+                },
+                font: {
+                  weight: "bold"
+                },
+                size: 10
+              }],
+              verticalOffset: {
+                screenLength: 50,
+                maxWorldLength: 1000,
+                minWorldLength: 20
+              },
+              callout: {
+                type: "line", // autocasts as new LineCallout3D()
+                size: 1,
+                color: "#56481f"
+              }
+            }
+          }]
+        });
+
+        webscene.add(peaks);
+
+        zurichLabel = new Graphic({
+          symbol: {
+            type: "point-3d",
+            symbolLayers: [{
+              type: "text",
+              material: {
+                color: "#56481f"
+              },
+              font: {
+                weight: "bold"
+              },
+              halo: {
+                color: [255, 246, 219, 0.6],
+                size: 2
+              },
+              text: "Zürich",
+              size: 12
+            }],
+            verticalOffset: {
+              screenLength: 100,
+              maxWorldLength: 1000,
+              minWorldLength: 30
+            },
+            callout: {
+              type: "line",
+              size: 1,
+              color: "#56481f"
+            }
+          },
+          geometry: new Point({
+            latitude: 47.3765,
+            longitude: 8.526979,
+            z: 900,
+            spatialReference: {
+              wkid: 3857
+            }
+          })
+        });
+
+        zurichSymbol = new Graphic({
+          symbol: {
+            type: "point-3d",
+            symbolLayers: [{
+              type: "object",
+              resource: {
+                primitive: "sphere"
+              },
+              material: {
+                color: "#56481f"
+              },
+              height: 50,
+              width: 250,
+              depth: 250
+            }]
+          },
+          geometry: new Point({
+            latitude: 47.3765,
+            longitude: 8.526979,
+            z: 900,
+            spatialReference: {
+              wkid: 3857
+            }
+          })
+        });
+
+        zurichLake = new Graphic({
+          symbol: {
+            type: "point-3d",
+            symbolLayers: [{
+              type: "text",
+              text: "Zürichsee",
+              material: {
+                color: [255, 246, 219]
+              },
+              font: {
+                weight: "bold"
+              },
+              size: 10
+            }]
+          },
+          geometry: new Point({
+            latitude: 47.271163,
+            longitude: 8.6033646,
+            z: 1200,
+            spatialReference: {
+              wkid: 3857
+            }
+          })
+        });
+
+        view.graphics.addMany([zurichLabel, zurichSymbol, zurichLake]);
+
+       function goToSlide(n) {
+          view.goTo(webscene.presentation.slides.getItemAt(n).viewpoint, {
+            duration: 2000
+          });
+       }
+
+        home.addEventListener("click", function() {
+          goToSlide(0);
+        });
+
+        uetliberg.addEventListener("click", function() {
+          goToSlide(2);
+        });
+
+        felsenegg.addEventListener("click", function() {
+          goToSlide(3);
+        });
+
+        zurichberg.addEventListener("click", function() {
+          goToSlide(4);
+        });
+
+      });
+
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+  <div id="contentDiv">
+    <h1>Zurich's Hills</h1>
+    <p>Switzerland's mountains are amazing. However, its hills are pretty awesome too.
+      This visualization maps the hills around Zurich with contour lines.
+      Click on the titles below or navigate in the map to explore the most popular hills
+      around Zurich.
+    </p>
+    <p class="title" id="home">Overview</p>
+    <p>On the west side of the Zurich lake (called Zürichsee), the Albis chain stretches for
+      about 19km and was formed as the left moraine of the glacier the bed of which is now Lake Zürich.
+      Being very near Zürich, the area is heavily visited, especially near its northern end,
+      and includes a large number of restaurants along the summit (from Uetliberg to Mätteli),
+      well-maintained trails and dirt roads.
+      On the east side, a range of peaks separate Greifensee from Zürichsee.
+      The upper part of the mountain is mostly woodland and a popular recreational area with picnic sites,
+      in addition there are hiking routes. In winter season a cross-country skiing trail
+      is a popular point of interest.
+    </p>
+    <p class="title" id="uetliberg">Zoom to Uetliberg</p>
+    <p>The Uetliberg (also known as Üetliberg) is a mountain in the Swiss plateau,
+      part of the Albis chain, rising to 870 m (2,850 ft).
+      The mountain offers an impressive panoramic view of the entire city of Zürich and the Lake of Zurich
+      and it's a popular attraction for tourists. A train takes tourists from the main station in Zurich all the
+      way to Utto Kulm, the summit of Uetliberg.
+    </p>
+    <p class="title" id="felsenegg">Zoom to Felsenegg</p>
+    <p>At over 2,624 ft (800m) altitude, on Felsenegg you can enjoy breathtaking views over Lake Zurich
+      and the distant mountains. A "Planet path" leads from Uetliberg to Felsenegg, which reflects the
+      distances in the solar system. Every meter of the path corresponds to a distance of 1 million
+      kilometers. The fascinating 2-hour hike takes you from the sun past the eight planets as far as
+      the dwarf planet Pluto.
+    </p>
+    <p class="title" id="zurichberg">Zoom to Zürichberg</p>
+    <p>The Zürichberg is a wooded hill rising to 679 m (2,228 feet), overlooking Lake Zürich and located
+      immediately to the east of the city of Zürich. It is a picturesque location, and the lower western
+      side of the hill is now part of the residential district of Zürich. The Zürich Zoo and FIFA's
+      headquarters are located on the Zürichberg as well. The upper part of the hill is mostly woodland
+      and a popular recreational area.
+    </p>
+  </div>
+</body>
+
+</html>
