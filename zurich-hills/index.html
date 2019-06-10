@@ -28,17 +28,6 @@
       filter: drop-shadow(0px 0px 5px #56481f);
     }
 
-    #layerToggle {
-      top: 20px;
-      right: 20px;
-      position: absolute;
-      z-index: 99;
-      background-color: white;
-      border-radius: 8px;
-      padding: 10px;
-      opacity: 0.75;
-    }
-
     .esri-widget {
       background-color: transparent;
     }
@@ -85,6 +74,7 @@
       line-height: 1.8em;
       overflow-y: auto;
       box-sizing: border-box;
+      text-align: justify;
     }
 
     .title {
@@ -105,6 +95,25 @@
 
     .indicator:hover {
       text-decoration: underline;
+    }
+
+    footer {
+      font-size: 0.8em;
+      line-height: 1.3em;
+      text-align: center;
+      border-top: 1px solid #56481f;
+      padding-top: 2em;
+      margin-top: 2em;
+    }
+
+    footer>a {
+      text-decoration: none;
+      border-bottom: 1px dashed #56481f;
+      color: #56481f;
+    }
+
+    footer>a:hover {
+      border-bottom: 1px solid #56481f;
     }
 
   </style>
@@ -432,7 +441,7 @@
   <div id="contentDiv">
     <h1>Zurich's Hills</h1>
     <p>Switzerland's mountains are amazing. However, its "hills" are pretty awesome too.
-      This visualization maps the hills around Zurich in contour lines.
+      This map shows the hills around Zurich in contour lines.
       Click on the map icon <img src="map.png" class="map-icon"> or navigate in the map to explore the most popular
       hills around Zurich.
     </p>
@@ -472,6 +481,21 @@
       headquarters are located on the Zürichberg as well. The upper part of the hill is mostly woodland
       and a popular recreational area.
     </p>
+
+    <footer>
+      Map made by <a href="https://raluca-nicola.net/" target="_blank">Raluca</a> as a fun contour lines project
+      because she can never remember the names of the peaks around Zurich.
+      I downloaded SRTM based contour line data from <a href="https://opendem.info/download_contours.html"
+        target="_blank">OpenDEM</a>
+      and the waterbodies from <a href="https://www.geofabrik.de/data/download.html" target="_blank">OSM Geofabrik</a>.
+      Both datasets are provided under an <a href="https://opendatacommons.org/licenses/odbl/index.html"
+        target="_blank">ODbL license</a>.
+      The peaks stem from the <a href="https://shop.swisstopo.admin.ch/en/products/landscape/names3D" target="_blank">swissNAMES3D</a> dataset,
+      published by the Federal Office of Topography Swisstopo (Bundesamt für Landestopografie).
+      I processed and published the data with
+      <a href="https://pro.arcgis.com/en/pro-app/" target="_blank">ArcGIS Pro</a> and created the map with
+      <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JavaScript</a>.
+    </footer>
   </div>
 </body>
 
