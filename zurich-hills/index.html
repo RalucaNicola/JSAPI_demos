@@ -88,11 +88,23 @@
     }
 
     .title {
-      background-color: #56481f;
       cursor: pointer;
-      color: #f4efe3;
       display: inline;
       padding: 0 3px;
+      font-weight: bold;
+    }
+
+    .map-icon {
+      height: 20px;
+      vertical-align: middle;
+    }
+
+    .indicator {
+      cursor: pointer;
+    }
+
+    .indicator:hover {
+      text-decoration: underline;
     }
 
   </style>
@@ -390,27 +402,25 @@
 
         view.graphics.addMany([zurichLabel, zurichSymbol, zurichLake]);
 
-       function goToSlide(n) {
-          view.goTo(webscene.presentation.slides.getItemAt(n).viewpoint, {
-            duration: 2000
-          });
-       }
+        function addEvents(className, slideNumber) {
+          const elements = document.getElementsByClassName(className);
 
-        home.addEventListener("click", function() {
-          goToSlide(0);
-        });
+          for (let i = 0; i < elements.length; i++) {
+            const el = elements[i];
+            el.addEventListener("click", function () {
+              view.goTo(webscene.presentation.slides.getItemAt(slideNumber).viewpoint, {
+                duration: 2000
+              });
+            });
+          }
+        }
 
-        uetliberg.addEventListener("click", function() {
-          goToSlide(2);
-        });
-
-        felsenegg.addEventListener("click", function() {
-          goToSlide(3);
-        });
-
-        zurichberg.addEventListener("click", function() {
-          goToSlide(4);
-        });
+        addEvents("home", 0);
+        addEvents("uetliberg", 2);
+        addEvents("felsenegg", 3);
+        addEvents("zurichberg", 4);
+        addEvents("albis", 5);
+        addEvents("east", 6);
 
       });
 
@@ -423,36 +433,40 @@
     <h1>Zurich's Hills</h1>
     <p>Switzerland's mountains are amazing. However, its hills are pretty awesome too.
       This visualization maps the hills around Zurich with contour lines.
-      Click on the titles below or navigate in the map to explore the most popular hills
-      around Zurich.
+      Click on the map icon <img src="map.png" class="map-icon"> or navigate in the map to explore the most popular
+      hills around Zurich.
     </p>
-    <p class="title" id="home">Overview</p>
-    <p>On the west side of the Zurich lake (called Zürichsee), the Albis chain stretches for
-      about 19km and was formed as the left moraine of the glacier the bed of which is now Lake Zürich.
+    <p class="title indicator home">Overview <img src="map.png" class="map-icon"></p>
+    <p>On the west side of the Zurich lake (called Zürichsee), the <span class="indicator albis">Albis chain <img src="map.png" class="map-icon"></span>
+      stretches for about 19km and was formed as the left moraine of the glacier the bed of which is now Lake Zürich.
       Being very near Zürich, the area is heavily visited, especially near its northern end,
       and includes a large number of restaurants along the summit (from Uetliberg to Mätteli),
       well-maintained trails and dirt roads.
-      On the east side, a range of peaks separate Greifensee from Zürichsee.
+      On the <span class="indicator east">east side <img src="map.png" class="map-icon"></span> of the lake,
+      a range of peaks separate Greifensee from Zürichsee.
       The upper part of the mountain is mostly woodland and a popular recreational area with picnic sites,
       in addition there are hiking routes. In winter season a cross-country skiing trail
       is a popular point of interest.
     </p>
-    <p class="title" id="uetliberg">Zoom to Uetliberg</p>
-    <p>The Uetliberg (also known as Üetliberg) is a mountain in the Swiss plateau,
-      part of the Albis chain, rising to 870 m (2,850 ft).
+    <p class="title uetliberg"> Uetliberg</p>
+    <p><span class="indicator uetliberg">Uetliberg <img src="map.png" class="map-icon"></span> (also known as Üetliberg)
+      is a mountain in the Swiss plateau, part of the Albis chain, rising to 870 m (2,850 ft).
       The mountain offers an impressive panoramic view of the entire city of Zürich and the Lake of Zurich
       and it's a popular attraction for tourists. A train takes tourists from the main station in Zurich all the
       way to Utto Kulm, the summit of Uetliberg.
     </p>
-    <p class="title" id="felsenegg">Zoom to Felsenegg</p>
-    <p>At over 2,624 ft (800m) altitude, on Felsenegg you can enjoy breathtaking views over Lake Zurich
-      and the distant mountains. A "Planet path" leads from Uetliberg to Felsenegg, which reflects the
+    <p class="title felsenegg">Felsenegg</p>
+    <p>At over 2,624 ft (800m) altitude, on <span class="indicator felsenegg">Felsenegg <img src="map.png"
+          class="map-icon"></span>
+      you can enjoy breathtaking views over Lake Zurich and the distant mountains.
+      A "Planet path" leads from Uetliberg to Felsenegg, which reflects the
       distances in the solar system. Every meter of the path corresponds to a distance of 1 million
       kilometers. The fascinating 2-hour hike takes you from the sun past the eight planets as far as
       the dwarf planet Pluto.
     </p>
-    <p class="title" id="zurichberg">Zoom to Zürichberg</p>
-    <p>The Zürichberg is a wooded hill rising to 679 m (2,228 feet), overlooking Lake Zürich and located
+    <p class="title zurichberg">Zürichberg</p>
+    <p>The <span class="indicator zurichberg">Zürichberg <img src="map.png" class="map-icon"></span>
+      is a wooded hill rising to 679 m (2,228 feet), overlooking Lake Zürich and located
       immediately to the east of the city of Zürich. It is a picturesque location, and the lower western
       side of the hill is now part of the residential district of Zürich. The Zürich Zoo and FIFA's
       headquarters are located on the Zürichberg as well. The upper part of the hill is mostly woodland
