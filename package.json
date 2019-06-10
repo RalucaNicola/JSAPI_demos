@@ -2,13 +2,10 @@
   "name": "jsapi-demos",
   "version": "1.0.0",
   "description": "Simple demos for ArcGIS API for JavaScript",
-  "main": "index.js",
   "scripts": {
-    "jslint": "jshint ./**/*.js || true",
-    "start": "node index.js"
+    "jslint": "jshint ./**/*.js || true"
   },
   "devDependencies": {
-    "browser-sync": "^2.26.3",
     "jshint": "^2.9.6"
   },
   "repository": {
