@@ -44,8 +44,14 @@
       border-top: 1px solid #56481f;
     }
 
+    .esri-navigation-toggle:hover,
+    .esri-navigation-toggle:focus {
+      background-color: transparent;
+    }
+
     .esri-widget--button {
       color: #56481f;
+      background-color: #f4efe3;
       border: 1px solid #56481f;
       border-radius: 50%;
       margin-top: 3px;
@@ -56,9 +62,8 @@
       color: #56481f;
     }
 
-    .esri-navigation-toggle:hover,
-    .esri-navigation-toggle:focus {
-      background-color: transparent;
+    .esri-attribution__sources[role="button"] {
+      color: #56481f;
     }
 
     #contentDiv {
@@ -70,17 +75,21 @@
       max-height: 100%;
       background-color: #f4efe3;
       color: #56481f;
-      padding: 1em;
+      padding: 2.5em;
       line-height: 1.8em;
       overflow-y: auto;
       box-sizing: border-box;
-      text-align: justify;
+    }
+
+    h1 {
+      padding: 1.5em 0 0.5em;
+      margin: 0;
     }
 
     .title {
       cursor: pointer;
-      display: inline;
-      padding: 0 3px;
+      padding: 1.5em 0 0.5em;
+      margin: 0;
       font-weight: bold;
     }
 
@@ -91,16 +100,16 @@
 
     .indicator {
       cursor: pointer;
+      border-bottom: 1px dashed #56481f;
     }
 
     .indicator:hover {
-      text-decoration: underline;
+      border-bottom: 1px solid #56481f;
     }
 
     footer {
       font-size: 0.8em;
       line-height: 1.3em;
-      text-align: center;
       border-top: 1px solid #56481f;
       padding-top: 2em;
       margin-top: 2em;
@@ -441,11 +450,9 @@
   <div id="contentDiv">
     <h1>Zurich's Hills</h1>
     <p>Switzerland's mountains are amazing. However, its "hills" are pretty awesome too.
-      This map shows the hills around Zurich in contour lines.
-      Click on the map icon <img src="map.png" class="map-icon"> or navigate in the map to explore the most popular
-      hills around Zurich.
+      This map shows the <span class="indicator home">hills around Zurich <img src="map.png" class="map-icon"></span> in contour lines.
     </p>
-    <p class="title indicator home">Overview <img src="map.png" class="map-icon"></p>
+    <p class="title home">Overview</p>
     <p>On the west side of Zurich Lake (called Zürichsee in German),
       the <span class="indicator albis">Albis chain <img src="map.png" class="map-icon"></span>
       stretches for about 19km. It was formed as the left moraine of the glacier bed which is now Lake Zurich.
