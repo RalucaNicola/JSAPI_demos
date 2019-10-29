@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Greenify Manhattan</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      color: rgb(50, 50, 50);
+      font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+
+    #sidePanelInfo {
+      max-width: 350px;
+      padding: 2em 4em 2em 2em;
+      font-size: 1.1em;
+      text-align: center;
+      background: linear-gradient(to right, white 80%, transparent);
+      box-shadow: none;
+      box-sizing: border-box;
+    }
+
+    a {
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .streetTree {
+      border-bottom: 1px dashed rgb(158, 132, 173);
+      color: rgb(158, 132, 173);
+    }
+
+    .buildingTree {
+      color: rgb(133, 168, 72);
+      font-weight: bold;
+    }
+
+    #sidePanelInfo>p, #sidePanelInfo>h1 {
+      text-align: left;
+    }
+
+
+    #plantController {
+      background-color: rgb(50, 50, 50);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
+      font-size: 1em;
+      padding: 0.5em;
+      margin: 1em 0 0;
+  }
+
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.13/esri/css/main.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+  <script src="https://js.arcgis.com/4.13/"></script>
+  <script>
+    require([
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/layers/SceneLayer",
+      "esri/layers/FeatureLayer",
+      "esri/symbols/WebStyleSymbol",
+      "esri/geometry/Point",
+      "esri/Graphic",
+      "esri/layers/GraphicsLayer",
+      "esri/geometry/geometryEngine",
+      "esri/tasks/support/Query"
+    ], function (WebScene, SceneView, SceneLayer, FeatureLayer,
+      WebStyleSymbol, Point, Graphic, GraphicsLayer, geometryEngine, Query) {
+
+      // Create Map
+      const map = new WebScene({
+        portalItem: {
+          id: "65933586e49646dca915f5e7dfbfb73c"
+        }
+      });
+
+      // Create the SceneView
+      const view = new SceneView({
+        container: "viewDiv",
+        map: map,
+        qualityProfile: "medium",
+        highlightOptions: {
+          color: "rgb(133, 168, 72)",
+          haloOpacity: 0.6,
+          fillOpacity: 0.2
+        }
+      });
+
+      const treesLayer = new GraphicsLayer({
+        elevationInfo: {
+          mode: "relative-to-scene"
+        }
+      });
+      map.add(treesLayer);
+
+      window.treesLayer = treesLayer;
+
+      let sceneLayer = null,
+        sceneLayerView = null;
+
+      const treeSymbol = new WebStyleSymbol({
+        name: "Ulmus",
+        styleName: "EsriRealisticTreesStyle"
+      });
+
+      const treesData = {
+        labels: ['Street trees', 'Building trees'],
+        datasets: [{
+          backgroundColor: ["rgb(158, 132, 173)","rgb(133, 168, 72)"],
+          data: [49858, 0]
+        }]
+      };
+
+      const treesChart = new Chart(document.querySelector("#chart>canvas").getContext("2d"), {
+          type: 'horizontalBar',
+          data: treesData,
+          options: {
+            responsive: true,
+            legend: {
+              display: false
+            },
+            scales: {
+              xAxes: [{
+                type: 'linear',
+                ticks: {
+                  suggestedMin: 0,
+                  suggestedMax: 50000,
+                  fontColor: "rgb(20, 20, 20)",
+                  fontFamily: "'Avenir Next W00','Helvetica Neue',Helvetica,Arial,sans-serif",
+                  fontSize: 14
+                }
+              }]
+            }
+          }
+      });
+
+      view.when(function () {
+        view.map.layers.filter(function (layer) {
+          if (layer.title === "Buildings Manhattan") {
+            sceneLayer = layer;
+
+            view.whenLayerView(sceneLayer)
+              .then(function (lyrView) {
+                sceneLayerView = lyrView;
+              });
+          }
+        });
+        let event = null;
+        let planting = false;
+        document.getElementById("plantController").addEventListener("click", function() {
+          if (planting === true) {
+            event.remove();
+            planting = false;
+            this.innerHTML = "Plant some more trees";
+          } else {
+            event = addHitEvent();
+            planting = true;
+            this.innerHTML = "I need a break, planting trees is hard work!";
+          }
+        });
+      });
+
+      let then = Date.now();
+      let plantedTreesNumber = 0;
+
+      function addHitEvent() {
+
+        return view.on(["pointer-move", "click"], function (event) {
+          let delta = Date.now() - then;
+
+          if (delta > 150) {
+            then = Date.now();
+            view.hitTest(event, {
+              include: [sceneLayer]
+            }).then(function (response) {
+
+              response.results.forEach(function (result) {
+                const objectid = result.graphic.attributes.OBJECTID;
+
+                const highlight = sceneLayerView.highlight(objectid);
+                window.setTimeout(function () {
+                  highlight.remove();
+                }, 2000);
+
+                const distance = result.distance;
+                const query = new Query({
+                  objectIds: [objectid]
+                });
+                sceneLayerView.queryExtent(query)
+                  .then(function (result) {
+                    if (result && result.extent) {
+
+                      const trees = getRandomTrees(result.extent, distance);
+                      treesLayer.addMany(trees);
+                      plantedTreesNumber += trees.length;
+                      treesChart.data.datasets[0].data[1] = plantedTreesNumber;
+                      treesChart.update();
+                      document.getElementById("plantedTrees").innerHTML = plantedTreesNumber.toString() + " building trees";
+                    }
+                  });
+
+              })
+            }).catch(function (error) {
+              console.error(error);
+            });
+          }
+        });
+      }
+
+      window.view = view;
+      view.ui.empty("top-left");
+
+      function getRandomTrees(extent, distance) {
+        let i = 0;
+        const trees = [];
+        let treeCount = 5;
+        if (distance < 500) {
+          treeCount = 20;
+        }
+        while (i < treeCount) {
+          const y = extent.ymin + (Math.random() * (extent.ymax - extent.ymin));
+          const x = extent.xmin + (Math.random() * (extent.xmax - extent.xmin));
+          const point = new Point({
+            x,
+            y,
+            spatialReference: {
+              wkid: 3857
+            }
+          });
+          i++;
+          const graphic = new Graphic({
+            geometry: point,
+            symbol: treeSymbol
+          });
+          trees.push(graphic);
+        }
+        return trees;
+      }
+
+      view.ui.add("sidePanelInfo", "top-left");
+
+    });
+
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id ="sidePanelInfo">
+      <h1>Greenify Manhattan</h1>
+      <p>Manhttan currently has <a class="streetTree" href="https://www.milliontreesnyc.org/downloads/pdf/street_tree_fact_sheet.pdf" target="_blank">49858 street trees</a>.
+      Imagine you could also plant trees on buildings... currently there are <span class="buildingTree" id="plantedTrees">0 building trees</span>.</p>
+      <p>Planting trees on buildings with this app is a breeze! Just hover over the buildings... when you are closer
+        than 500m to the building you can plant 20 trees at a time! Further away you only get 5 trees planted.
+        Let's get started!
+      </p>
+      <div id="chart"><canvas height="100"></canvas></div>
+      <button id="plantController">Plant some trees</button>
+    </div>
+  </div>
+
+</body>
+
+</html>
