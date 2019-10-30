@@ -14,11 +14,11 @@ define([
 
   function _init(container, store) {
 
-    esriConfig.request.corsEnabledServers.push('https://zurich.maps.arcgis.com/');
+    //esriConfig.request.corsEnabledServers.push('https://zurich.maps.arcgis.com/');
 
     // create vector tile layer with the Christmas style
     var christmasLayer = new VectorTileLayer({
-      url: 'https://basemaps.arcgis.com/b2/arcgis/rest/services/World_Basemap/VectorTileServer'
+      url: 'https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_v2/VectorTileServer'
     });
     christmasLayer.loadStyle('christmas-style.json');
 
@@ -174,7 +174,6 @@ define([
       outFields: ['*'],
       labelingInfo: [
         {
-          labelPlacement: 'left-center',
           labelExpressionInfo: {
             value: '{country}'
           },

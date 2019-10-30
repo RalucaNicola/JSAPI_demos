@@ -30,26 +30,6 @@ button#tour:focus {
   outline: 0px;
 }
 
-.esri-popup__feature-buttons, .esri-popup__pointer, .esri-popup__header-buttons {
-  display: none;
-}
-
-.esri-popup--shadow {
-  box-shadow: none;
-}
-
-.img-popup {
-  text-align: center;
-}
-
-.copyright-popup {
-  font-size: 0.8em;
-}
-
-.esri-popup__content p{
-  font-size: inherit;
-}
-
 footer.attribution {
   font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
   color: #323232;
@@ -65,26 +45,6 @@ footer.attribution {
 /* desktop layout */
 
 @media ( min-width: 1024px ) {
-
-  .esri-popup__main-container.esri-widget {
-    left: 50%;
-    background-color: transparent;
-    border-bottom:#ff635e 2px solid;
-    min-height: 300px;
-  }
-
-  .esri-popup--aligned-bottom-center .esri-popup__main-container.esri-widget{
-    border-top: #ff635e 2px solid;
-    border-bottom: none;
-  }
-
-  .esri-popup__content {
-    background-color: rgba(255, 255, 255, 0.9);
-    margin: 0 0 0 40px;
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 5px;
-  }
 
   #menu {
     position: absolute;
@@ -117,9 +77,6 @@ footer.attribution {
     display: none;
   }
 
-  .esri-view-width-xsmall .esri-popup--is-docked-bottom-center .esri-popup__main-container {
-    max-height: 40% !important;
-  }
 }
 
 /* mobile landscape */
@@ -139,9 +96,5 @@ footer.attribution {
   button#tour {
     top: 0px;
     left: 20px;
-  }
-
-  .esri-popup--is-docked-top-right .esri-popup__main-container {
-    max-height: 100% !important;
   }
 }
