@@ -30,7 +30,6 @@ body,
 .esri-search__input-container {
   background-color: floralwhite;
   font-family: 'Shadows Into Light Two', cursive;
-  padding: 5px;
 }
 
 .esri-component.esri-attribution.esri-widget {
@@ -49,6 +48,10 @@ body,
 
 .esri-popup__footer {
   display: none !important;
+}
+
+.esri-widget {
+  background-color: transparent;
 }
 
 header {

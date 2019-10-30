@@ -217,7 +217,7 @@ require([
     view: view,
     sources: [{
       // the widget will only use the art galleries layer for the search
-      featureLayer: artGalleriesLayer,
+      layer: artGalleriesLayer,
       outFields: ["*"],
       autoNavigate: true,
       searchFields: ["name"],

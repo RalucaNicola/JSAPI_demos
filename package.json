@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Simple demos for ArcGIS API for JavaScript",
   "scripts": {
-    "jslint": "jshint ./**/*.js || true"
+    "lint": "jshint ./ || true"
   },
   "devDependencies": {
-    "jshint": "^2.9.6"
+    "jshint": "^2.10.2"
   },
   "repository": {
     "type": "git",
