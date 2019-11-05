@@ -1,0 +1,52 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background-color: aliceblue;
+}
+#viewDiv canvas {
+  filter: drop-shadow(16px 16px 10px rgba(0, 0, 0, 0.5));
+}
+
+#histogram,
+.esri-legend,
+.esri-histogram-range-slider .esri-histogram,
+.esri-histogram__content {
+  background-color: transparent;
+}
+
+#sidePanelInfo {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+#histContainer {
+  padding: 0 2em;
+  color: #323232;
+  font-size: 14px;
+  font-family: "Avenir Next W00", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.3em;
+  max-width: 240px;
+}
+
+.esri-histogram-range-slider__range-type--between .esri-slider__segment-1 {
+  background-color: #f57449;
+}
+.esri-slider__thumb,
+.esri-slider__anchor--moving:focus .esri-slider__thumb {
+  border: 2px solid #f57449;
+}
+
+.title,
+.description {
+  padding-bottom: 1em;
+}
+
+.description {
+  padding-top: 1.5em;
+  font-size: 12px;
+}
