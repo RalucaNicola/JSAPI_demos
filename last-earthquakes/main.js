@@ -67,7 +67,7 @@ require([
 
   const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
 
-  const geojsonLayer = new GeoJSONLayer({
+  const earthquakesLayer = new GeoJSONLayer({
     url: url,
     copyright: "USGS Earthquakes",
     screenSizePerspectiveEnabled: false,
@@ -85,6 +85,8 @@ require([
       ]
     }
   });
+
+  map.add(earthquakesLayer);
 
   // the number of earthquakes in each class is displayed in the legend
 
@@ -134,7 +136,7 @@ require([
     size: 40
   };
 
-  geojsonLayer.queryFeatures({where: "1=1", outStatistics: statDefinitions})
+  earthquakesLayer.queryFeatures({where: "1=1", outStatistics: statDefinitions})
     .then(function(result){
       statResults = result.features[0].attributes;
       const renderer = {
@@ -170,7 +172,7 @@ require([
           label: annotate(statResults.major) + " larger than 7. These earthquakes are likely to cause damage even to earthquake resistant structures."
         }]
       }
-      geojsonLayer.renderer = renderer;
+      earthquakesLayer.renderer = renderer;
     });
 
     function annotate(no) {
@@ -188,11 +190,11 @@ require([
    * to filter earthquakes based on magnitude
    *****************************************/
 
-  view.whenLayerView(geojsonLayer).then(function(lyrView) {
+  view.whenLayerView(earthquakesLayer).then(function(lyrView) {
     const min = -2;
     const max = 10;
     histogram({
-      layer: geojsonLayer,
+      layer: earthquakesLayer,
       field: "mag",
       numBins: 30,
       minValue: min,
@@ -231,10 +233,10 @@ require([
   });
 
   function updateHistogramCount(clause, values) {
-    const query = geojsonLayer.createQuery();
+    const query = earthquakesLayer.createQuery();
     query.where = clause;
     query.outStatistics = statDefinitions;
-    return geojsonLayer.queryFeatures(query)
+    return earthquakesLayer.queryFeatures(query)
       .then(function(result){
         document.getElementById("histCount").innerHTML = annotate(result.features[0].attributes.total) + " with magnitude between " + transform(values[0]) + " and " + transform(values[1]);
       });
