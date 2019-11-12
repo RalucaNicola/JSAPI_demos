@@ -19,7 +19,8 @@ require([
     basemap: new Basemap({
       baseLayers: [new TileLayer({
         url: "https://tiles.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/VintageShadedRelief/MapServer",
-        opacity: 0.7
+        opacity: 0.7,
+        minScale: 0
       })]
     }),
     ground: {
