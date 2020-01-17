@@ -183,7 +183,7 @@ require([
         }
         return no.toString() + " earthquakes";
       }
-      return "No earthquakes";
+      return "0 earthquakes";
     }
 
   /*****************************************
