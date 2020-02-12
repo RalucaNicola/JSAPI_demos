@@ -1,280 +1,336 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <!--
 Multiverse by HTML5 UP
 html5up.net | @ajlkn
 Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
+  <head>
+    <title>Raluca's 3D experiments</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="./website/css/main.css" />
+    <noscript> <link rel="stylesheet" href="./website/css/noscript.css"/></noscript>
+  </head>
 
-<head>
-  <title>Raluca's 3D experiments</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <link rel="stylesheet" href="./website/css/main.css" />
-  <noscript>
-    <link rel="stylesheet" href="./website/css/noscript.css" /></noscript>
-</head>
+  <body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+      <!-- Header -->
+      <header id="header">
+        <h1><a href="index.html">3D web experiments</a></h1>
+        <nav>
+          <ul>
+            <li><a href="#footer" class="icon fa-info-circle">About</a></li>
+          </ul>
+        </nav>
+      </header>
 
-<body class="is-preload">
+      <!-- Main -->
+      <div id="main">
+        <article class="thumb">
+          <a href="./website/images/ridgecrest.png" class="image"
+            ><img src="./website/images/ridgecrest.png" alt=""
+          /></a>
+          <h2>Ridgecrest earthquake</h2>
+          <p>
+            A local view of the Ridgecrest earthquake in July 2019 <a href="./ridgecrest-earthquake/">Live demo</a>.
+            Original application by <a href="https://github.com/ycabon/earthquakes">Yann Cabon</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/last-earthquakes.png" class="image"
+            ><img src="./website/images/last-earthquakes.png" alt=""
+          /></a>
+          <h2>A classical earthquakes visualization</h2>
+          <p>
+            A classical approach to visualizing the earthquakes in the last 30 days.
+            <a href="./last-earthquakes/">Live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/zurich-hills.png" class="image"
+            ><img src="./website/images/zurich-hills.png" alt=""
+          /></a>
+          <h2>Zurich Hills</h2>
+          <p>An app that maps the hills around zurich in contour lines. <a href="./zurich-hills/">Live demo</a>.</p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/rock-the-house.png" class="image"
+            ><img src="./website/images/rock-the-house.png" alt=""
+          /></a>
+          <h2>Rock the house</h2>
+          <p>
+            Had some fun with the Web Audio API and a BIM model...with some CSS sorcery the building starts glowing
+            based on the microphone input stream. Have fun with the <a href="./rock-the-house/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/earthquakes.png" class="image"
+            ><img src="./website/images/earthquakes.png" alt=""
+          /></a>
+          <h2>Earthquakes</h2>
+          <p>
+            Displays earthquakes between 2008 and 2018. The depth of the earthquake is inverted and exaggerated. See the
+            <a href="./earthquakes/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/sketch-the-city.png" class="image"
+            ><img src="./website/images/sketch-the-city.png" alt=""
+          /></a>
+          <h2>Sketch the city</h2>
+          <p>
+            Taking the sketch edges to extreme: this app takes a WebScene and turns it into a hand-drawn-like scene. See
+            the <a href="./sketch-the-city/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/world-population.png" class="image"
+            ><img src="./website/images/world-population.png" alt=""
+          /></a>
+          <h2>World population</h2>
+          <p>
+            A globe showing the population evolution from 2005 to 2020. Original data from
+            <a href="http://sedac.ciesin.columbia.edu/data/set/popdynamics-pop-projection-ssp-downscaled-1km-2010-2100"
+              >NASA's EarthData website</a
+            >. See the <a href="./world-population/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/fire-emergency-calls.png" class="image"
+            ><img src="./website/images/fire-emergency-calls.png" alt=""
+          /></a>
+          <h2>Fire emergency calls</h2>
+          <p>
+            Had a play with visualizing emergency calls density as contour lines of a Kernel Density Surface. See the
+            <a href="./fire-emergency-calls/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/berlin-palace.png" class="image"
+            ><img src="./website/images/berlin-palace.png" alt=""
+          /></a>
+          <h2>Berlin Palace</h2>
+          <p>
+            An app displaying Berlin Palace in different styles, from realistic to abstract. See the
+            <a href="./berlin-palace/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/usa-population.png" class="image"
+            ><img src="./website/images/usa-population.png" alt=""
+          /></a>
+          <h2>Population in USA</h2>
+          <p>
+            An experiment to visualize population in the USA in 3D. Population data from 2017. See the
+            <a href="./usa-population/?mode=3D">live demo</a>. The app also shows a comparison to a 2D visualization
+            <a href="./usa-population/">here</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/extrude-buildings-paris.png" class="image"
+            ><img src="./website/images/extrude-buildings-paris.png" alt=""
+          /></a>
+          <h2>Extruded footprints</h2>
+          <p>
+            Building footprints are extruded based on the height, the color represents the construction year. See the
+            <a href="./extrude-buildings-paris/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/terrain-exaggeration.png" class="image"
+            ><img src="./website/images/terrain-exaggeration.png" alt=""
+          /></a>
+          <h2>Terrain exaggeration</h2>
+          <p>
+            The app where I play with terrain exaggeration. See the <a href="./terrain-exaggeration/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/world-pop-2020.png" class="image"
+            ><img src="./website/images/world-pop-2020.png" alt=""
+          /></a>
+          <h2>World population in 2020</h2>
+          <p>
+            World population for the year 2020. Original data from
+            <a href="http://sedac.ciesin.columbia.edu/data/set/popdynamics-pop-projection-ssp-downscaled-1km-2010-2100"
+              >NASA's EarthData website</a
+            >. See the <a href="./world-population-2020/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/cassini-globe.png" class="image"
+            ><img src="./website/images/cassini-globe.png" alt=""
+          /></a>
+          <h2>World globe by Giovanni Cassini</h2>
+          <p>
+            World Globe scanned, georeferenced and published by David Rumsey Map Collection.
+            <a href="./cassini-globe/">Live demo</a>
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/urban-sketch.png" class="image"
+            ><img src="./website/images/urban-sketch.png" alt=""
+          /></a>
+          <h2>Urban sketch</h2>
+          <p>
+            Fun, creative project applying sketch edges to a project developed by Nik Davis and Devin Lavigne. © Houseal
+            Lavigne Associates, LLC. <a href="./urban-sketch/">Live demo</a>
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/urban-development.png" class="image"
+            ><img src="./website/images/urban-development.png" alt=""
+          /></a>
+          <h2>Urban development in Boston</h2>
+          <p>
+            Showing current buildings and projects in development (orange buildings) in the city of Boston.
+            <a href="./urban-development/">Live demo</a>
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/cities-globe.png" class="image"
+            ><img src="./website/images/cities-globe.png" alt=""
+          /></a>
+          <h2>World's biggest cities</h2>
+          <p>
+            Creating a globe with the biggest cities. You can learn how to create a similar globe in this
+            <a
+              href="https://github.com/RalucaNicola/JSAPI_demos/tree/master/cities-globe#worlds-biggest-cities---a-how-to-guide"
+              >tutorial</a
+            >. <a href="./cities-globe/">Live demo</a>
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/public-transport.png" class="image"
+            ><img src="./website/images/public-transport.png" alt=""
+          /></a>
+          <h2>San Francisco public transport</h2>
+          <p>
+            Distance to public transport stations in San Francisco mapped on buildings.
+            <a href="./public-transport-transit/">Live demo</a>
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/malta-contour-lines.png" class="image"
+            ><img src="./website/images/malta-contour-lines.png" alt=""
+          /></a>
+          <h2>Malta in contour lines</h2>
+          <p>Displaying Malta's elevation only using contour lines. <a href="./malta-contour-lines/">Live demo</a></p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/romania-3D.png" class="image"
+            ><img src="./website/images/romania-3D.png" alt=""
+          /></a>
+          <h2>Romania in 3D</h2>
+          <p>
+            I wanted to visualize my home town Bucharest in 3D, so I downloaded data from OSM like building footprints
+            and trees and used 3D models of trees and extruded polygons as symbols. In the end, why do this only for
+            Bucharest, when you can visualize entire Romania like this? See the <a href="./romania-3D/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/webscene-photobooth.png" class="image"
+            ><img src="./website/images/webscene-photobooth.png" alt=""
+          /></a>
+          <h2>WebScene Photobooth</h2>
+          <p>
+            This app uses the screenshot API to take a screenshot of a webscene and apply some filters on it. See the
+            <a href="./webscene-photobooth/">live demo</a>.
+          </p>
+        </article>
 
-  <!-- Wrapper -->
-  <div id="wrapper">
+        <article class="thumb">
+          <a href="./website/images/urban-population-3d.png" class="image"
+            ><img src="./website/images/urban-population-3d.png" alt=""
+          /></a>
+          <h2>Urban population 3D</h2>
+          <p>
+            Yet another population map. In this one I'm setting 3D models of buildings to represent population in
+            cities. See the <a href="./urban-population-3d/">live demo</a>.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/scene-swiper.png" class="image"
+            ><img src="./website/images/scene-swiper.png" alt=""
+          /></a>
+          <h2>Scene Swiper</h2>
+          <p>
+            This app displays two scenes and allows user to switch between them by swiping.
+            <a href="./scene-swiper/">Live demo</a>
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/art-galleries-nyc.png" class="image"
+            ><img src="./website/images/art-galleries-nyc.png" alt=""
+          /></a>
+          <h2>Art Galleries in New York</h2>
+          <p>
+            I found a dataset on art galleries in New York and thought it would be fun to map it. Go to the
+            <a href="./art-galleries-nyc/">live demo</a> to see what came out of it.
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/christmas-map.png" class="image"
+            ><img src="./website/images/christmas-map.png" alt=""
+          /></a>
+          <h2>Fun Christmas facts</h2>
+          <p>
+            This app shows Christmas traditions in different countries around the world.
+            <a href="./christmas-map/">Live demo</a>
+          </p>
+        </article>
+        <article class="thumb">
+          <a href="./website/images/indicity.png" class="image"><img src="./website/images/indicity.png" alt=""/></a>
+          <h2>Indicity</h2>
+          <p>
+            An app that I used at DevSummit 2018 to show how to filter buildings by height. It's called Indicity because
+            you could use different indicators to filter buildings. See the <a href="./indicity/">live demo</a>.
+          </p>
+        </article>
+      </div>
 
-    <!-- Header -->
-    <header id="header">
-      <h1><a href="index.html">3D web experiments</a></h1>
-      <nav>
-        <ul>
-          <li><a href="#footer" class="icon fa-info-circle">About</a></li>
-        </ul>
-      </nav>
-    </header>
-
-    <!-- Main -->
-    <div id="main">
-      <article class="thumb">
-        <a href="./website/images/last-earthquakes.png" class="image"><img src="./website/images/last-earthquakes.png"
-            alt="" /></a>
-        <h2>A classical earthquakes visualization</h2>
-        <p>A classical approach to visualizing the earthquakes in the last 30 days. <a href="./last-earthquakes/">Live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/zurich-hills.png" class="image"><img src="./website/images/zurich-hills.png"
-            alt="" /></a>
-        <h2>Zurich Hills</h2>
-        <p>An app that maps the hills around zurich in contour lines. <a href="./zurich-hills/">Live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/rock-the-house.png" class="image"><img src="./website/images/rock-the-house.png"
-            alt="" /></a>
-        <h2>Rock the house</h2>
-        <p>Had some fun with the Web Audio API and a BIM model...with some CSS sorcery the building starts
-          glowing based on the microphone input stream. Have fun with the <a href="./rock-the-house/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/earthquakes.png" class="image"><img src="./website/images/earthquakes.png"
-            alt="" /></a>
-        <h2>Earthquakes</h2>
-        <p>Displays earthquakes between 2008 and 2018. The depth of the earthquake is inverted and exaggerated.
-          See the <a href="./earthquakes/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/sketch-the-city.png" class="image"><img src="./website/images/sketch-the-city.png"
-            alt="" /></a>
-        <h2>Sketch the city</h2>
-        <p>Taking the sketch edges to extreme: this app takes a WebScene and turns it into a hand-drawn-like scene.
-          See the <a href="./sketch-the-city/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/world-population.png" class="image"><img src="./website/images/world-population.png"
-            alt="" /></a>
-        <h2>World population</h2>
-        <p>A globe showing the population evolution from 2005 to 2020.
-          Original data from <a
-            href="http://sedac.ciesin.columbia.edu/data/set/popdynamics-pop-projection-ssp-downscaled-1km-2010-2100">NASA's
-            EarthData website</a>.
-          See the <a href="./world-population/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/fire-emergency-calls.png" class="image"><img
-            src="./website/images/fire-emergency-calls.png" alt="" /></a>
-        <h2>Fire emergency calls</h2>
-        <p>Had a play with visualizing emergency calls density as contour lines of a Kernel Density Surface.
-          See the <a href="./fire-emergency-calls/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/berlin-palace.png" class="image"><img src="./website/images/berlin-palace.png"
-            alt="" /></a>
-        <h2>Berlin Palace</h2>
-        <p>An app displaying Berlin Palace in different styles, from realistic to abstract.
-          See the <a href="./berlin-palace/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/usa-population.png" class="image"><img src="./website/images/usa-population.png"
-            alt="" /></a>
-        <h2>Population in USA</h2>
-        <p>An experiment to visualize population in the USA in 3D. Population data from 2017.
-          See the <a href="./usa-population/?mode=3D">live demo</a>. The app also shows a comparison to a
-          2D visualization <a href="./usa-population/">here</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/extrude-buildings-paris.png" class="image"><img
-            src="./website/images/extrude-buildings-paris.png" alt="" /></a>
-        <h2>Extruded footprints</h2>
-        <p>Building footprints are extruded based on the height, the color represents the construction year.
-          See the <a href="./extrude-buildings-paris/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/terrain-exaggeration.png" class="image"><img
-            src="./website/images/terrain-exaggeration.png" alt="" /></a>
-        <h2>Terrain exaggeration</h2>
-        <p>The app where I play with terrain exaggeration.
-          See the <a href="./terrain-exaggeration/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/world-pop-2020.png" class="image"><img
-            src="./website/images/world-pop-2020.png" alt="" /></a>
-        <h2>World population in 2020</h2>
-        <p>World population for the year 2020.
-          Original data from <a
-            href="http://sedac.ciesin.columbia.edu/data/set/popdynamics-pop-projection-ssp-downscaled-1km-2010-2100">NASA's
-            EarthData website</a>.
-          See the <a href="./world-population-2020/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/cassini-globe.png" class="image"><img src="./website/images/cassini-globe.png"
-            alt="" /></a>
-        <h2>World globe by Giovanni Cassini</h2>
-        <p>World Globe scanned, georeferenced and published by David Rumsey Map Collection.
-          <a href="./cassini-globe/">Live demo</a> </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/urban-sketch.png" class="image"><img src="./website/images/urban-sketch.png"
-            alt="" /></a>
-        <h2>Urban sketch</h2>
-        <p>Fun, creative project applying sketch edges to a project developed by Nik Davis and Devin Lavigne. © Houseal
-          Lavigne Associates, LLC.
-          <a href="./urban-sketch/">Live demo</a> </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/urban-development.png" class="image"><img src="./website/images/urban-development.png"
-            alt="" /></a>
-        <h2>Urban development in Boston</h2>
-        <p>Showing current buildings and projects in development (orange buildings) in the city of Boston.
-          <a href="./urban-development/">Live demo</a> </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/cities-globe.png" class="image"><img src="./website/images/cities-globe.png"
-            alt="" /></a>
-        <h2>World's biggest cities</h2>
-        <p>Creating a globe with the biggest cities. You can learn how to create a similar globe in this
-          <a
-            href="https://github.com/RalucaNicola/JSAPI_demos/tree/master/cities-globe#worlds-biggest-cities---a-how-to-guide">tutorial</a>.
-          <a href="./cities-globe/">Live demo</a> </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/public-transport.png" class="image"><img
-            src="./website/images/public-transport.png" alt="" /></a>
-        <h2>San Francisco public transport</h2>
-        <p>Distance to public transport stations in San Francisco mapped on buildings.
-          <a href="./public-transport-transit/">Live demo</a> </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/malta-contour-lines.png" class="image"><img
-            src="./website/images/malta-contour-lines.png" alt="" /></a>
-        <h2>Malta in contour lines</h2>
-        <p>Displaying Malta's elevation only using contour lines.
-          <a href="./malta-contour-lines/">Live demo</a> </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/romania-3D.png" class="image"><img src="./website/images/romania-3D.png" alt="" /></a>
-        <h2>Romania in 3D</h2>
-        <p>I wanted to visualize my home town Bucharest in 3D, so I downloaded data from OSM like building footprints
-          and trees
-          and used 3D models of trees and extruded polygons as symbols. In the end, why do this only for Bucharest, when
-          you can
-          visualize entire Romania like this?
-          See the <a href="./romania-3D/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/webscene-photobooth.png" class="image"><img
-            src="./website/images/webscene-photobooth.png" alt="" /></a>
-        <h2>WebScene Photobooth</h2>
-        <p>This app uses the screenshot API to take a screenshot of a webscene and apply some filters on it.
-          See the <a href="./webscene-photobooth/">live demo</a>.
-        </p>
-      </article>
-
-      <article class="thumb">
-        <a href="./website/images/urban-population-3d.png" class="image"><img
-            src="./website/images/urban-population-3d.png" alt="" /></a>
-        <h2>Urban population 3D</h2>
-        <p>Yet another population map. In this one I'm setting 3D models of buildings to represent population in cities.
-          See the <a href="./urban-population-3d/">live demo</a>.
-        </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/scene-swiper.png" class="image"><img src="./website/images/scene-swiper.png"
-            alt="" /></a>
-        <h2>Scene Swiper</h2>
-        <p>This app displays two scenes and allows user to switch between them by swiping.
-          <a href="./scene-swiper/">Live demo</a> </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/art-galleries-nyc.png" class="image"><img src="./website/images/art-galleries-nyc.png"
-            alt="" /></a>
-        <h2>Art Galleries in New York</h2>
-        <p>I found a dataset on art galleries in New York and thought it would be fun to map it.
-          Go to the <a href="./art-galleries-nyc/">live demo</a> to see what came out of it.</p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/christmas-map.png" class="image"><img src="./website/images/christmas-map.png"
-            alt="" /></a>
-        <h2>Fun Christmas facts</h2>
-        <p>This app shows Christmas traditions in different countries around the world.
-          <a href="./christmas-map/">Live demo</a> </p>
-      </article>
-      <article class="thumb">
-        <a href="./website/images/indicity.png" class="image"><img src="./website/images/indicity.png" alt="" /></a>
-        <h2>Indicity</h2>
-        <p>An app that I used at DevSummit 2018 to show how to filter buildings by height. It's called
-          Indicity because you could use different indicators to filter buildings.
-          See the <a href="./indicity/">live demo</a>.
-        </p>
-      </article>
+      <!-- Footer -->
+      <footer id="footer" class="panel">
+        <div>
+          <section>
+            <h2>Raluca's 3D web experiments</h2>
+            <p>
+              This repository is just a collection of small experiments I make with
+              <a href="https://developers.arcgis.com/javascript/">ArcGIS API for JavaScript</a>. The data comes either
+              from OpenData portals, Esri's Living Atlas, Natural Earth or OpenStreetMap. All these demo apps are under
+              <a href="https://github.com/RalucaNicola/JSAPI_demos/blob/master/LICENSE">Apache 2.0 License</a>. They
+              live on <a href="https://github.com/RalucaNicola/JSAPI_demos">GitHub</a>, so feel free to use/remix them
+              for your own projects. I'd love to know if you made something cool with them 🙂
+            </p>
+          </section>
+          <section>
+            <ul class="icons">
+              <li>
+                <a href="https://twitter.com/nicolaraluk" class="icon fa-twitter"><span class="label">Twitter</span></a>
+              </li>
+              <li>
+                <a href="https://github.com/RalucaNicola" class="icon fa-github"><span class="label">GitHub</span></a>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <p class="copyright">
+              This site is using multiverse theme by <a href="http://html5up.net">HTML5 UP</a> and is hosted on GitHub
+              Pages.
+            </p>
+          </section>
+        </div>
+      </footer>
     </div>
 
-    <!-- Footer -->
-    <footer id="footer" class="panel">
-      <div>
-        <section>
-          <h2>Raluca's 3D web experiments</h2>
-          <p>This repository is just a collection of small experiments I make with <a href="https://developers.arcgis.com/javascript/">ArcGIS API for JavaScript</a>.
-          The data comes either from OpenData portals, Esri's Living Atlas, Natural Earth or OpenStreetMap.
-          All these demo apps are under <a href="https://github.com/RalucaNicola/JSAPI_demos/blob/master/LICENSE">Apache
-            2.0 License</a>.
-          They live on <a href="https://github.com/RalucaNicola/JSAPI_demos">GitHub</a>, so feel free to use/remix them for your own projects.
-          I'd love to know if you made something cool with them 🙂
-          </p>
-        </section>
-        <section>
-          <ul class="icons">
-            <li><a href="https://twitter.com/nicolaraluk" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-            <li><a href="https://github.com/RalucaNicola" class="icon fa-github"><span class="label">GitHub</span></a></li>
-          </ul>
-        </section>
-        <section>
-          <p class="copyright">
-            This site is using multiverse theme by <a href="http://html5up.net">HTML5 UP</a> and is hosted on GitHub
-            Pages.
-          </p>
-        </section>
-      </div>
-    </footer>
-
-  </div>
-
-  <!-- Scripts -->
-  <script src="./website/js/jquery.min.js"></script>
-  <script src="./website/js/jquery.poptrox.min.js"></script>
-  <script src="./website/js/browser.min.js"></script>
-  <script src="./website/js/breakpoints.min.js"></script>
-  <script src="./website/js/util.js"></script>
-  <script src="./website/js/main.js"></script>
-
-</body>
-
+    <!-- Scripts -->
+    <script src="./website/js/jquery.min.js"></script>
+    <script src="./website/js/jquery.poptrox.min.js"></script>
+    <script src="./website/js/browser.min.js"></script>
+    <script src="./website/js/breakpoints.min.js"></script>
+    <script src="./website/js/util.js"></script>
+    <script src="./website/js/main.js"></script>
+  </body>
 </html>

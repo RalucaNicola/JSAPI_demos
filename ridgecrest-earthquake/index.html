@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Ridgecrest earthquake - July 2019</title>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        font-family: "Avenir Next W00", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      #titleDiv {
+        position: absolute;
+        top: 15px;
+        right: 0;
+        background: white;
+        backdrop-filter: blur(5px);
+        padding: 10px 20px 10px 0;
+        color: rgb(50, 50, 50);
+        border-bottom: 1px solid rgba(75, 75, 75);
+      }
+
+      #titleSpan {
+        color: rgb(75, 75, 75);
+        font-size: 2rem;
+        text-decoration: none;
+      }
+
+      #loadingDiv {
+        top: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+      }
+
+      #loadingSpan {
+        color: rgb(75, 75, 75);
+        font-size: 2rem;
+      }
+
+      .esri-time-slider {
+        left: 0;
+        right: 0;
+        bottom: 15px;
+      }
+
+      #undergroundBtn {
+        background: white;
+        border: none;
+        border-bottom: 1px solid rgb(75, 75, 75);
+        font-family: "Avenir Next W00", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 1.2em;
+        box-shadow: none;
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
+    <script>
+      var dojoConfig = { has: { "esri-workers-for-memory-layers": 1 } };
+    </script>
+    <script src="https://js.arcgis.com/4.14/"></script>
+
+    <script>
+      require([
+        "esri/request",
+        "esri/TimeExtent",
+        "esri/WebScene",
+        "esri/layers/GeoJSONLayer",
+        "esri/layers/FeatureLayer",
+        "esri/views/SceneView",
+        "esri/widgets/Zoom",
+        "esri/widgets/TimeSlider",
+        "esri/widgets/Expand",
+        "esri/widgets/Bookmarks"
+      ], function(
+        esriRequest,
+        TimeExtent,
+        WebScene,
+        GeoJSONLayer,
+        FeatureLayer,
+        SceneView,
+        Zoom,
+        TimeSlider,
+        Expand,
+        Bookmarks
+      ) {
+        (async () => {
+          // If GeoJSON files are not on the same domain as your website, a CORS enabled server
+          // or a proxy is required.
+          const url = "./ridgecrest.json";
+
+          const renderer = {
+            type: "simple",
+            field: "mag",
+            symbol: {
+              type: "simple-marker",
+              color: [255, 91, 59, 0.9],
+              outline: { color: [255, 91, 59, 0], width: 0 }
+            },
+            visualVariables: [
+              {
+                type: "size",
+                field: "mag",
+                stops: [
+                  {
+                    value: 2,
+                    size: "1.5625px"
+                  },
+                  {
+                    value: 3,
+                    size: "3.125px"
+                  },
+                  {
+                    value: 4,
+                    size: "6.25px"
+                  },
+                  {
+                    value: 5,
+                    size: "12.5px"
+                  },
+                  {
+                    value: 6,
+                    size: "25px"
+                  },
+                  {
+                    value: 7,
+                    size: "50px"
+                  },
+                  {
+                    value: 8,
+                    size: "100px"
+                  },
+                  {
+                    value: 9,
+                    size: "200px"
+                  }
+                ]
+              }
+            ]
+          };
+
+          const layer = new GeoJSONLayer({
+            url,
+            title: "USGS Earthquakes",
+            copyright: "USGS",
+            renderer,
+            definitionExpression: "type = 'earthquake' and mag > 0",
+            spatialReference: { wkid: 3857 },
+            screenSizePerspectiveEnabled: false,
+            fields: [
+              { name: "mag", type: "double" },
+              { name: "time", type: "date" },
+              { name: "type", type: "string" },
+              { name: "detail", type: "string" }
+            ],
+            elevationInfo: {
+              mode: "absolute-height",
+              unit: "kilometers",
+              featureExpressionInfo: {
+                expression: "Geometry($feature).z * -1"
+              }
+            },
+            timeInfo: {
+              startField: "time"
+            }
+          });
+
+          const projectedLayer = new GeoJSONLayer({
+            url,
+            title: "USGS Earthquakes",
+            copyright: "USGS",
+            renderer,
+            definitionExpression: "type = 'earthquake' and mag > 0",
+            spatialReference: { wkid: 3857 },
+            fields: [
+              { name: "mag", type: "double" },
+              { name: "time", type: "date" },
+              { name: "type", type: "string" },
+              { name: "detail", type: "string" }
+            ],
+            elevationInfo: {
+              mode: "on-the-ground"
+            },
+            timeInfo: {
+              startField: "time"
+            },
+            opacity: 0.4
+          });
+
+          // Query for the earthquakes ordered by magnitude.
+          // This will give us the last earthquake in the last week
+          const {
+            features: [lastBigEarthquake]
+          } = await layer.queryFeatures({
+            orderByFields: ["mag DESC", "time DESC"],
+            returnGeometry: true
+          });
+
+          // - Get a 50 kilometers buffer for the clipping area
+          // - Query for all the earthquakes in a 50 kms radius
+          const [{ extent }, { features: nearbyEarthquakes }] = await Promise.all([
+            layer.queryExtent({
+              geometry: lastBigEarthquake.geometry,
+              distance: 65,
+              units: "kilometers"
+            }),
+            layer.queryFeatures({
+              geometry: lastBigEarthquake.geometry,
+              distance: 20,
+              units: "kilometers"
+            })
+          ]);
+
+          // Get the full time extent for those nearby earthquakes
+          const fullTimeExtent = new TimeExtent(
+            nearbyEarthquakes.reduce(
+              (timeExtent, feature) => ({
+                start: Math.min(timeExtent.start, feature.attributes.time),
+                end: Math.max(timeExtent.end, feature.attributes.time)
+              }),
+              { start: Number.POSITIVE_INFINITY, end: Number.NEGATIVE_INFINITY }
+            )
+          );
+          // see 12 hours of data around the earthquake
+          const timeExtent = new TimeExtent({
+            start: new Date(lastBigEarthquake.attributes.time - 6 * 60 * 60 * 1000),
+            end: new Date(lastBigEarthquake.attributes.time + 6 * 60 * 60 * 1000)
+          });
+
+          const scene = new WebScene({
+            portalItem: {
+              id: "da51d41a9b234e80b43998531aa906e6"
+            }
+          });
+
+          scene.layers.addMany([layer, projectedLayer]);
+
+          scene.ground.surfaceColor = "#ffffff";
+          scene.ground.navigationConstraint = {
+            type: "none"
+          };
+
+          const view = new SceneView({
+            container: "viewDiv",
+            map: scene,
+            qualityProfile: "high",
+            viewingMode: "local",
+            extent,
+            clippingArea: extent,
+            environment: {
+              atmosphereEnabled: false,
+              starsEnabled: false,
+              background: {
+                type: "color",
+                color: "white"
+              }
+            },
+            popup: null,
+            highlightOptions: {
+              fillOpacity: 0,
+              haloOpacity: 0.5,
+              color: [255, 91, 59]
+            },
+            ui: {
+              padding: {
+                top: 80
+              },
+              components: ["attribution"]
+            }
+          });
+
+          const zoom = new Zoom({ view, layout: "horizontal" });
+          view.ui.add(zoom, "bottom-left");
+          view.ui.add("undergroundBtn", "top-right");
+          document.getElementById("undergroundBtn").addEventListener("click", function() {
+            // slide 0 of the webscene presentation has a viewpoint that is underground
+            view.goTo(view.map.presentation.slides.getItemAt(0).viewpoint, {
+              duration: 4000
+            });
+          });
+
+          layer.labelingInfo = [
+            {
+              // When using callouts on labels, "above-center" is the only allowed position
+              where: `mag = ${lastBigEarthquake.attributes.mag}`,
+              labelPlacement: "above-center",
+              labelExpressionInfo: {
+                value: "Magnitude {mag}"
+              },
+              symbol: {
+                type: "text",
+                haloColor: [255, 91, 59],
+                haloSize: "2px",
+                color: "white",
+                font: {
+                  size: 16
+                }
+              }
+            }
+          ];
+
+          const { data: detail } = await esriRequest(lastBigEarthquake.attributes.detail);
+          document.getElementById("titleSpan").innerText = detail.properties.title;
+          document.getElementById("titleSpan").href = detail.properties.url;
+
+          await view.whenLayerView(layer);
+          /* await view.goTo({
+            target: nearbyEarthquakes,
+            tilt: 120,
+            heading: 45
+          }, { animate: false }); */
+          document.getElementById("loadingDiv").remove();
+
+          view.whenLayerView(layer).then(layerView => {
+            layerView.highlight(lastBigEarthquake);
+            const timeSlider = new TimeSlider({
+              view,
+              mode: "time-window",
+              playRate: 64,
+              stops: {
+                interval: {
+                  value: 1,
+                  unit: "hours"
+                }
+              },
+              values: [timeExtent.start, timeExtent.end],
+              fullTimeExtent
+            });
+            view.ui.add(timeSlider, "manual");
+          });
+
+          let layers = await Promise.all([loadContours(detail), loadNearbyCities(detail)]);
+
+          layers = layers.filter(layer => !!layer);
+          scene.addMany(layers);
+        })();
+
+        async function loadContours(earthquakeDetails) {
+          if (!earthquakeDetails.properties.products.shakemap) {
+            return null;
+          }
+
+          function createSymbol(height, color) {
+            return {
+              type: "line-3d",
+              symbolLayers: [
+                {
+                  type: "path",
+                  profile: "quad",
+                  material: {
+                    color
+                  },
+                  width: 200,
+                  height: height * 3,
+                  join: "round",
+                  cap: "round",
+                  anchor: "center",
+                  profileRotation: "heading"
+                }
+              ]
+            };
+          }
+
+          return new GeoJSONLayer({
+            url: earthquakeDetails.properties.products.shakemap[0].contents["download/cont_mi.json"].url,
+            renderer: {
+              type: "unique-value",
+              field: "value",
+              uniqueValueInfos: [
+                { value: 6, symbol: createSymbol(Math.pow(2.2, 6), "#fac100") },
+                { value: 6.5, symbol: createSymbol(Math.pow(2.2, 6.5), "#f6a700") },
+                { value: 7, symbol: createSymbol(Math.pow(2.2, 7), "#f08d00") },
+                { value: 7.5, symbol: createSymbol(Math.pow(2.2, 7.5), "#ffad00") },
+                { value: 8, symbol: createSymbol(Math.pow(2.2, 8), "#ee6a00") },
+                { value: 8.5, symbol: createSymbol(Math.pow(2.2, 8.5), "#f24c0d") },
+                { value: 9, symbol: createSymbol(Math.pow(2.2, 9), "#f41c1c") }
+              ]
+            }
+          });
+        }
+
+        async function loadNearbyCities(earthquakeDetails) {
+          if (!earthquakeDetails.properties.products["nearby-cities"]) {
+            return null;
+          }
+
+          const { data: nearbyCities } = await esriRequest(
+            earthquakeDetails.properties.products["nearby-cities"][0].contents["nearby-cities.json"].url,
+            {
+              responseType: "json"
+            }
+          );
+
+          return new FeatureLayer({
+            objectIdField: "OBJECTID",
+            fields: [
+              { name: "direction", type: "string" },
+              { name: "distance", type: "double" },
+              { name: "name", type: "string" }
+            ],
+            source: nearbyCities.map(({ name, longitude, latitude, distance, direction }) => ({
+              geometry: {
+                type: "point",
+                longitude,
+                latitude
+              },
+              attributes: {
+                name,
+                distance,
+                direction
+              }
+            })),
+            screenSizePerspectiveEnabled: false,
+            renderer: {
+              type: "simple",
+              symbol: {
+                type: "point-3d",
+                symbolLayers: [
+                  {
+                    type: "icon",
+                    resource: {
+                      primitive: "circle"
+                    },
+                    material: {
+                      color: "black"
+                    },
+                    size: 4
+                  }
+                ]
+              }
+            },
+            labelingInfo: [
+              {
+                labelPlacement: "above-center",
+                labelExpressionInfo: {
+                  value: "{name} - {distance}kms"
+                },
+                symbol: {
+                  type: "label-3d",
+                  symbolLayers: [
+                    {
+                      type: "text",
+                      material: {
+                        color: [20, 20, 20]
+                      },
+                      halo: {
+                        color: [255, 255, 255, 0.7],
+                        size: 2
+                      },
+                      size: 12
+                    }
+                  ],
+                  verticalOffset: {
+                    screenLength: 50,
+                    maxWorldLength: 20000,
+                    minWorldLength: 2000
+                  },
+                  callout: {
+                    type: "line",
+                    size: 0.8,
+                    color: [20, 20, 20],
+                    border: {
+                      color: [255, 255, 255, 0.7]
+                    }
+                  }
+                }
+              }
+            ]
+          });
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"><button id="undergroundBtn">Cross-section view</button></div>
+    <div id="titleDiv"><a id="titleSpan" target="_blank"></a></div>
+    <div id="loadingDiv"><span id="loadingSpan">Fetching the Ridgecrest earthquake data...</span></div>
+  </body>
+</html>
