@@ -2,10 +2,8 @@
 // based on code from sample: https://developers.arcgis.com/javascript/latest/sample-code/sandbox/index.html?sample=views-synchronize
 
 define(["esri/core/watchUtils"], function(watchUtils) {
-
   function _syncViews(view1, view2) {
     var viewpointWatchHandle;
-    var interactWatcher;
     var scheduleId;
 
     function clear() {
@@ -15,7 +13,7 @@ define(["esri/core/watchUtils"], function(watchUtils) {
       viewpointWatchHandle = viewStationaryHandle = scheduleId = null;
     }
 
-    interactWatcher = view1.watch('interacting,animation', function(newValue) {
+    view1.watch("interacting,animation", function(newValue) {
       if (!newValue) {
         return;
       }
@@ -26,17 +24,17 @@ define(["esri/core/watchUtils"], function(watchUtils) {
 
       scheduleId = setTimeout(function() {
         scheduleId = null;
-        viewpointWatchHandle = view1.watch('viewpoint',
-          function(newValue) {
-            view2.viewpoint = newValue;
-          });
+        viewpointWatchHandle = view1.watch("viewpoint", function(newValue) {
+          view2.viewpoint = newValue;
+        });
       }, 0);
 
-      viewStationaryHandle = watchUtils.whenTrue(view1,
-        'stationary', clear);
-
+      viewStationaryHandle = watchUtils.whenTrue(view1, "stationary", clear);
     });
 
+    watchUtils.whenTrue(view1, "ready", function() {
+      view1.viewpoint = view2.viewpoint;
+    });
   }
 
   return {
@@ -44,5 +42,5 @@ define(["esri/core/watchUtils"], function(watchUtils) {
       _syncViews(view1, view2);
       _syncViews(view2, view1);
     }
-  }
+  };
 });
