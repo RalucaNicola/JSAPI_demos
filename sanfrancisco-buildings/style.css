@@ -1,0 +1,101 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.esri-slider__segment-1 {
+  background-color: #555;
+}
+
+.esri-time-slider {
+  box-shadow: none;
+  border: 1px solid #ddd;
+}
+
+.esri-slider__thumb,
+.esri-slider__anchor--moving:focus .esri-slider__thumb {
+  border: 2px solid #555;
+}
+
+.esri-time-slider__mode--cumulative-from-start .esri-slider__segment-0 {
+  background-color: #555;
+}
+
+.esri-time-slider__max,
+.esri-time-slider__min {
+  display: none;
+}
+
+.esri-time-slider__time-extent-date {
+  color: #555;
+}
+
+.esri-slider__thumb:hover {
+  border-color: #555;
+}
+
+.title,
+.description {
+  padding: 0.5em 0;
+}
+
+.title {
+  font-weight: bold;
+  color: #555;
+  font-size: 1.3em;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #555;
+  font-size: 1.1em;
+}
+
+#menuContainer {
+  position: absolute;
+  bottom: 25px;
+  left: 20px;
+  right: 20px;
+  padding: 0.5em;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+#timeContainer {
+  width: 100%;
+  margin: 2em 0;
+}
+
+.charts {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.charts>div{
+  text-align: center;
+}
+
+button {
+  background-color: white;
+  color: #555;
+  font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
+  padding: 0.4em;
+  border: 1px solid #555;
+  border: none;
+  border-bottom: 1px solid #555;
+  cursor: pointer;
+}
+
+button:hover {
+  color: white;
+  background-color: #555;
+}
+
+.buttons {
+  text-align: center;
+}
