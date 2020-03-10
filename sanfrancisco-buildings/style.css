@@ -67,13 +67,6 @@ body,
   overflow-y: auto;
 }
 
-#timeContainer {
-  position: absolute;
-  bottom: 25px;
-  left: 20px;
-  right: 20px;
-}
-
 .charts {
   display: flex;
   flex-direction: column;
