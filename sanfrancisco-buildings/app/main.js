@@ -62,7 +62,14 @@ define([
               timeSlider.watch("timeExtent", function (timeExtent) {
                 appState.maxYear = timeExtent.end.getFullYear();
                 updateMap();
-                runQuery();
+              });
+
+              // watch for changes on the layer
+              bdgLayerView.watch("updating", function (updating) {
+                if (!updating) {
+                  console.log("updating");
+                  runQuery();
+                }
               });
             });
           }
@@ -71,7 +78,11 @@ define([
 
       // add sketch functionality
 
-      const sketchLayer = new GraphicsLayer();
+      const sketchLayer = new GraphicsLayer({
+        elevationInfo: {
+          mode: "on-the-ground"
+        }
+      });
       webscene.add(sketchLayer);
 
       const sketchViewModel = new SketchViewModel({
@@ -86,38 +97,31 @@ define([
       sketchViewModel.on("create", function (event) {
         if (event.state === "complete") {
           appState.filterGeometry = event.graphic.geometry;
+          bdgLayerView.filter = {
+            geometry: appState.filterGeometry,
+            spatialRelationship: "intersects"
+          };
           runQuery();
         }
       });
 
       sketchViewModel.on("update", function (event) {
-        if (event.state !== "cancel" && event.graphics.length) {
+        if (!event.cancelled && event.graphics.length) {
           appState.filterGeometry = event.graphics[0].geometry;
+          bdgLayerView.filter = {
+            geometry: appState.filterGeometry,
+            spatialRelationship: "intersects"
+          };
           runQuery();
         }
       });
-      const debouncedRunQuery = promiseUtils.debounce(function () {
-        if (appState.filterGeometry) {
-          return promiseUtils.eachAlways([
-            queryStatistics(),
-            queryObjectIds()
-          ])
-        }
-        return queryStatistics();
-      });
 
-      function queryStatistics() {
+      const debouncedRunQuery = promiseUtils.debounce(function () {
         const query = bdgLayerView.createQuery();
         query.geometry = appState.filterGeometry;
         query.outStatistics = statistics.totalStatDefinitions;
         return bdgLayerView.queryFeatures(query).then(charts.updateCharts);
-      }
-
-      function queryObjectIds() {
-        const query = bdgLayerView.createQuery();
-        query.geometry = appState.filterGeometry;
-        return bdgLayerView.queryObjectIds(query).then(highlightBuildings);
-      }
+      });
 
       function runQuery() {
         debouncedRunQuery().catch((error) => {
@@ -128,21 +132,15 @@ define([
         });
       }
 
-      view.watch("updating", function (updating) {
-        if (!updating) {
-          runQuery();
-        }
-      });
-
       document.getElementById("drawPolygon").addEventListener("click", function () {
         sketchViewModel.create("polygon");
       });
 
       document.getElementById("clearSelection").addEventListener("click", function () {
         appState.filterGeometry = null;
+        bdgLayerView.filter = null;
         sketchViewModel.cancel();
         sketchLayer.removeAll();
-        clearHighlighting();
         runQuery();
       });
 
@@ -161,19 +159,6 @@ define([
       document.getElementById("clearRenderer").addEventListener("click", function () {
         renderers.applyOriginalTexture(bdgLayer);
       });
-
-      function clearHighlighting() {
-        if (highlightHandle) {
-          highlightHandle.remove();
-          highlightHandle = null;
-        }
-      }
-
-      function highlightBuildings(objectIds) {
-        // Remove any previous highlighting
-        clearHighlighting();
-        highlightHandle = bdgLayerView.highlight(objectIds);
-      }
 
       function updateMap() {
         bdgLayer.definitionExpression = `${config.yearField} <= ${appState.maxYear}`;
