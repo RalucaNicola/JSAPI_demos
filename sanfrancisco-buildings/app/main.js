@@ -28,7 +28,6 @@ define([
 
       let bdgLayer = null;
       let bdgLayerView = null;
-      let highlightHandle = null;
 
       const appState = {
         minYear: 0,
@@ -54,6 +53,10 @@ define([
         webscene.allLayers.forEach(layer => {
           if (layer.title === config.buildingLayerTitle) {
             bdgLayer = layer;
+            bdgLayer.popupTemplate = {
+              content: `Building is {${config.heightField}}m tall, was built in
+              {${config.yearField}} and is has a {${config.usageField}} use.`
+            };
             bdgLayer.outFields = [config.heightField, config.yearField, config.usageField];
             view.whenLayerView(layer).then(function (lyrView) {
               bdgLayerView = lyrView;
