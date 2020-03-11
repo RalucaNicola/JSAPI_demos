@@ -1,0 +1,3313 @@
+{
+  "version": 8,
+  "sprite": "https://www.arcgis.com/sharing/rest/content/items/1fba3ab575f6434b80a708e1aa589dd5/resources/styles/sprite-1581865174359",
+  "glyphs": "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_v2/VectorTileServer/resources/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "esri": {
+      "type": "vector",
+      "url": "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_v2/VectorTileServer"
+    }
+  },
+  "layers": [
+    {
+      "id": "Airport/Airport property",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Airport",
+      "filter": [
+        "==",
+        "_symbol",
+        1
+      ],
+      "minzoom": 9,
+      "layout": {},
+      "paint": {
+        "fill-color": "#b4bfb9",
+        "fill-opacity": 0.15
+      }
+    },
+    {
+      "id": "Airport/Airport runway",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Airport",
+      "filter": [
+        "==",
+        "_symbol",
+        0
+      ],
+      "minzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": "#ffffff",
+        "fill-opacity": 0.5
+      }
+    },
+    {
+      "id": "Water line small scale",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Water line small scale",
+      "minzoom": 3,
+      "maxzoom": 5,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#4992d1",
+        "line-opacity": 0.4,
+        "line-width": 0.75
+      }
+    },
+    {
+      "id": "Water line medium scale",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Water line medium scale",
+      "minzoom": 5,
+      "maxzoom": 7,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#4992d1",
+        "line-opacity": 0.4,
+        "line-width": 0.75
+      }
+    },
+    {
+      "id": "Water line large scale",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Water line large scale",
+      "minzoom": 7,
+      "maxzoom": 11,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#4992d1",
+        "line-opacity": 0.4,
+        "line-width": 0.75
+      }
+    },
+    {
+      "id": "Water line/Waterfall",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Water line",
+      "filter": [
+        "==",
+        "_symbol",
+        5
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#4992d1",
+        "line-opacity": 0.4,
+        "line-width": 0.75,
+        "line-dasharray": [
+          5,
+          5
+        ]
+      }
+    },
+    {
+      "id": "Water line/Dam or weir",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Water line",
+      "filter": [
+        "==",
+        "_symbol",
+        2
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#4992d1",
+        "line-opacity": 0.4,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              0.75
+            ],
+            [
+              17,
+              2
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Water line/Levee",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Water line",
+      "filter": [
+        "==",
+        "_symbol",
+        3
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#adad9d",
+        "line-dasharray": [
+          1,
+          1.5
+        ],
+        "line-width": 1.5
+      }
+    },
+    {
+      "id": "Water line/Canal or ditch",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Water line",
+      "filter": [
+        "==",
+        "_symbol",
+        1
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "#4992d1",
+        "line-opacity": 0.4,
+        "line-width": {
+          "base": 1.2,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              0.75
+            ],
+            [
+              17,
+              2
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Water line/Stream or river intermittent",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Water line",
+      "filter": [
+        "==",
+        "_symbol",
+        4
+      ],
+      "minzoom": 11,
+      "layout": {},
+      "paint": {
+        "line-color": "#4992d1",
+        "line-dasharray": [
+          7,
+          3
+        ],
+        "line-opacity": 0.4,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              0.75
+            ],
+            [
+              17,
+              2
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Water line/Stream or river",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Water line",
+      "filter": [
+        "==",
+        "_symbol",
+        0
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "#4992d1",
+        "line-opacity": 0.4,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              0.75
+            ],
+            [
+              17,
+              2
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Marine area",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Marine area",
+      "minzoom": 0,
+      "layout": {},
+      "paint": {
+        "fill-color": {
+          "stops": [
+            [
+              11,
+              "#dde3ed"
+            ],
+            [
+              12,
+              "#dde3ed"
+            ],
+            [
+              13,
+              "#dde3ed"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Bathymetry/depth 2 (shallow water)",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Bathymetry",
+      "filter": [
+        "==",
+        "_symbol",
+        0
+      ],
+      "maxzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": "#e0f4ff"
+      }
+    },
+    {
+      "id": "Bathymetry/depth 3",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Bathymetry",
+      "filter": [
+        "==",
+        "_symbol",
+        1
+      ],
+      "maxzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": "#daf2ff"
+      }
+    },
+    {
+      "id": "Bathymetry/depth 4",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Bathymetry",
+      "filter": [
+        "==",
+        "_symbol",
+        2
+      ],
+      "maxzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": "#d4f0ff"
+      }
+    },
+    {
+      "id": "Bathymetry/depth 5",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Bathymetry",
+      "filter": [
+        "==",
+        "_symbol",
+        3
+      ],
+      "maxzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": "#cfeeff"
+      }
+    },
+    {
+      "id": "Bathymetry/depth 6",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Bathymetry",
+      "filter": [
+        "==",
+        "_symbol",
+        4
+      ],
+      "maxzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": "#c9ecff"
+      }
+    },
+    {
+      "id": "Bathymetry/depth 7 (deep water)",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Bathymetry",
+      "filter": [
+        "==",
+        "_symbol",
+        5
+      ],
+      "maxzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": "#c3eaff"
+      }
+    },
+    {
+      "id": "Water area small scale",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area small scale",
+      "minzoom": 1,
+      "maxzoom": 5,
+      "layout": {},
+      "paint": {
+        "fill-color": "#dde3ed"
+      }
+    },
+    {
+      "id": "Water area medium scale/Lake intermittent",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area medium scale",
+      "filter": [
+        "==",
+        "_symbol",
+        1
+      ],
+      "minzoom": 5,
+      "maxzoom": 7,
+      "layout": {},
+      "paint": {
+        "fill-pattern": "Water area/Lake or river intermittent"
+      }
+    },
+    {
+      "id": "Water area medium scale/Lake or river",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area medium scale",
+      "filter": [
+        "==",
+        "_symbol",
+        0
+      ],
+      "minzoom": 5,
+      "maxzoom": 7,
+      "layout": {},
+      "paint": {
+        "fill-color": "#dde3ed"
+      }
+    },
+    {
+      "id": "Water area large scale/Lake intermittent",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area large scale",
+      "filter": [
+        "==",
+        "_ symbol",
+        1
+      ],
+      "minzoom": 7,
+      "maxzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-pattern": "Water area/Lake or river intermittent"
+      }
+    },
+    {
+      "id": "Water area large scale/Lake or river",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area large scale",
+      "filter": [
+        "==",
+        "_symbol",
+        0
+      ],
+      "minzoom": 7,
+      "maxzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": "#dde3ed",
+        "fill-outline-color": "#d2e2ef"
+      }
+    },
+    {
+      "id": "Water area/Lake, river or bay",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area",
+      "filter": [
+        "==",
+        "_symbol",
+        7
+      ],
+      "minzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": {
+          "stops": [
+            [
+              12,
+              "#dde3ed"
+            ],
+            [
+              13,
+              "#dde3ed"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Water area/Lake or river intermittent",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area",
+      "filter": [
+        "==",
+        "_symbol",
+        6
+      ],
+      "minzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-pattern": "Water area/Lake or river intermittent"
+      },
+      "fill-opacity": 0.3
+    },
+    {
+      "id": "Water area/Inundated area",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area",
+      "filter": [
+        "==",
+        "_symbol",
+        4
+      ],
+      "minzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-pattern": "Water area/Inundated area"
+      },
+      "fill-opacity": 0.3
+    },
+    {
+      "id": "Water area/Swamp or marsh",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area",
+      "filter": [
+        "==",
+        "_symbol",
+        3
+      ],
+      "minzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-pattern": "Water area/Swamp or marsh"
+      }
+    },
+    {
+      "id": "Water area/Playa",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area",
+      "filter": [
+        "==",
+        "_symbol",
+        1
+      ],
+      "minzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-pattern": "Water area/Playa"
+      }
+    },
+    {
+      "id": "Water area/Ice mass",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area",
+      "filter": [
+        "==",
+        "_symbol",
+        2
+      ],
+      "minzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-pattern": "Water area/Ice mass",
+        "fill-opacity": 0.5
+      }
+    },
+    {
+      "id": "Water area/Dam or weir",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Water area",
+      "filter": [
+        "==",
+        "_symbol",
+        5
+      ],
+      "minzoom": 11,
+      "layout": {},
+      "paint": {
+        "fill-color": {
+          "stops": [
+            [
+              12,
+              "#dde3ed"
+            ],
+            [
+              13,
+              "#dde3ed"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Railroad/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Railroad",
+      "minzoom": 12,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [
+              13,
+              "#ebe8e6"
+            ],
+            [
+              14,
+              "#dedcda"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              0.75
+            ],
+            [
+              14,
+              2
+            ],
+            [
+              17,
+              4.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Railroad/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Railroad",
+      "minzoom": 14,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-dasharray": [
+          8,
+          9
+        ],
+        "line-color": "#fafaf8",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              14,
+              0.5
+            ],
+            [
+              17,
+              1.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Ferry/Rail ferry/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Ferry",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          1
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 12,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#dedcda",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              0.75
+            ],
+            [
+              14,
+              2
+            ],
+            [
+              17,
+              4.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Ferry/Rail ferry/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Ferry",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          1
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 14,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-dasharray": [
+          8,
+          9
+        ],
+        "line-color": "#fafaf8",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              14,
+              0.5
+            ],
+            [
+              17,
+              1.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Ferry/Ferry",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Ferry",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          0
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#80c3ff",
+        "line-width": 0.75,
+        "line-dasharray": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "Building",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Building",
+      "minzoom": 16,
+      "layout": {},
+      "paint": {
+        "fill-color": "#c8c8c8",
+        "fill-outline-color": "#ffffff",
+        "fill-opacity": 0.3
+      }
+    },
+    {
+      "id": "Trail or path/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Trail or path",
+      "minzoom": 15,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#506e46",
+        "line-opacity": 0.3,
+        "line-width": {
+          "base": 11,
+          "stops": [
+            [
+              13,
+              3.5
+            ],
+            [
+              16,
+              4
+            ],
+            [
+              18,
+              8
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Pedestrian/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          9
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 15,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#c7d0c4",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              15,
+              3.5
+            ],
+            [
+              16,
+              4
+            ],
+            [
+              18,
+              8
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/4WD/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          10
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#d3d4d6",
+        "line-dasharray": [
+          3,
+          2
+        ],
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              13,
+              2.25
+            ],
+            [
+              14,
+              2.7
+            ],
+            [
+              16,
+              4.5
+            ],
+            [
+              18,
+              11.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Service/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          8
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#d3d4d6",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              13,
+              2.25
+            ],
+            [
+              14,
+              2.7
+            ],
+            [
+              16,
+              4.5
+            ],
+            [
+              18,
+              11.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Local/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          7
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 12,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [
+              12,
+              "#cfd0d1"
+            ],
+            [
+              13,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              0.75
+            ],
+            [
+              13,
+              2.5
+            ],
+            [
+              16,
+              5.5
+            ],
+            [
+              18,
+              17.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Minor/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          5
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [
+              11,
+              "#bdbebf"
+            ],
+            [
+              13,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              12,
+              2.25
+            ],
+            [
+              14,
+              4.5
+            ],
+            [
+              16,
+              10.5
+            ],
+            [
+              18,
+              18.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Minor, ramp or traffic circle/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          6
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 12,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [
+              11,
+              "#bdbebf"
+            ],
+            [
+              13,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              12,
+              2.25
+            ],
+            [
+              14,
+              3.2
+            ],
+            [
+              16,
+              11
+            ],
+            [
+              18,
+              18.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Major/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          3
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 9,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [
+              9,
+              "#bdbebf"
+            ],
+            [
+              12,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              9,
+              0.75
+            ],
+            [
+              10,
+              2.25
+            ],
+            [
+              11,
+              3.5
+            ],
+            [
+              14,
+              6.5
+            ],
+            [
+              16,
+              13
+            ],
+            [
+              18,
+              23
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Major, ramp or traffic circle/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          4
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [
+              11,
+              "#bdbebf"
+            ],
+            [
+              12,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              9,
+              0.75
+            ],
+            [
+              10,
+              2.25
+            ],
+            [
+              11,
+              2.25
+            ],
+            [
+              14,
+              3.2
+            ],
+            [
+              16,
+              11
+            ],
+            [
+              18,
+              18.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Highway/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          1
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 8,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [
+              8,
+              "#d7d8d9"
+            ],
+            [
+              10,
+              "#8e8f8f"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              8,
+              1.2
+            ],
+            [
+              9,
+              2.7
+            ],
+            [
+              11,
+              3.5
+            ],
+            [
+              14,
+              7
+            ],
+            [
+              16,
+              16.5
+            ],
+            [
+              18,
+              34
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Freeway Motorway/Highway, ramp or traffic circle/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          2
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 8,
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "#8e8f8f",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              8,
+              1.2
+            ],
+            [
+              9,
+              2.7
+            ],
+            [
+              11,
+              3.5
+            ],
+            [
+              14,
+              3.2
+            ],
+            [
+              16,
+              11
+            ],
+            [
+              18,
+              18.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Trail or path/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Trail or path",
+      "minzoom": 15,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#fcfcfa",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              14,
+              1.5
+            ],
+            [
+              16,
+              2
+            ],
+            [
+              18,
+              6
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Pedestrian/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          9
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 15,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#fcfcfa",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              15,
+              1.5
+            ],
+            [
+              16,
+              2
+            ],
+            [
+              18,
+              6
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/4WD/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          10
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              13,
+              0.75
+            ],
+            [
+              14,
+              1.2
+            ],
+            [
+              16,
+              3
+            ],
+            [
+              18,
+              10
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Service/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          8
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              13,
+              0.75
+            ],
+            [
+              14,
+              1.2
+            ],
+            [
+              16,
+              3
+            ],
+            [
+              18,
+              10
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Local/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          7
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              2
+            ],
+            [
+              16,
+              4
+            ],
+            [
+              18,
+              15.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Minor/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          5
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 12,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              0.75
+            ],
+            [
+              14,
+              2.5
+            ],
+            [
+              16,
+              7.5
+            ],
+            [
+              18,
+              15.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Major/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          3
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 10,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              10,
+              0.75
+            ],
+            [
+              11,
+              1.5
+            ],
+            [
+              14,
+              4.5
+            ],
+            [
+              16,
+              10
+            ],
+            [
+              18,
+              20
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Freeway Motorway/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          0
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 6,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [
+              6,
+              "#d7d8d9"
+            ],
+            [
+              7,
+              "#b3b4b4"
+            ],
+            [
+              8,
+              "#8e8f8f"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              6,
+              0.75
+            ],
+            [
+              7,
+              2.7
+            ],
+            [
+              11,
+              3.75
+            ],
+            [
+              14,
+              8
+            ],
+            [
+              16,
+              16.5
+            ],
+            [
+              18,
+              34
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Minor, ramp or traffic circle/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          6
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 12,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              0.75
+            ],
+            [
+              14,
+              1.7
+            ],
+            [
+              16,
+              8.5
+            ],
+            [
+              18,
+              16
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Major, ramp or traffic circle/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          4
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 10,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              10,
+              0.75
+            ],
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              1.7
+            ],
+            [
+              16,
+              8.5
+            ],
+            [
+              18,
+              16
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Freeway Motorway/Highway, ramp or traffic circle/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          2
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 8,
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              7,
+              0.75
+            ],
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              1.7
+            ],
+            [
+              16,
+              9.5
+            ],
+            [
+              18,
+              16
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Highway/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          1
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 9,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              9,
+              1.2
+            ],
+            [
+              11,
+              1.75
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              16,
+              12.5
+            ],
+            [
+              18,
+              30
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road/Freeway Motorway/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          0
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 7,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              7,
+              1.2
+            ],
+            [
+              11,
+              1.75
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              16,
+              12.5
+            ],
+            [
+              18,
+              30
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Pedestrian/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          9
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 15,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#c7d0c4",
+        "line-opacity": 0.15,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              15,
+              3.5
+            ],
+            [
+              16,
+              4
+            ],
+            [
+              18,
+              8
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/4WD/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          10
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#d3d4d6",
+        "line-opacity": 0.3,
+        "line-dasharray": [
+          3,
+          2
+        ],
+        "line-width": {
+          "base": 1.2,
+          "stops": [
+            [
+              13,
+              2.25
+            ],
+            [
+              14,
+              2.7
+            ],
+            [
+              16,
+              4.5
+            ],
+            [
+              18,
+              11.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Service/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          8
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#d3d4d6",
+        "line-opacity": 0.15,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              13,
+              2.25
+            ],
+            [
+              14,
+              2.7
+            ],
+            [
+              16,
+              4.5
+            ],
+            [
+              18,
+              11.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Local/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          7
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 12,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.15,
+        "line-color": {
+          "stops": [
+            [
+              12,
+              "#cfd0d1"
+            ],
+            [
+              13,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              0.75
+            ],
+            [
+              13,
+              2.5
+            ],
+            [
+              16,
+              5.5
+            ],
+            [
+              18,
+              17.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Minor, ramp or traffic circle/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          6
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.15,
+        "line-color": {
+          "stops": [
+            [
+              11,
+              "#bdbebf"
+            ],
+            [
+              13,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              12,
+              2.25
+            ],
+            [
+              14,
+              3.2
+            ],
+            [
+              16,
+              11
+            ],
+            [
+              18,
+              18.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Minor/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          5
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 11,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.15,
+        "line-color": {
+          "stops": [
+            [
+              11,
+              "#bdbebf"
+            ],
+            [
+              13,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              12,
+              2.25
+            ],
+            [
+              14,
+              4.5
+            ],
+            [
+              16,
+              10.5
+            ],
+            [
+              18,
+              18.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Major, ramp or traffic circle/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          4
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 9,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.15,
+        "line-color": {
+          "stops": [
+            [
+              11,
+              "#bdbebf"
+            ],
+            [
+              12,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              9,
+              0.75
+            ],
+            [
+              10,
+              2.25
+            ],
+            [
+              11,
+              2.25
+            ],
+            [
+              14,
+              3.2
+            ],
+            [
+              16,
+              11
+            ],
+            [
+              18,
+              18.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Freeway Motorway, ramp or traffic circle/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          2
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 7,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.15,
+        "line-color": "#8e8f8f",
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              8,
+              1.2
+            ],
+            [
+              9,
+              2.7
+            ],
+            [
+              11,
+              3.5
+            ],
+            [
+              14,
+              3.2
+            ],
+            [
+              16,
+              11
+            ],
+            [
+              18,
+              18.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Major/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          3
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 9,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.15,
+        "line-color": {
+          "stops": [
+            [
+              9,
+              "#bdbebf"
+            ],
+            [
+              12,
+              "#9ea0a1"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              9,
+              0.75
+            ],
+            [
+              10,
+              2.25
+            ],
+            [
+              11,
+              3.5
+            ],
+            [
+              14,
+              6.5
+            ],
+            [
+              16,
+              13
+            ],
+            [
+              18,
+              23
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Highway/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          1
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 8,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.15,
+        "line-color": {
+          "stops": [
+            [
+              8,
+              "#d7d8d9"
+            ],
+            [
+              10,
+              "#8e8f8f"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              8,
+              1.2
+            ],
+            [
+              9,
+              2.7
+            ],
+            [
+              11,
+              3.5
+            ],
+            [
+              14,
+              7
+            ],
+            [
+              16,
+              16.5
+            ],
+            [
+              18,
+              34
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Pedestrian/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          9
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 15,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#fcfcfa",
+        "line-opacity": 0.7,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              15,
+              1.5
+            ],
+            [
+              16,
+              2
+            ],
+            [
+              18,
+              6
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/4WD/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          10
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              13,
+              0.75
+            ],
+            [
+              14,
+              1.2
+            ],
+            [
+              16,
+              3
+            ],
+            [
+              18,
+              10
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Service/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          8
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              13,
+              0.75
+            ],
+            [
+              14,
+              1.2
+            ],
+            [
+              16,
+              3
+            ],
+            [
+              18,
+              10
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Local/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          7
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 13,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              2
+            ],
+            [
+              16,
+              4
+            ],
+            [
+              18,
+              15.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Minor/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          5
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 12,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              0.75
+            ],
+            [
+              14,
+              2.5
+            ],
+            [
+              16,
+              7.5
+            ],
+            [
+              18,
+              15.5
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Major/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          3
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 10,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              10,
+              0.75
+            ],
+            [
+              11,
+              1.5
+            ],
+            [
+              14,
+              4.5
+            ],
+            [
+              16,
+              10
+            ],
+            [
+              18,
+              20
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Freeway Motorway/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          0
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 7,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-opacity": 0.15,
+        "line-color": {
+          "stops": [
+            [
+              6,
+              "#d7d8d9"
+            ],
+            [
+              7,
+              "#b3b4b4"
+            ],
+            [
+              8,
+              "#8e8f8f"
+            ]
+          ]
+        },
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              6,
+              0.75
+            ],
+            [
+              7,
+              2.7
+            ],
+            [
+              11,
+              3.75
+            ],
+            [
+              14,
+              8
+            ],
+            [
+              16,
+              16.5
+            ],
+            [
+              18,
+              34
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Minor, ramp or traffic circle/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          6
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 12,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              12,
+              0.75
+            ],
+            [
+              14,
+              1.7
+            ],
+            [
+              16,
+              8.5
+            ],
+            [
+              18,
+              16
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Major, ramp or traffic circle/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          4
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 10,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              10,
+              0.75
+            ],
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              1.7
+            ],
+            [
+              16,
+              8.5
+            ],
+            [
+              18,
+              16
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Freeway Motorway/Highway, ramp or traffic circle/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          2
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 7,
+      "layout": {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              7,
+              0.75
+            ],
+            [
+              11,
+              0.75
+            ],
+            [
+              14,
+              1.7
+            ],
+            [
+              16,
+              9.5
+            ],
+            [
+              18,
+              16
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Highway/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          1
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 9,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              9,
+              0.75
+            ],
+            [
+              11,
+              1.75
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              16,
+              12.5
+            ],
+            [
+              18,
+              30
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Road tunnel/Freeway Motorway/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "Road tunnel",
+      "filter": [
+        "all",
+        [
+          "==",
+          "_symbol",
+          0
+        ],
+        [
+          "!in",
+          "Viz",
+          3
+        ]
+      ],
+      "minzoom": 7,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#ffffff",
+        "line-opacity": 0.5,
+        "line-width": {
+          "base": 1,
+          "stops": [
+            [
+              7,
+              1.2
+            ],
+            [
+              11,
+              1.75
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              16,
+              12.5
+            ],
+            [
+              18,
+              30
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "Building/Special area of interest",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "Building",
+      "filter": [
+        "==",
+        "_symbol",
+        0
+      ],
+      "minzoom": 15,
+      "layout": {},
+      "paint": {
+        "fill-color": "#c8c8c8",
+        "fill-outline-color": "#ffffff",
+        "fill-opacity": 0.3
+      }
+    }
+  ],
+  "metadata": {
+    "arcgisStyleUrl": "https://www.arcgis.com/sharing/rest/content/items/1fba3ab575f6434b80a708e1aa589dd5/resources/styles/root.json",
+    "arcgisOriginalItemTitle": "Copy of World Terrain Base"
+  }
+}

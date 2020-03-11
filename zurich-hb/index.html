@@ -1,0 +1,615 @@
+<!-- https://plans.trafimage.ch/zuerich-hb -->
+<!-- https://stations.sbb.cartaro-enterprise.com/de/api/models/swagger/ -->
+<!-- UID Zurich HB: 8503000-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Zurich HB</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      font-family: "Avenir Next W00", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: linear-gradient(0deg, rgba(228, 234, 242, 1) 5%, rgba(255, 255, 255, 1) 50%);
+    }
+
+    #menu {
+      padding: 1em;
+      background: white;
+    }
+
+    .slider {
+      min-height: 100px;
+      min-width: 110px;
+    }
+
+    .esri-slider__tick-label {
+      transform: none !important;
+    }
+
+    .esri-slider__content {
+      margin-left: 10px !important;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.14/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/SceneView",
+      "esri/layers/FeatureLayer",
+      "esri/layers/GraphicsLayer",
+      "esri/layers/GeoJSONLayer",
+      "esri/layers/SceneLayer",
+      "esri/layers/VectorTileLayer",
+      "esri/geometry/Extent",
+      "esri/layers/support/LabelClass",
+      "esri/widgets/Editor",
+      "esri/widgets/Home",
+      "esri/Color",
+      "esri/geometry/Mesh",
+      "esri/geometry/Point",
+      "esri/geometry/Polygon",
+      "esri/Graphic",
+      "esri/widgets/Slider"
+    ], function (
+      Map,
+      SceneView,
+      FeatureLayer,
+      GraphicsLayer,
+      GeoJSONLayer,
+      SceneLayer,
+      VectorTileLayer,
+      Extent,
+      LabelClass,
+      Editor,
+      Home,
+      Color,
+      Mesh,
+      Point,
+      Polygon,
+      Graphic,
+      Slider) {
+      const shopWallsUrl =
+        "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/shop_walls_zurichhb/FeatureServer";
+
+      const colors = {
+        blue: new Color([0, 106, 255]),
+        lightOrange: new Color([255, 228, 156]),
+        lighterBlue: new Color([230, 240, 255]),
+        lightBlue: new Color([184, 213, 255]),
+        darkBlue: new Color([30, 72, 133]),
+        darkOrange: new Color([240, 152, 0]),
+        white: new Color([255, 255, 255]),
+        lightGray: new Color([232, 232, 232]),
+        darkGray: new Color([100, 100, 100])
+      }
+
+      const extent = new Extent({
+        xmin: 949940.6557,
+        xmax: 950931.8698,
+        ymin: 6003633.1368,
+        ymax: 6004391.2433,
+        spatialReference: 102100
+      });
+
+      const groundOpacity = 1;
+
+      const floorMapping = [{
+        name: "Overview",
+        originalNames: ["Erdgeschoss"],
+        elevation: 410
+      }, {
+        name: "Ground",
+        originalNames: ["Erdgeschoss"],
+        elevation: 410
+      }, {
+        name: "-1",
+        originalNames: ["Zwischengeschoss"],
+        elevation: 385
+      }, {
+        name: "-2",
+        originalNames: ["Shopville", "Untergeschoss", "Shopville/Aufgänge"],
+        elevation: 360
+      }, {
+        name: "-3",
+        originalNames: ["Bahnhöfe Löwenstrasse / Museumsstrasse", "Bahnhof SZU"],
+        elevation: 335
+      }]
+
+      const floorExpression = `
+        IIf($feature.floor == 'Bahnhöfe Löwenstrasse / Museumsstrasse' || $feature.floor == 'Bahnhof SZU', ${floorMapping[4].elevation},
+          IIf($feature.floor == 'Erdgeschoss', ${floorMapping[1].elevation},
+            IIf($feature.floor == 'Shopville' || $feature.floor == 'Shopville/Aufgänge' || $feature.floor == 'Untergeschoss' ,
+            ${floorMapping[3].elevation}, ${floorMapping[2].elevation})
+          )
+        )`;
+
+      const elevationInfo = {
+        mode: "absolute-height",
+        featureExpressionInfo: {
+          expression: floorExpression
+        }
+      };
+
+      const wallsLayer = new GeoJSONLayer({
+        url: "./shop-walls.json",
+        elevationInfo: elevationInfo,
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "line-3d",
+            symbolLayers: [
+              {
+                type: "path",
+                profile: "quad",
+                material: { color: colors.lightBlue },
+                width: 0.5,
+                height: 2,
+                join: "miter",
+                cap: "butt",
+                anchor: "bottom",
+                profileRotation: "all"
+              }
+            ]
+          }
+        }
+      });
+
+      const areasLayer = new GeoJSONLayer({
+        url: './areas.json',
+        elevationInfo: elevationInfo,
+        renderer: {
+          type: "unique-value",
+          field: "type",
+          defaultSymbol: {
+            type: "polygon-3d",
+            symbolLayers: [
+              {
+                type: "fill",
+                material: { color: colors.white },
+                outline: {
+                  size: 1.6,
+                  color: colors.lightGray
+                }
+              }
+            ]
+          },
+          uniqueValueInfos: [
+            {
+              value: "shops",
+              symbol: {
+                type: "polygon-3d",
+                symbolLayers: [
+                  {
+                    type: "fill",
+                    material: { color: colors.lighterBlue },
+                    size: 3
+                  }
+                ]
+              },
+              label: "Shopping area"
+            },
+            {
+              value: "perron",
+              symbol: {
+                type: "polygon-3d",
+                symbolLayers: [
+                  {
+                    type: "extrude",
+                    material: { color: colors.lightOrange },
+                    size: 1
+                  }
+                ]
+              },
+              label: "Perron"
+            },
+            {
+              value: "treppe",
+              symbol: {
+                type: "polygon-3d",
+                symbolLayers: [
+                  {
+                    type: "extrude",
+                    material: { color: colors.lightGray },
+                    size: 1.5
+                  }
+                ]
+              },
+              label: "Stairs"
+            },
+            {
+              value: "rolltreppe",
+              symbol: {
+                type: "polygon-3d",
+                symbolLayers: [
+                  {
+                    type: "extrude",
+                    material: { color: colors.lightGray },
+                    size: 1.5
+                  }
+                ]
+              },
+              label: "Rollstairs"
+            }
+          ]
+        }
+      });
+
+      function fadeAwayAreas(floors) {
+        const floorEnumString = "'" + floors.join(" ") + "'";
+        const expression = `IIf(Boolean(Find($feature.floor, ${floorEnumString}, 0) == -1), 1, 0.1)`;
+        console.log(expression);
+        const opacityVariable = {
+          type: "opacity",
+          stops: [
+            { value: 0.1, opacity: 0.1 },
+            { value: 1, opacity: 1 }
+          ],
+          valueExpression: expression
+        }
+        const areasRenderer = areasLayer.renderer.clone();
+        areasRenderer.visualVariables = [opacityVariable];
+        areasLayer.renderer = areasRenderer;
+        areasLayer.definitionExpression = `floor NOT IN (${"'" + floors.join("', '") + "'"})`
+        wallsLayer.definitionExpression = `floor NOT IN (${"'" + floors.join("', '") + "'"})`;
+      }
+
+      const servicesLayer = new GeoJSONLayer({
+        url: './services.json',
+        screenSizePerspectiveEnabled: false,
+        elevationInfo: {
+          mode: "absolute-height",
+          featureExpressionInfo: {
+            expression: floorExpression
+          },
+          offset: 2
+        },
+        labelingInfo: [
+          new LabelClass({
+            where: `category = 'Öffentlicher Verkehr'`,
+            labelExpressionInfo: { expression: "$feature.name" },
+            symbol: {
+              type: "label-3d",
+              symbolLayers: [
+                {
+                  type: "text",
+                  material: {
+                    color: [199, 126, 0, 1]
+                  },
+                  halo: {
+                    size: 1,
+                    color: [255, 255, 255, 1]
+                  },
+                  font: {
+                    size: 11,
+                    family: '"Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif'
+                  }
+                }
+              ]
+            }
+          }),
+          new LabelClass({
+            //where: `category IN ('Shopping', 'Restaurants & Take Aways')`,
+            labelExpressionInfo: { expression: "$feature.name" },
+            symbol: {
+              type: "label-3d",
+              symbolLayers: [
+                {
+                  type: "text",
+                  material: {
+                    color: colors.darkGray
+                  },
+                  halo: {
+                    size: 1,
+                    color: [255, 255, 255, 1]
+                  },
+                  font: {
+                    size: 11,
+                    family: '"Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif'
+                  }
+                }
+              ]
+            }
+          })
+        ],
+        renderer: {
+          type: "unique-value",
+          field: "category",
+          defaultSymbol: {
+            type: "point-3d",
+            symbolLayers: [
+              {
+                type: "icon",
+                resource: { primitive: "circle" },
+                material: { color: colors.darkGray },
+                size: 4
+              }
+            ],
+            verticalOffset: {
+              screenLength: 5,
+              maxWorldLength: 200,
+              minWorldLength: 5
+            },
+            callout: {
+              type: "line",
+              size: 0.5,
+              color: colors.darkGray
+            }
+          },
+          uniqueValueInfos: [
+            {
+              value: "Öffentlicher Verkehr",
+              symbol: {
+                type: "point-3d",
+                symbolLayers: [
+                  {
+                    type: "icon",
+                    resource: { primitive: "circle" },
+                    material: { color: colors.darkOrange },
+                    size: 4
+                  }
+                ],
+                verticalOffset: {
+                  screenLength: 5,
+                  maxWorldLength: 200,
+                  minWorldLength: 5
+                },
+                callout: {
+                  type: "line",
+                  size: 0.5,
+                  color: colors.darkOrange
+                }
+              },
+              label: "Public transport"
+            }
+          ]
+        }
+      });
+
+      function filterPoints(floors) {
+        const floorEnumSql = "'" + floors.join("', '") + "'";
+        servicesLayer.definitionExpression = `floor IN (${floorEnumSql})`;
+      }
+
+      filterPoints(floorMapping[0].originalNames);
+      const buildingsLayer = new SceneLayer({
+        url:
+          "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/Zurich_Existing_Buildings_Year/SceneServer",
+        outFields: ["EGID"],
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "mesh-3d",
+            symbolLayers: [
+              {
+                type: "fill",
+                material: { color: [255, 255, 255] },
+                edges: {
+                  type: "solid",
+                  color: [50, 50, 50, 0.5],
+                  size: 1,
+                  extensionLength: 0
+                }
+              }
+            ]
+          },
+          visualVariables: [
+            {
+              type: "opacity",
+              valueExpression: "IIf(indexof([140889,302040593,150642],$feature.EGID)==-1,1,0);",
+              stops: [
+                { value: 0, opacity: 0.2 },
+                { value: 1, opacity: 1 }
+              ]
+            }
+          ]
+        },
+        elevationInfo: {
+          mode: "absolute-height",
+          offset: 5
+        }
+      });
+
+      const vectorTile = new VectorTileLayer({
+        url: "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_v2/VectorTileServer"
+      });
+      vectorTile.loadStyle("style.json");
+      const map = new Map({
+        basemap: {
+          baseLayers: vectorTile
+        },
+        ground: "world-elevation"
+      });
+
+      map.ground.navigationConstraint = {
+        type: "none"
+      };
+      map.ground.opacity = groundOpacity;
+      map.ground.surfaceColor = "white";
+
+      map.layers.addMany([areasLayer, wallsLayer, servicesLayer, buildingsLayer]);
+
+      const view = new SceneView({
+        container: "viewDiv",
+        viewingMode: "global",
+        map: map,
+        qualityProfile: "high",
+        camera: {
+          position: [
+            8.54341317,
+            47.37556450,
+            566.11708
+          ],
+          heading: 314.10,
+          tilt: 66.12
+        },
+        //clippingArea: stationExtent,
+        alphaCompositingEnabled: true,
+        // spatialReference: {
+        //   wkid: 102100
+        // },
+        popup: {
+          defaultPopupTemplateEnabled: true
+        },
+        environment: {
+          background: {
+            type: "color",
+            color: [255, 255, 255, 0]
+          },
+          starsEnabled: false,
+          atmosphereEnabled: false,
+          // lighting: {
+          //   directShadowsEnabled: true
+          // }
+        }
+      });
+
+      const planeLayer = new GraphicsLayer({
+        elevationInfo: {
+          mode: "absolute-height",
+          offset: 407
+        },
+        visible: false
+      });
+      map.add(planeLayer);
+
+      polygonRings = [
+        [8.53418, 47.38077, 0],
+        [8.53252, 47.37848, 0],
+        [8.54158, 47.37569, 0],
+        [8.54302, 47.37842, 0],
+        [8.53418, 47.38077, 0]
+      ]
+
+      const graphic = new Graphic({
+        symbol: {
+          type: "polygon-3d",
+          symbolLayers: [
+            {
+              type: "extrude",
+              material: { color: [255, 255, 255, 0.8] },
+              size: 2,
+              edges: {
+                type: "solid",
+                color: [70, 70, 70, 0.5],
+                size: 1
+              }
+            }
+          ]
+        },
+        geometry: new Polygon({
+          rings: polygonRings,
+          spatialReference: 4326
+        })
+      });
+      planeLayer.add(graphic);
+
+      view.whenLayerView(buildingsLayer).then(function (lyrView) {
+        lyrView.filter = {
+          geometry: extent,
+          spatialRelationship: "intersects"
+        };
+      });
+
+      const slider = new Slider({
+        container: "sliderDiv",
+        min: 0,
+        max: 4,
+        values: [0],
+        steps: 1,
+        layout: "vertical-reversed",
+
+        tickConfigs: [{
+          labelFormatFunction: function (value) {
+            return floorMapping[value].name;
+          },
+          labelsVisible: true,
+          mode: "count",
+          values: 5
+        }]
+      });
+
+      function liftPlane(oldValue, newValue) {
+        if (oldValue < newValue - 3) {
+          planeLayer.elevationInfo = { mode: "absolute-height", offset: oldValue }
+          requestAnimationFrame(function () {
+            liftPlane(oldValue + 1, newValue)
+          });
+        }
+      }
+
+      function lowerPlane(oldValue, newValue) {
+        if (oldValue > newValue - 3) {
+          planeLayer.elevationInfo = { mode: "absolute-height", offset: oldValue }
+          requestAnimationFrame(function () {
+            lowerPlane(oldValue - 1, newValue)
+          });
+        }
+      }
+
+      slider.on("thumb-drag", function (event) {
+        console.log(event);
+        if (event.state === "stop") {
+          if (event.value === 0) {
+            view.map.ground.opacity = groundOpacity;
+            planeLayer.visible = false;
+            buildingsLayer.visible = true;
+          }
+          else {
+            planeLayer.visible = true;
+            buildingsLayer.visible = false;
+            view.map.ground.opacity = 0;
+            filterPoints(floorMapping[event.value].originalNames);
+          }
+          const oldValue = planeLayer.elevationInfo.offset;
+          const newValue = floorMapping[event.value].elevation;
+          if (oldValue < newValue) {
+            liftPlane(oldValue, newValue);
+          }
+          if (oldValue > newValue) {
+            lowerPlane(oldValue, newValue);
+          }
+
+          // let floors = [];
+          // for (let i = 0; i < event.value; i++) {
+          //   floors = floors.concat(floorMapping[i].originalNames);
+          // }
+          // console.log(floors);
+          // fadeAwayAreas(floors);
+
+        }
+      });
+
+      view.ui.add("menu", "top-right");
+
+      view.on("click", function (event) {
+        console.log(event.mapPoint);
+      })
+
+      window.view = view;
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="menu">
+      <h2> Zurich main station</h2>
+      <div id="sliderDiv" class="slider"></div>
+      <p>Data source © SBB/CFF/FFS, <a href="www.trafimage.ch">www.trafimage.ch</a></p>
+    </div>
+  </div>
+
+</body>
+
+</html>
