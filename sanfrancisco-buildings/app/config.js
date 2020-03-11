@@ -47,7 +47,7 @@ define([], function () {
     heightVariable: {
       stops: [
         { value: 10, color: "#e0ecf4", label: "< 10m" },
-        { value: 70, color: "#8856a7", label: "> 100m" }
+        { value: 70, color: "#8856a7", label: "> 70m" }
       ],
       binSize: 10
     },

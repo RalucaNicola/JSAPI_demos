@@ -23,7 +23,7 @@ define(["app/config", "app/utils", "app/statistics"], function (config, appUtils
         },
         title: {
           display: true,
-          text: "Construction year"
+          text: "Number of buildings by construction year"
         },
         scales: {
           xAxes: [
@@ -56,7 +56,6 @@ define(["app/config", "app/utils", "app/statistics"], function (config, appUtils
           {
             label: "Buildings with this height",
             backgroundColor: heightBins.map(function (element) { return element.color }),
-            stack: "Stack 0",
             data: [0, 0, 0, 0, 0, 0, 0, 0]
           }
         ]
@@ -68,7 +67,7 @@ define(["app/config", "app/utils", "app/statistics"], function (config, appUtils
         },
         title: {
           display: true,
-          text: "Building height"
+          text: "Number of buildings by height"
         },
         scales: {
           xAxes: [
