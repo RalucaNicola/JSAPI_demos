@@ -1,0 +1,29 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+footer {
+  color: #323232;
+  background-color: rgba(255,255,255, 0.65);
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  font-size:12px;
+  padding: 5px;
+}
+
+footer a {
+  color: #323232;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+canvas {
+  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3));
+}

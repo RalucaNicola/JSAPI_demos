@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1">
+  <title>Switzerland - the low poly map</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/css/main.css">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    var locationPath = location.origin + location.pathname.replace(/\/[^\/]+$/, "");
+    window.dojoConfig = {
+      packages: [{
+        name: "lib",
+        location: locationPath + "/lib"
+      }]
+    }
+  </script>
+  <script src="https://js.arcgis.com/4.15/"></script>
+  <script src="index.js"></script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+  <footer>Triangulated with <a href="https://github.com/r3mi/poly2tri.js">poly2tri.js</a>. <a href="https://fonts.google.com/specimen/Anton">Anton font family</a> from <a href="https://fonts.google.com/">Google Fonts</a>.</footer>
+</body>
+
+</html>
