@@ -46,8 +46,8 @@
     }
 
   </style>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.13/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.13/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.9/"></script>
 
   <script>
     require([
@@ -61,7 +61,7 @@
       // the style of the edges
       const sketchEdges = {
         type: "sketch",
-        color: [0, 0, 0, 0.8],
+        color: [0, 0, 0, 0.6],
         size: 2,
         extensionLength: 10
       };
@@ -123,7 +123,7 @@
             view.goTo(webscene.presentation.slides.getItemAt(0).viewpoint,
             {
               // make the animation really slow
-              speedFactor: 0.005,
+              speedFactor: 0.05,
               // use the same speed all the time during the animation
               easing: "linear"
             });
