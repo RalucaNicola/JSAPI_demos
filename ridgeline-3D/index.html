@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>JoyPlot 3D tests</title>
+  <title>Swiss mountains in a 3D joyplot</title>
   <style>
     html,
     body,
@@ -76,7 +76,7 @@
               material: { color: [255, 250, 239, 0] },
               outline: {
                 color: [255, 255, 255, 0.5],
-                size: 10
+                size: 3
               }
             }]
           }
@@ -118,10 +118,7 @@
             callout: {
               type: "line", // autocasts as new LineCallout3D()
               size: 0.5,
-              color: [0, 0, 0],
-              border: {
-                color: [255, 255, 255, 0.7]
-              }
+              color: [0, 0, 0]
             }
           }
         },
@@ -161,8 +158,6 @@
         layers: [layer, countryBoundaries, peaks],
         ground: {
           surfaceColor: "#cdcade"
-          //surfaceColor: [25, 6, 112],
-          //opacity: 0.2
         }
       });
 
@@ -207,14 +202,15 @@
               hasZ: true,
               paths: [[xmin, y, 0], [xmax, y, 0]]
             });
-            const densifiedLine = geometryEngine.densify(line, 100, "meters");
+            const densifiedLine = geometryEngine.densify(line, 1000, "meters");
             elevationLayer.queryElevation(densifiedLine, { demResolution: 1000 }).then(function (result) {
               const exaggeratedGeometry = result.geometry;
 
               const paths = exaggeratedGeometry.paths[0];
               for (let i = 0; i < paths.length; i++) {
                 const z = paths[i][2];
-                paths[i][2] = z * 5;
+                const altitude = z * 4 > 14000 ? 14000 : z * 4;
+                paths[i][2] = altitude;
               }
 
               const vertices = paths.map(function (x) { return x; });
@@ -278,7 +274,7 @@
       function getColorFromHeight(value) {
         const stops = [
           { value: 0, color: new Color([255, 255, 255]) },
-          { value: 10000, color: new Color([0, 0, 0]) }
+          { value: 14000, color: new Color([0, 0, 0]) }
         ];
         for (let i = 0; i < stops.length; i++) {
           const stop = stops[i];
