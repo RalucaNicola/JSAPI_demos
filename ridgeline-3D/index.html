@@ -23,6 +23,7 @@
     require([
       "esri/Map",
       "esri/views/SceneView",
+      "esri/Color",
       "esri/Graphic",
       "esri/layers/GraphicsLayer",
       "esri/layers/FeatureLayer",
@@ -36,6 +37,7 @@
     ], function (
       Map,
       SceneView,
+      Color,
       Graphic,
       GraphicsLayer,
       FeatureLayer,
@@ -51,10 +53,10 @@
         url: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"
       });
 
-      const xmin = -23594392.5140;
-      const xmax = 21436409.8208;
-      const ymin = -10140862.8815;
-      const ymax = 19186357.1149;
+      const xmin = 616192.3606;
+      const xmax = 1262846.8176;
+      const ymin = 5655610.7333;
+      const ymax = 6158941.8641;
 
       const layer = new GraphicsLayer({
         spatialReference: {
@@ -64,7 +66,7 @@
 
       const countryBoundaries = new FeatureLayer({
         url: "http://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries_(Generalized)/FeatureServer",
-        title: "World Countries",
+        definitionExpression: "COUNTRY = 'Switzerland'",
         renderer: {
           type: "simple",
           symbol: {
@@ -73,29 +75,119 @@
               type: "fill",  // autocasts as new FillSymbol3DLayer()
               material: { color: [255, 250, 239, 0] },
               outline: {
-                color: [70, 70, 70, 0.7]
+                color: [255, 255, 255, 0.5],
+                size: 10
               }
             }]
           }
         }
       });
 
+      var peaks = new FeatureLayer({
+        url:
+          "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Cities/FeatureServer",
+        returnZ: false,
+        // Select peaks higher than 3000m
+        definitionExpression: "POP > 30000 AND CNTRY_NAME='Switzerland'",
+        screenSizePerspectiveEnabled: false,
+        // Set a renderer that will show the points with icon symbols
+        renderer: {
+          type: "simple", // autocasts as new SimpleRenderer()
+          symbol: {
+            type: "point-3d", // autocasts as new PointSymbol3D()
+            symbolLayers: [
+              {
+                type: "icon", // autocasts as new IconSymbol3DLayer()
+                resource: {
+                  primitive: "circle"
+                },
+                material: {
+                  color: "black"
+                },
+                size: 6
+              }
+            ],
+            // Labels need a small vertical offset that will be used by the callout
+            verticalOffset: {
+              screenLength: 200,
+              maxWorldLength: 10000,
+              minWorldLength: 30
+            },
+            // The callout has to have a defined type (currently only line is possible)
+            // The size, the color and the border color can be customized
+            callout: {
+              type: "line", // autocasts as new LineCallout3D()
+              size: 0.5,
+              color: [0, 0, 0],
+              border: {
+                color: [255, 255, 255, 0.7]
+              }
+            }
+          }
+        },
+        outFields: ["*"],
+        // Add labels with callouts of type line to the icons
+        labelingInfo: [
+          {
+            // When using callouts on labels, "above-center" is the only allowed position
+            labelPlacement: "above-center",
+            labelExpressionInfo: {
+              value: "{CITY_NAME}"
+            },
+            symbol: {
+              type: "label-3d", // autocasts as new LabelSymbol3D()
+              symbolLayers: [
+                {
+                  type: "text", // autocasts as new TextSymbol3DLayer()
+                  material: {
+                    color: "black"
+                  },
+                  halo: {
+                    color: [255, 255, 255, 0.7],
+                    size: 2
+                  },
+                  size: 10
+                }
+              ],
+
+            }
+          }
+        ]
+      });
+
+
       // Create Map and View
       var map = new Map({
-        layers: [layer, countryBoundaries],
+        layers: [layer, countryBoundaries, peaks],
         ground: {
-          surfaceColor: "#fff"
+          surfaceColor: "#cdcade"
+          //surfaceColor: [25, 6, 112],
+          //opacity: 0.2
         }
       });
 
       var view = new SceneView({
         container: "viewDiv",
         map: map,
+        camera: {
+          position: [
+            8.43659210,
+            46.61913897,
+            3206165.05469
+          ],
+          heading: 0,
+          tilt: 0,
+          fov: 10
+        },
         viewingMode: "local",
+        clippingArea: {
+          xmin, xmax, ymin, ymax, spatialReference: { wkid: 3857 }
+        },
+        qualityProfile: "high",
         environment: {
           background: {
             type: "color",
-            color: "#fff"
+            color: "#cdcade"
           },
           starsEnabled: false,
           atmosphereEnabled: false,
@@ -105,105 +197,106 @@
         }
       });
 
-      const lineSymbol = {
-        type: "line-3d", // autocasts as new LineSymbol3D()
-        symbolLayers: [
-          {
-            type: "line", // autocasts as new LineSymbol3DLayer()
-            material: {
-              color: [100, 100, 100, 0.7]
-            },
-            size: 1
-          }
-        ]
-      };
-
-        window.view = view;
-      view.when(function() {
-        for (let y = ymin; y < ymax; y +=200000) {
-          const line = new Polyline({
-            spatialReference: {wkid: 3857},
-            hasZ: true,
-            paths: [[xmin, y, 0], [xmax, y, 0]]
-          });
-          const densifiedLine = geometryEngine.densify(line, 5000, "meters");
-          elevationLayer.queryElevation(densifiedLine, {demResolution: 20000}).then(function(result){
-            const exaggeratedGeometry = result.geometry;
-            const paths = exaggeratedGeometry.paths[0];
-            for (let i = 0; i < paths.length; i++) {
-              const z = paths[i][2];
-              paths[i][2] = z * 250;
-            }
-            exaggeratedGeometry.paths[0] = paths;
-            const graphic = new Graphic({
-              geometry: exaggeratedGeometry,
-              symbol: lineSymbol
+      window.view = view;
+      countryBoundaries.queryFeatures({ where: "COUNTRY='Switzerland'", returnGeometry: true })
+        .then(function (result) {
+          const switzerland = result.features[0].geometry;
+          for (let y = ymin; y < ymax; y += 10000) {
+            const line = new Polyline({
+              spatialReference: { wkid: 3857 },
+              hasZ: true,
+              paths: [[xmin, y, 0], [xmax, y, 0]]
             });
-            layer.add(graphic);
+            const densifiedLine = geometryEngine.densify(line, 100, "meters");
+            elevationLayer.queryElevation(densifiedLine, { demResolution: 1000 }).then(function (result) {
+              const exaggeratedGeometry = result.geometry;
 
-            const vertices = paths.map(function(x) {return x;});
-            const faces = [];
-
-            const length = paths.length;
-
-            for (let i = 0; i < paths.length; i++) {
-              const vIdx1 = i;
-              const vIdx2 = (i + 1) % paths.length;
-
-              const vIdx3 = length + i;
-              const vIdx4 = length + (i + 1) % paths.length;
-
-              // Add new wall vertex
-              const bottomVertex = [].concat.apply([], paths[vIdx1]);
-              bottomVertex[2] = 0;
-              vertices.push(bottomVertex);
-
-              if (i !== paths.length - 1) {
-                      faces.push(vIdx2, vIdx3, vIdx1, vIdx4, vIdx3, vIdx2);
-                    }
-            }
-
-            const mesh = new Mesh({
-              vertexAttributes: {
-                // vertex positions for the Louvre pyramid, Paris
-                position: vertices.flat()
-              },
-              // Add a single component with faces that index the vertices
-              // so we only need to define them once
-              components: [
-                {
-                  faces: faces,
-                  material: new MeshMaterialMetallicRoughness({
-                    color: "#fff",
-                    metallic: 0.5,
-                    emissiveColor: "#ff984f"
-                  })
-                }
-              ],
-              spatialReference: { wkid: 3857 }
-              // specify a spatial reference if the position of the vertices is not in WGS84
-            });
-
-            const polyGraphic = new Graphic({
-              geometry: mesh,
-              symbol: {
-                type: "mesh-3d",
-                symbolLayers: [{
-                  type: "fill",
-
-                }]
+              const paths = exaggeratedGeometry.paths[0];
+              for (let i = 0; i < paths.length; i++) {
+                const z = paths[i][2];
+                paths[i][2] = z * 5;
               }
+
+              const vertices = paths.map(function (x) { return x; });
+              const colors = paths.map(function (x) {
+                const color = getColorFromHeight(x[2]);
+                return [color.r, color.g, color.b, 240];
+              })
+              const faces = [];
+
+              const length = paths.length;
+
+              for (let i = 0; i < paths.length; i++) {
+                const vIdx1 = i;
+                const vIdx2 = (i + 1) % paths.length;
+
+                const vIdx3 = length + i;
+                const vIdx4 = length + (i + 1) % paths.length;
+
+                const bottomVertex = [].concat.apply([], paths[vIdx1]);
+                bottomVertex[2] = 500;
+                colors.push([255, 255, 255, 240]);
+                vertices.push(bottomVertex);
+                if (i !== paths.length - 1) {
+                  faces.push(vIdx2, vIdx3, vIdx1, vIdx4, vIdx3, vIdx2);
+                }
+              }
+
+              const mesh = new Mesh({
+                vertexAttributes: {
+                  position: vertices.flat(),
+                  color: colors.flat()
+                },
+                components: [
+                  {
+                    faces: faces,
+                    material: new MeshMaterialMetallicRoughness({
+                      color: "#fff",
+                      metallic: 0.8,
+                      emissiveColor: "#190670"
+                    })
+                  }
+                ],
+                spatialReference: { wkid: 3857 }
+                // specify a spatial reference if the position of the vertices is not in WGS84
+              });
+
+              const polyGraphic = new Graphic({
+                geometry: mesh,
+                symbol: {
+                  type: "mesh-3d",
+                  symbolLayers: [{
+                    type: "fill"
+                  }]
+                }
+              });
+              layer.add(polyGraphic);
             });
-            layer.add(polyGraphic);
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
+          }
+        });
+
+      function getColorFromHeight(value) {
+        const stops = [
+          { value: 0, color: new Color([255, 255, 255]) },
+          { value: 10000, color: new Color([0, 0, 0]) }
+        ];
+        for (let i = 0; i < stops.length; i++) {
+          const stop = stops[i];
+
+          if (value < stop.value) {
+            if (i === 0) {
+              return stop.color;
+            }
+
+            const prev = stops[i - 1];
+
+            const weight = (value - prev.value) / (stop.value - prev.value);
+            return Color.blendColors(prev.color, stop.color, weight);
+          }
         }
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+
+        return stops[stops.length - 1].color;
+      }
     });
   </script>
 </head>
