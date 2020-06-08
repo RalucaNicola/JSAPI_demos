@@ -6,8 +6,8 @@
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Malta in contour lines</title>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.13/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.13/"></script>
+  <link rel="stylesheet" href="https://jsdev.arcgis.com/4.16/esri/css/main.css">
+  <script src="https://jsdev.arcgis.com/4.16/"></script>
 
   <style>
     html,
@@ -29,31 +29,30 @@
       padding: 10px;
       opacity: 0.75;
     }
-
   </style>
 
   <script>
     require([
-        "esri/config",
-        "esri/WebScene",
-        "esri/views/SceneView",
-        "esri/layers/FeatureLayer",
-        "dojo/dom",
-        "dojo/on",
-        "esri/layers/GraphicsLayer",
+      "esri/config",
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/layers/FeatureLayer",
+      "dojo/dom",
+      "dojo/on",
+      "esri/layers/GraphicsLayer",
 
-        "esri/Graphic",
-        "esri/geometry/Point",
-        "esri/geometry/Polyline",
-        "esri/geometry/Polygon",
+      "esri/Graphic",
+      "esri/geometry/Point",
+      "esri/geometry/Polyline",
+      "esri/geometry/Polygon",
 
-        "esri/renderers/SimpleRenderer",
+      "esri/renderers/SimpleRenderer",
 
-        "esri/symbols/PointSymbol3D",
-        "esri/symbols/TextSymbol3DLayer",
+      "esri/symbols/PointSymbol3D",
+      "esri/symbols/TextSymbol3DLayer",
 
-        "dojo/domReady!"
-      ],
+      "dojo/domReady!"
+    ],
       function (
         esriConfig, WebScene, SceneView, FeatureLayer, dom, on,
         GraphicsLayer,
@@ -62,24 +61,45 @@
         PointSymbol3D, TextSymbol3DLayer
       ) {
 
-        var webscene = new WebScene({
-          portalItem: {
-            id: "e1569a7b6e2249adae3447cfc382972a"
+        const webscene = new WebScene({
+          ground: {
+            opacity: 0
           }
         });
 
-        view = new SceneView({
+        const waterExtent = {
+  xmin: 1521098.8175,
+  xmax: 1701900.7220,
+  ymin: 4214845.6469,
+  ymax: 4358527.1603,
+  spatialReference: 102100
+}
+        const view = new SceneView({
           container: "viewDiv",
           map: webscene,
-          viewingMode: 'global',
+          viewingMode: 'local',
           qualityProfile: "high",
-
+          clippingArea: waterExtent,
+          camera: {
+  position: [
+    14.23626865,
+    35.86805744,
+    2779.39878
+  ],
+  heading: 99.49,
+  tilt: 78.96
+},
           environment: {
             lighting: {
+              date: "Mon Mar 16 2020 08:33:03 GMT+0100 (Central European Standard Time)",
               directShadowsEnabled: true,
-              ambientOcclusionEnabled: true
+              ambientOcclusionEnabled: true,
+              waterReflectionEnabled: true
             }
           },
+          spatialReference: {
+            wkid: 102100
+          }
         });
 
         // add contour lines layer
@@ -88,7 +108,7 @@
           elevationInfo: {
             mode: "relative-to-ground",
             featureExpressionInfo: {
-              expression: "$feature.elevation * 3"
+              expression: "$feature.elevation * 4"
             }
           },
           renderer: {
@@ -98,9 +118,9 @@
               symbolLayers: [{
                 type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
                 material: {
-                  color: "#DCD2B0"
+                  color: "#ccf1ff"
                 },
-                size: 50
+                size: 100
               }]
             },
             visualVariables: [{
@@ -121,10 +141,63 @@
         });
         webscene.add(contourLayer);
 
+        const polygon = new Polygon({
+          rings: [[
+            [waterExtent.xmin, waterExtent.ymin, 100],
+            [waterExtent.xmax, waterExtent.ymin, 100],
+            [waterExtent.xmax, waterExtent.ymax, 100],
+            [waterExtent.xmin, waterExtent.ymax, 100],
+            [waterExtent.xmin, waterExtent.ymin, 100]
+          ]],
+          spatialReference: {
+            wkid: 102100
+          }
+        });
+
+        const waterGraphic = new Graphic({
+          geometry: polygon,
+          symbol: {
+            type: "polygon-3d",
+            symbolLayers: [{
+              type: "water",
+              waveDirection: 260,
+              color: "#5ef2ff",
+              waveStrength: "moderate",
+              waterbodySize: "large"
+            }]
+          }
+        });
+
+        view.graphics.add(waterGraphic);
+
+        createPalmTree([35.83107814703555, 14.419950872084213, 200]);
+        createPalmTree([35.81070010665252, 14.535001303083316, 200]);
+        createPalmTree([35.873950031364394, 14.350356971797067, 500]);
+
+        function createPalmTree(coordinates){
+          const palmTreeGraphic = new Graphic({
+            geometry: new Point({
+              latitude: coordinates[0],
+              longitude: coordinates[1],
+              z: coordinates[2]
+            }),
+            symbol: {
+              type: "point-3d",
+              symbolLayers: [{
+                type: "object",
+                resource: { href: "./assets/QueenPalmTree.gltf"},
+                height: 600,
+              }]
+            }
+          });
+          view.graphics.add(palmTreeGraphic);
+
+        }
+
         contourLayer.load().then(function () {
-          view.then(function () {
-            view.goTo(contourLayer.fullExtent);
-            webscene.clippingArea = contourLayer.fullExtent;
+          view.when(function () {
+            // view.goTo(contourLayer.fullExtent);
+            webscene.clippingArea = waterExtent;
           })
 
         });
