@@ -6,8 +6,8 @@
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Malta in contour lines</title>
 
-  <link rel="stylesheet" href="https://jsdev.arcgis.com/4.16/esri/css/main.css">
-  <script src="https://jsdev.arcgis.com/4.16/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/next/esri/css/main.css">
+  <script src="https://js.arcgis.com/next/"></script>
 
   <style>
     html,
@@ -68,12 +68,12 @@
         });
 
         const waterExtent = {
-  xmin: 1521098.8175,
-  xmax: 1701900.7220,
-  ymin: 4214845.6469,
-  ymax: 4358527.1603,
-  spatialReference: 102100
-}
+          xmin: 1521098.8175,
+          xmax: 1701900.7220,
+          ymin: 4214845.6469,
+          ymax: 4358527.1603,
+          spatialReference: 102100
+        }
         const view = new SceneView({
           container: "viewDiv",
           map: webscene,
@@ -81,14 +81,14 @@
           qualityProfile: "high",
           clippingArea: waterExtent,
           camera: {
-  position: [
-    14.23626865,
-    35.86805744,
-    2779.39878
-  ],
-  heading: 99.49,
-  tilt: 78.96
-},
+            position: [
+              14.23626865,
+              35.86805744,
+              2779.39878
+            ],
+            heading: 99.49,
+            tilt: 78.96
+          },
           environment: {
             lighting: {
               date: "Mon Mar 16 2020 08:33:03 GMT+0100 (Central European Standard Time)",
@@ -174,7 +174,7 @@
         createPalmTree([35.81070010665252, 14.535001303083316, 200]);
         createPalmTree([35.873950031364394, 14.350356971797067, 500]);
 
-        function createPalmTree(coordinates){
+        function createPalmTree(coordinates) {
           const palmTreeGraphic = new Graphic({
             geometry: new Point({
               latitude: coordinates[0],
@@ -185,7 +185,7 @@
               type: "point-3d",
               symbolLayers: [{
                 type: "object",
-                resource: { href: "./assets/QueenPalmTree.gltf"},
+                resource: { href: "./assets/QueenPalmTree.gltf" },
                 height: 600,
               }]
             }
@@ -194,14 +194,6 @@
 
         }
 
-        contourLayer.load().then(function () {
-          view.when(function () {
-            // view.goTo(contourLayer.fullExtent);
-            webscene.clippingArea = waterExtent;
-          })
-
-        });
-
         createLabels([{
           name: 'Valetta',
           coordinates: [35.897341, 14.513617]
@@ -209,7 +201,6 @@
           name: 'Rabat',
           coordinates: [35.885562, 14.372360]
         }]);
-
 
         function createLabels(labels) {
           for (var i = 0; i < labels.length; i++) {
