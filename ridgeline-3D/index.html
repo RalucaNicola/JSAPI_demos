@@ -85,10 +85,10 @@
 
       var peaks = new FeatureLayer({
         url:
-          "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Cities/FeatureServer",
+            "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/AlpineSummits/FeatureServer",
         returnZ: false,
-        // Select peaks higher than 3000m
-        definitionExpression: "POP > 30000 AND CNTRY_NAME='Switzerland'",
+        // Select peaks
+        definitionExpression: "NAME = 'Dufourspitze' OR NAME='Matterhorn' OR NAME='Piz Bernina' OR NAME = 'Eiger' OR NAME='Piz Murtaröl' OR NAME='Sommet des Diablerets'",
         screenSizePerspectiveEnabled: false,
         // Set a renderer that will show the points with icon symbols
         renderer: {
@@ -102,23 +102,23 @@
                   primitive: "circle"
                 },
                 material: {
-                  color: "black"
+                  color: [255, 255, 255]
                 },
-                size: 6
+                size: 5
               }
             ],
             // Labels need a small vertical offset that will be used by the callout
             verticalOffset: {
-              screenLength: 200,
-              maxWorldLength: 10000,
-              minWorldLength: 30
+              screenLength: 150,
+              maxWorldLength: 30000,
+              minWorldLength: 10000
             },
             // The callout has to have a defined type (currently only line is possible)
             // The size, the color and the border color can be customized
             callout: {
               type: "line", // autocasts as new LineCallout3D()
-              size: 0.5,
-              color: [0, 0, 0]
+              size: 0.75,
+              color: [255, 255, 255]
             }
           }
         },
@@ -127,9 +127,9 @@
         labelingInfo: [
           {
             // When using callouts on labels, "above-center" is the only allowed position
-            labelPlacement: "above-center",
+            labelPlacement: "center-right",
             labelExpressionInfo: {
-              value: "{CITY_NAME}"
+              expression: "var labels = [$feature.NAME, $feature.HOEHE + 'm']; return Concatenate(labels, TextFormatting.NewLine);"
             },
             symbol: {
               type: "label-3d", // autocasts as new LabelSymbol3D()
@@ -137,11 +137,7 @@
                 {
                   type: "text", // autocasts as new TextSymbol3DLayer()
                   material: {
-                    color: "black"
-                  },
-                  halo: {
-                    color: [255, 255, 255, 0.7],
-                    size: 2
+                    color: "white"
                   },
                   size: 10
                 }
