@@ -33,7 +33,8 @@
       "esri/layers/ElevationLayer",
       "esri/core/promiseUtils",
       "esri/geometry/geometryEngine",
-      "esri/geometry/support/MeshMaterialMetallicRoughness"
+      "esri/geometry/support/MeshMaterialMetallicRoughness",
+      "esri/widgets/NavigationToggle/NavigationToggleViewModel"
     ], function (
       Map,
       SceneView,
@@ -47,7 +48,8 @@
       ElevationLayer,
       promiseUtils,
       geometryEngine,
-      MeshMaterialMetallicRoughness
+      MeshMaterialMetallicRoughness,
+      NavigationToggle
     ) {
       const elevationLayer = new ElevationLayer({
         url: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"
@@ -186,6 +188,16 @@
             date: "Fri May 15 2020 13:06:37 GMT+0200 (Central European Summer Time)"
           }
         }
+      });
+
+      // Make 'rotate' the default action
+      view.ui.components = [ "zoom", 'attribution' ];
+      navigationToggle = new NavigationToggle({
+        viewModel: {
+          view: view
+        },
+        navigationMode: 'rotate',
+        view: view
       });
 
       window.view = view;
