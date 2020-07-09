@@ -125,6 +125,7 @@ define([
       });
       view.ui.add([lineMeasureExpand, areaMeasureExpand, lineOfSightExpand, basemapToggle], "top-left");
 
+      view.ui.add("statsContainer", "top-right");
       view.when(function () {
         webscene.allLayers.forEach(layer => {
           if (layer.title === config.buildingLayerTitle) {
