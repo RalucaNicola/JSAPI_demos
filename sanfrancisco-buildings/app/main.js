@@ -4,6 +4,11 @@ define([
   "esri/views/SceneView",
   "esri/layers/GraphicsLayer",
   "esri/widgets/Sketch/SketchViewModel",
+  "esri/widgets/BasemapToggle",
+  "esri/widgets/Expand",
+  "esri/widgets/DirectLineMeasurement3D",
+  "esri/widgets/AreaMeasurement3D",
+  "esri/widgets/LineOfSight",
   "esri/config",
   "esri/core/promiseUtils",
   "app/time",
@@ -15,6 +20,11 @@ define([
   SceneView,
   GraphicsLayer,
   SketchViewModel,
+  BasemapToggle,
+  Expand,
+  DirectLineMeasurement3D,
+  AreaMeasurement3D,
+  LineOfSight,
   esriConfig,
   promiseUtils,
   time,
@@ -48,6 +58,72 @@ define([
         qualityProfile: "high",
         map: webscene
       });
+
+      const directLineMeasurement3D = new DirectLineMeasurement3D({
+        view: view
+      });
+
+      const lineMeasureExpand = new Expand({
+        view: view,
+        content: directLineMeasurement3D,
+        expandIconClass: "esri-icon-polyline",
+        expandTooltip: "Start line measurement",
+        collapseTooltip: "Stop line measurement"
+      });
+
+      lineMeasureExpand.watch("expanded", function(value) {
+        if (!value) {
+          directLineMeasurement3D.viewModel.clear();
+        } else {
+          directLineMeasurement3D.viewModel.start();
+        }
+      });
+
+      const areaMeasurement3D = new AreaMeasurement3D({
+        view: view
+      });
+
+      const areaMeasureExpand = new Expand({
+        view: view,
+        content: areaMeasurement3D,
+        expandIconClass: "esri-icon-polygon",
+        expandTooltip: "Start area measurement",
+        collapseTooltip: "Stop area measurement"
+      });
+
+      areaMeasureExpand.watch("expanded", function(value) {
+        if (!value) {
+          areaMeasurement3D.viewModel.clear();
+        } else {
+          areaMeasurement3D.viewModel.start();
+        }
+      });
+
+      const lineOfSight = new LineOfSight({
+        view: view
+      });
+
+      const lineOfSightExpand = new Expand({
+        view: view,
+        content: lineOfSight,
+        expandIconClass: "esri-icon-visible",
+        expandTooltip: "Start line of sight",
+        collapseTooltip: "Stop line of sight"
+      });
+
+      lineOfSightExpand.watch("expanded", function(value) {
+        if (!value) {
+          lineOfSight.viewModel.clear();
+        } else {
+          lineOfSight.viewModel.start();
+        }
+      });
+
+      const basemapToggle = new BasemapToggle({
+        view: view,
+        nextBasemap: "satellite"
+      });
+      view.ui.add([lineMeasureExpand, areaMeasureExpand, lineOfSightExpand, basemapToggle], "top-left");
 
       view.when(function () {
         webscene.allLayers.forEach(layer => {

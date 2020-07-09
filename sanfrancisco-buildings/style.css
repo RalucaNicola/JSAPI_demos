@@ -8,6 +8,16 @@ body,
   font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+.esri-basemap-toggle__container, .esri-basemap-toggle__image {
+  height: 40px;
+  width: 40px;
+}
+
+.esri-basemap-toggle {
+  height: 42px;
+  width: 42px;
+}
+
 .esri-slider__segment-1 {
   background-color: #555;
 }
@@ -84,7 +94,7 @@ body,
   text-align: center;
 }
 
-button {
+.text-button {
   background-color: white;
   color: #555;
   font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -95,7 +105,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.text-button:hover {
   color: white;
   background-color: #555;
 }

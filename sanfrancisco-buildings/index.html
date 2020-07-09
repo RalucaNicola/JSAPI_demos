@@ -7,7 +7,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>San Francisco buildings</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/next/esri/css/main.css" />
+  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/css/main.css" />
   <link rel="stylesheet" href="./style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
   <script>
@@ -19,7 +19,7 @@
       }]
     };
   </script>
-  <script src="https://js.arcgis.com/next/"></script>
+  <script src="https://js.arcgis.com/4.16/"></script>
   <script>
     require([
       'app/main'
@@ -36,21 +36,21 @@
       <div class="charts">
         <div>
           <canvas id="yearChart" width="350" height="170"></canvas>
-          <button id="applyYearRenderer">Color by construction year</button>
+          <button id="applyYearRenderer" class="text-button">Color by construction year</button>
         </div>
         <div>
           <canvas id="heightChart" width="350" height="170"></canvas>
-          <button id="applyHeightRenderer">Color by height</button>
+          <button id="applyHeightRenderer" class="text-button">Color by height</button>
         </div>
         <div>
           <canvas id="usageChart" width="350" height="170"></canvas>
-          <button id="applyUsageRenderer">Color by usage</button>
+          <button id="applyUsageRenderer" class="text-button">Color by usage</button>
         </div>
       </div>
       <div class="buttons">
-        <button id="drawPolygon">Draw a selection polygon</button>
-        <button id="clearSelection">Clear selection</button>
-        <button id="clearRenderer">Clear renderer</button>
+        <button id="drawPolygon" class="text-button">Draw a selection polygon</button>
+        <button id="clearSelection" class="text-button">Clear selection</button>
+        <button id="clearRenderer" class="text-button">Clear renderer</button>
       </div>
     </div>
     <div id="timeContainer" class="esri-widget">
