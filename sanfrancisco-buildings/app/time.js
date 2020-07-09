@@ -13,6 +13,7 @@ define(["esri/widgets/TimeSlider"], function (TimeSlider) {
           end: end
         },
         values: [end],
+        playRate: 2000,
         stops: {
           interval: {
             value: config.timeline.bin,

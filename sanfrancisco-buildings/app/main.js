@@ -44,7 +44,8 @@ define([
         maxYear: null,
         totalCount: null,
         filterGeometry: null,
-        features: null
+        features: null,
+        selection: false
       };
 
       const webscene = new WebScene({
@@ -58,6 +59,8 @@ define([
         qualityProfile: "high",
         map: webscene
       });
+
+      /* add widgets for measurement, line of sight, and basemap toggle */
 
       const directLineMeasurement3D = new DirectLineMeasurement3D({
         view: view
@@ -142,15 +145,9 @@ define([
               timeSlider.watch("timeExtent", function (timeExtent) {
                 appState.maxYear = timeExtent.end.getFullYear();
                 updateMap();
+                runQuery();
               });
-
-              // watch for changes on the layer
-              bdgLayerView.watch("updating", function (updating) {
-                if (!updating) {
-                  console.log("updating");
-                  runQuery();
-                }
-              });
+              runQuery();
             });
           }
         });
@@ -197,10 +194,22 @@ define([
       });
 
       const debouncedRunQuery = promiseUtils.debounce(function () {
-        const query = bdgLayerView.createQuery();
-        query.geometry = appState.filterGeometry;
-        query.outStatistics = statistics.totalStatDefinitions;
-        return bdgLayerView.queryFeatures(query).then(charts.updateCharts);
+
+        if (appState.selection) {
+          const query = bdgLayerView.createQuery();
+          query.geometry = appState.filterGeometry;
+          query.outStatistics = statistics.totalStatDefinitions;
+          return bdgLayerView.queryFeatures(query).then(function(result) {
+            charts.updateCharts(result, appState.selection);
+          }).catch(console.error);
+        } else {
+          const query = bdgLayer.createQuery();
+          query.outStatistics = statistics.totalStatDefinitions;
+          return bdgLayer.queryFeatures(query).then(function(result) {
+            charts.updateCharts(result, appState.selection);
+          }).catch(console.error);
+        }
+
       });
 
       function runQuery() {
@@ -213,11 +222,13 @@ define([
       }
 
       document.getElementById("drawPolygon").addEventListener("click", function () {
+        appState.selection = true;
         sketchViewModel.create("polygon");
       });
 
       document.getElementById("clearSelection").addEventListener("click", function () {
         appState.filterGeometry = null;
+        appState.selection = false;
         bdgLayerView.filter = null;
         sketchViewModel.cancel();
         sketchLayer.removeAll();

@@ -23,7 +23,7 @@ define(["app/config", "app/utils", "app/statistics"], function (config, appUtils
         },
         title: {
           display: true,
-          text: "Number of buildings by construction year"
+          text: "Number of buildings by construction year - total"
         },
         scales: {
           xAxes: [
@@ -67,7 +67,7 @@ define(["app/config", "app/utils", "app/statistics"], function (config, appUtils
         },
         title: {
           display: true,
-          text: "Number of buildings by height"
+          text: "Number of buildings by height - total"
         },
         scales: {
           xAxes: [
@@ -122,7 +122,7 @@ define(["app/config", "app/utils", "app/statistics"], function (config, appUtils
         },
         title: {
           display: true,
-          text: "Building usage"
+          text: "Building usage - total"
         }
       }
     });
@@ -136,25 +136,31 @@ define(["app/config", "app/utils", "app/statistics"], function (config, appUtils
     yearChart,
     heightChart,
     usageChart,
-    updateCharts(result) {
+    updateCharts(result, selection) {
       const allStats = result.features[0].attributes;
 
       const yearValues = statistics.yearStatDefinitions.map(function (element) {
         return allStats[element.outStatisticFieldName]
       });
       yearChart.data.datasets[0].data = yearValues;
+      const yearTitle = selection ? "Number of buildings by construction year - selection" : "Number of buildings by construction year - total"
+      yearChart.options.title.text = yearTitle;
       yearChart.update();
 
       const heightValues = statistics.heightStatDefinitions.map(function (element) {
         return allStats[element.outStatisticFieldName]
       });
       heightChart.data.datasets[0].data = heightValues;
+      const heightTitle = selection ? "Number of buildings by height - selection" : "Number of buildings by height - total"
+      heightChart.options.title.text = heightTitle;
       heightChart.update();
 
       const usageValues = statistics.usageStatDefinitions.map(function (element) {
         return allStats[element.outStatisticFieldName]
       });
       usageChart.data.datasets[0].data = usageValues;
+      const usageTitle = selection ? "Building usage - selection" : "Building usage - total"
+      usageChart.options.title.text = usageTitle;
       usageChart.update();
     }
   }
