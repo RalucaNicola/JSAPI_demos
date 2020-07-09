@@ -188,6 +188,8 @@
         }
       });
 
+      view.ui.find("navigation-toggle").viewModel.navigationMode = "rotate";
+
       window.view = view;
       countryBoundaries.queryFeatures({ where: "COUNTRY='Switzerland'", returnGeometry: true })
         .then(function (result) {
