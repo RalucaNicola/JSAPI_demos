@@ -14,7 +14,7 @@ define([], function () {
     noDataColor: "white",
     otherColor: "#FFB55A",
     yearClasses: [{
-      minYear: 0,
+      minYear: 1500,
       maxYear: 1899,
       color: "#bd0026",
       label: "<1900"

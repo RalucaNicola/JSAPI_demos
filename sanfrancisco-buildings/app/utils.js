@@ -7,22 +7,26 @@ define(["app/config", "esri/Color"], function (config, Color) {
     for (let i = stops[stops.length - 1].value; i >= stops[0].value; i -= binSize) {
       const nextValue = i + binSize;
       let fieldName = `height_${i}_${nextValue}`;
-      let label = `${i} < ${nextValue}m`;
+      let label = `${i} - ${nextValue}m`;
       let statsField = `CASE WHEN (${config.heightField} < ${nextValue} AND ${config.heightField} >= ${i}) THEN 1 ELSE 0 END`;
+      let whereClause = `${config.heightField} < ${nextValue} AND ${config.heightField} >= ${i}`;
       if (i - binSize < stops[0].value) {
         fieldName = `height_${i}`;
         label = `< ${i}m`;
         statsField = `CASE WHEN (${config.heightField} < ${i}) THEN 1 ELSE 0 END`;
+        whereClause = `${config.heightField} < ${i}`;
       }
       if (i === stops[stops.length - 1].value) {
         fieldName = `height_${i}`;
         label = `> ${i}m`;
         statsField = `CASE WHEN (${config.heightField} > ${i}) THEN 1 ELSE 0 END`;
+        whereClause = `${config.heightField} > ${i}`;
       }
       bins.push({
         value: i,
         color: getColorFromValue(i).toHex(),
         statsField: statsField,
+        whereClause: whereClause,
         fieldName: fieldName,
         label: label
       })

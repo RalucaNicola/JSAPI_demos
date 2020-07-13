@@ -48,6 +48,7 @@ define(["app/config", "app/utils", "app/statistics"], function (config, appUtils
   function createHeightChart() {
     const heightCanvas = document.getElementById("heightChart");
     const heightBins = appUtils.heightBins;
+    console.log(heightBins);
     return new Chart(heightCanvas.getContext("2d"), {
       type: "horizontalBar",
       data: {

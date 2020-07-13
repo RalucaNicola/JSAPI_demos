@@ -14,7 +14,8 @@ define([
   "app/time",
   "app/statistics",
   "app/renderers",
-  "app/charts"
+  "app/charts",
+  "app/utils"
 ], function (config,
   WebScene,
   SceneView,
@@ -30,7 +31,8 @@ define([
   time,
   statistics,
   renderers,
-  charts) {
+  charts,
+  utils) {
 
   return {
     init: function () {
@@ -138,6 +140,7 @@ define([
               {${config.yearField}} and is has a {${config.usageField}} use.`
             };
             bdgLayer.outFields = [config.heightField, config.yearField, config.usageField];
+
             view.whenLayerView(layer).then(function (lyrView) {
               bdgLayerView = lyrView;
               // add time slider
@@ -148,10 +151,81 @@ define([
                 runQuery();
               });
               runQuery();
+              addChartEventListeners();
             });
           }
         });
       });
+
+      function addChartEventListeners() {
+        charts.usageChart.options.hover.onHover = function(event, elements) {
+          if (elements[0]) {
+            let whereClause = "";
+            try {
+              const element = config.usageValues.find(usage => usage.label === elements[0]._model.label);
+              whereClause = `${config.usageField} = '${element.value}'`;
+            } catch {
+              sqlClauses = config.usageValues.map(function(e) {
+                return `${config.usageField} <> '${e.value}'`;
+              });
+              whereClause = sqlClauses.join(" AND ");
+            }
+            if (bdgLayerView.filter) {
+              if (elements[0]._model.label === "Other") {
+                bdgLayerView.filter.where = whereClause;
+              } else {
+                bdgLayerView.filter.where = whereClause;
+              }
+            } else {
+              bdgLayerView.filter = {
+                where: whereClause
+              }
+            }
+          } else {
+            removeWhereFilter();
+          }
+        }
+
+        charts.yearChart.options.hover.onHover = function(event, elements) {
+          if (elements[0]) {
+            const element = config.yearClasses.find(yearClass => yearClass.label === elements[0]._model.label);
+            if (bdgLayerView.filter) {
+              bdgLayerView.filter.where = `${config.yearField} < ${element.maxYear} AND ${config.yearField} > ${element.minYear}`;
+            } else {
+              bdgLayerView.filter = {
+                where: `${config.yearField} < ${element.maxYear} AND ${config.yearField} > ${element.minYear}`
+              }
+            }
+          } else {
+            removeWhereFilter();
+          }
+        }
+
+        charts.heightChart.options.hover.onHover = function(event, elements) {
+          if (elements[0]) {
+            const element = utils.heightBins.find(heightBin => heightBin.label === elements[0]._model.label);
+            if (bdgLayerView.filter) {
+              bdgLayerView.filter.where = element.whereClause;
+            } else {
+              bdgLayerView.filter = {
+                where: element.whereClause
+              }
+            }
+          } else {
+            removeWhereFilter();
+          }
+        }
+      }
+
+      function removeWhereFilter() {
+        if (bdgLayerView.filter) {
+          bdgLayerView.filter.where = null;
+        } else {
+          bdgLayerView.filter = {
+            where: null
+          }
+        }
+      }
 
       // add sketch functionality
 

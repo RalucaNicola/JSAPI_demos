@@ -51,16 +51,17 @@ define([
             material: { color: config.noDataColor, colorMixMode: "replace" },
           }]
         },
-        visualVariables: {
+        visualVariables: [{
           type: "color",
           field: config.heightField,
           legendOptions: {
             title: "Height of the buildings"
           },
           stops: config.heightVariable.stops
-        }
+        }]
       }
     },
+
     applyUsageRenderer: function (layer) {
 
       const uniqueValueInfos = config.usageValues.map(function (element) {
