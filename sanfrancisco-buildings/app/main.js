@@ -9,6 +9,7 @@ define([
   "esri/widgets/DirectLineMeasurement3D",
   "esri/widgets/AreaMeasurement3D",
   "esri/widgets/LineOfSight",
+  "esri/widgets/Daylight",
   "esri/config",
   "esri/core/promiseUtils",
   "app/time",
@@ -26,6 +27,7 @@ define([
   DirectLineMeasurement3D,
   AreaMeasurement3D,
   LineOfSight,
+  Daylight,
   esriConfig,
   promiseUtils,
   time,
@@ -78,9 +80,9 @@ define([
 
       lineMeasureExpand.watch("expanded", function(value) {
         if (!value) {
-          directLineMeasurement3D.viewModel.clear();
+          directLineMeasurement3D.viewModel.clearMeasurement();
         } else {
-          directLineMeasurement3D.viewModel.start();
+          directLineMeasurement3D.viewModel.newMeasurement();
         }
       });
 
@@ -98,9 +100,9 @@ define([
 
       areaMeasureExpand.watch("expanded", function(value) {
         if (!value) {
-          areaMeasurement3D.viewModel.clear();
+          areaMeasurement3D.viewModel.clearMeasurement();
         } else {
-          areaMeasurement3D.viewModel.start();
+          areaMeasurement3D.viewModel.newMeasurement();
         }
       });
 
@@ -128,7 +130,17 @@ define([
         view: view,
         nextBasemap: "satellite"
       });
-      view.ui.add([lineMeasureExpand, areaMeasureExpand, lineOfSightExpand, basemapToggle], "top-left");
+
+      const daylightExpand = new Expand({
+        view: view,
+        content: new Daylight({
+          view: view
+        }),
+        expandIconClass: "esri-icon-environment-settings",
+        expandTooltip: "Open daylight settings",
+        collapseTooltip: "Close daylight settings"
+      })
+      view.ui.add([lineMeasureExpand, areaMeasureExpand, lineOfSightExpand, daylightExpand, basemapToggle], "top-left");
 
       view.ui.add("statsContainer", "top-right");
       view.when(function () {
@@ -189,11 +201,12 @@ define([
         charts.yearChart.options.hover.onHover = function(event, elements) {
           if (elements[0]) {
             const element = config.yearClasses.find(yearClass => yearClass.label === elements[0]._model.label);
+            const whereClause = `${config.yearField} < ${element.maxYear} AND ${config.yearField} >= ${element.minYear}`;
             if (bdgLayerView.filter) {
-              bdgLayerView.filter.where = `${config.yearField} < ${element.maxYear} AND ${config.yearField} > ${element.minYear}`;
+              bdgLayerView.filter.where = whereClause;
             } else {
               bdgLayerView.filter = {
-                where: `${config.yearField} < ${element.maxYear} AND ${config.yearField} > ${element.minYear}`
+                where: whereClause
               }
             }
           } else {
