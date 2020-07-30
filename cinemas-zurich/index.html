@@ -1,0 +1,317 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>
+    Cinemas in Zurich
+  </title>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #timeSlider {
+      position: absolute;
+      left: 100px;
+      right: 100px;
+      bottom: 30px;
+    }
+
+    #infoDiv {
+      height: 200px;
+      padding: 10px;
+      width: 280px;
+    }
+
+    #infoDiv span {
+      color: #f9c653;
+      font-size: 12pt;
+      font-weight: bolder;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.16/"></script>
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/SceneView",
+      "esri/layers/GeoJSONLayer",
+      "esri/widgets/TimeSlider",
+      "esri/widgets/Expand",
+      "esri/widgets/Legend",
+      "esri/Basemap",
+      "esri/layers/VectorTileLayer"
+    ], function (Map, SceneView, GeoJSONLayer, TimeSlider, Expand, Legend, Basemap, VectorTileLayer) {
+      let layerView;
+
+      function getBackgroundCanvasURL(width) {
+        const canvas = document.createElement("canvas");
+        canvas.setAttribute("width", width.toString() + "px");
+        canvas.setAttribute("height", "1px");
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#7b42f5";
+        ctx.fillRect(0, 0, width, 1);
+        return canvas.toDataURL("image/png");
+      }
+
+      const layer = new GeoJSONLayer({
+        url:
+          "./kinostandorte.geojson",
+        copyright: `<a href="https://data.stadt-zuerich.ch/dataset/kinostandorte-zwischen-1907-und-2018">Kinostandorte Stadt Zurich Open Data</a>`,
+        title: "Cinemas in Zurich",
+        // set the CSVLayer's timeInfo based on the date field
+        timeInfo: {
+          startField: "startDate", // name of the date field
+          interval: {
+            // set time interval to one day
+            unit: "days",
+            value: 1
+          },
+          endField: "endDate"
+        },
+        elevationInfo: {
+          mode: "on-the-ground"
+        },
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "point-3d",
+            symbolLayers: [{
+              type: "icon",
+              resource: { primitive: "circle" },
+              size: 10,
+              material: { color: [123, 66, 245] }
+            }]
+          }
+        },
+        screenSizePerspectiveEnabled: false,
+        popupTemplate: {
+          title: "{Kinonamen}",
+          content: [
+            {
+              type: "fields",
+              fieldInfos: [
+                {
+                  fieldName: "Adresse",
+                  label: "Address",
+                  visible: true
+                },
+                {
+                  fieldName: "VonISO",
+                  label: "Opens",
+                  visible: true
+                },
+                {
+                  fieldName: "BisISO",
+                  label: "Closes",
+                  visible: true
+                }
+              ]
+            }
+          ]
+        }
+      });
+
+      const labelsLayer = new GeoJSONLayer({
+        url: "./kinostandorte.geojson",
+        elevationInfo: {
+          mode: "relative-to-ground"
+        },
+        screenSizePerspectiveEnabled: false,
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "point-3d",
+            symbolLayers: [{
+              type: "icon",
+              resource: { href: getBackgroundCanvasURL(10) },
+              size: 10,
+              anchor: "relative",
+              anchorPosition: {
+                x: -0.5,
+                y: 0
+              }
+            }],
+            verticalOffset: {
+              screenLength: 50,
+              maxWorldLength: 500,
+              minWorldLength: 30
+            },
+            callout: {
+              type: "line", // autocasts as new LineCallout3D()
+              size: 1,
+              color: [123, 66, 245],
+              border: {
+                color: [255, 255, 255, 0]
+              }
+            }
+          }
+        },
+        timeInfo: {
+          startField: "startDate", // name of the date field
+          interval: {
+            // set time interval to one day
+            unit: "days",
+            value: 1
+          },
+          endField: "endDate"
+        },
+        popupTemplate: {
+          title: "{Kinonamen}",
+          content: [
+            {
+              type: "fields",
+              fieldInfos: [
+                {
+                  fieldName: "Adresse",
+                  label: "Address",
+                  visible: true
+                },
+                {
+                  fieldName: "VonISO",
+                  label: "Opens",
+                  visible: true
+                },
+                {
+                  fieldName: "BisISO",
+                  label: "Closes",
+                  visible: true
+                }
+              ]
+            }
+          ]
+        },
+        screenSizePerspectiveEnabled: false,
+        labelingInfo: [
+          {
+            // When using callouts on labels, "above-center" is the only allowed position
+            labelPlacement: "center-right",
+            labelExpressionInfo: {
+              expression: `$feature.Kinonamen + TextFormatting.NewLine + "(" + Left($feature.VonISO, 4) + " - " + Left($feature.BisISO, 4) + ")"`
+            },
+            symbol: {
+              type: "label-3d", // autocasts as new LabelSymbol3D()
+              symbolLayers: [
+                {
+                  type: "text", // autocasts as new TextSymbol3DLayer()
+                  material: {
+                    color: [123, 66, 245]
+                  },
+                  size: 10
+                }
+              ],
+
+            }
+          }
+        ]
+      })
+
+      const map = new Map({
+        basemap: new Basemap({
+          baseLayers: [new VectorTileLayer({
+            // URL to the style of vector tiles
+            url: "https://www.arcgis.com/sharing/rest/content/items/1fba3ab575f6434b80a708e1aa589dd5/resources/styles/root.json",
+            opacity: 0.6
+          })]
+        }),
+        layers: [layer, labelsLayer]
+      });
+      map.ground.surfaceColor = "rgb(240, 240, 240)";
+
+      var view = new SceneView({
+        map: map,
+        container: "viewDiv",
+        camera: {
+          position: [
+            8.55082711,
+            47.36877940,
+            614.40419
+          ],
+          heading: 312.91,
+          tilt: 58.59
+        },
+        qualityProfile: "high"
+      });
+
+      const timeSlider = new TimeSlider({
+        container: "timeSlider",
+        playRate: 1000,
+        mode: "instant",
+        stops: {
+          interval: {
+            value: 1,
+            unit: "years"
+          }
+        }
+      });
+      view.ui.add(timeSlider, "manual");
+
+      // wait till the layer view is loaded
+      view.whenLayerView(layer).then(function (lv) {
+        layerView = lv;
+        const start = layer.timeInfo.fullTimeExtent.start;
+        // set time slider's full extent to
+        // 5/25/5019 - until end date of layer's fullTimeExtent
+        timeSlider.fullTimeExtent = {
+          start: start,
+          end: layer.timeInfo.fullTimeExtent.end
+        };
+
+        // We will be showing earthquakes with one day interval
+        // when the app is loaded we will show earthquakes that
+        // happened between 5/25 - 5/26.
+        const end = new Date(start);
+        // end of current time extent for time slider
+        // showing earthquakes with one day interval
+        end.setDate(end.getDate() + 1);
+
+        // Values property is set so that timeslider
+        // widget show the first day. We are setting
+        // the thumbs positions.
+
+        view.whenLayerView(labelsLayer).then(function (labelsLv) {
+
+          // watch for time slider timeExtent change
+          timeSlider.watch("timeExtent", function () {
+            // only show earthquakes happened up until the end of
+            // timeSlider's current time extent.
+            lv.filter = {
+              timeExtent: {
+                start: timeSlider.timeExtent.start,
+                end: timeSlider.timeExtent.end
+              }
+            }
+            labelsLv.filter = {
+              timeExtent: {
+                start: timeSlider.timeExtent.start,
+                end: timeSlider.timeExtent.end
+              }
+            }
+          });
+          timeSlider.values = [start, end];
+        })
+
+
+
+      });
+
+
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+  <div id="timeSlider"></div>
+</body>
+
+</html>
