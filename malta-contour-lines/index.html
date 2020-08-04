@@ -6,8 +6,8 @@
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>Malta in contour lines</title>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/next/esri/css/main.css">
-  <script src="https://js.arcgis.com/next/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.16/"></script>
 
   <style>
     html,
@@ -19,15 +19,10 @@
       width: 100%;
     }
 
-    #layerToggle {
-      top: 20px;
-      right: 20px;
-      position: absolute;
-      z-index: 99;
-      background-color: white;
-      border-radius: 8px;
-      padding: 10px;
-      opacity: 0.75;
+    a, esri-attribution__link esri-widget__anchor {
+      text-decoration: none;
+      font-weight: bold;
+      color:rgba(245, 105, 66) !important;
     }
   </style>
 
@@ -51,6 +46,8 @@
       "esri/symbols/PointSymbol3D",
       "esri/symbols/TextSymbol3DLayer",
 
+      "esri/widgets/Daylight",
+
       "dojo/domReady!"
     ],
       function (
@@ -58,7 +55,7 @@
         GraphicsLayer,
         Graphic, Point, Polyline, Polygon,
         SimpleRenderer,
-        PointSymbol3D, TextSymbol3DLayer
+        PointSymbol3D, TextSymbol3DLayer, Daylight
       ) {
 
         const webscene = new WebScene({
@@ -77,7 +74,7 @@
         const view = new SceneView({
           container: "viewDiv",
           map: webscene,
-          viewingMode: 'local',
+          viewingMode: 'global',
           qualityProfile: "high",
           clippingArea: waterExtent,
           camera: {
@@ -90,6 +87,10 @@
             tilt: 78.96
           },
           environment: {
+            atmosphere: {
+              // creates a realistic view of the atmosphere
+              quality: "high"
+            },
             lighting: {
               date: "Mon Mar 16 2020 08:33:03 GMT+0100 (Central European Standard Time)",
               directShadowsEnabled: true,
@@ -105,6 +106,8 @@
         // add contour lines layer
         var contourLayer = new FeatureLayer({
           url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/polygon_contour_malta/FeatureServer",
+          copyright: `Contour line data from <a href="https://www.opendem.info/download_contours.html">Opendem.info</a> |
+           Palm tree model from <a href="https://poly.google.com/view/ficLBIjGliK">Google Poly</a>`,
           elevationInfo: {
             mode: "relative-to-ground",
             featureExpressionInfo: {
@@ -143,11 +146,11 @@
 
         const polygon = new Polygon({
           rings: [[
-            [waterExtent.xmin, waterExtent.ymin, 100],
-            [waterExtent.xmax, waterExtent.ymin, 100],
-            [waterExtent.xmax, waterExtent.ymax, 100],
-            [waterExtent.xmin, waterExtent.ymax, 100],
-            [waterExtent.xmin, waterExtent.ymin, 100]
+            [waterExtent.xmin, waterExtent.ymin, 800],
+            [waterExtent.xmax, waterExtent.ymin, 800],
+            [waterExtent.xmax, waterExtent.ymax, 800],
+            [waterExtent.xmin, waterExtent.ymax, 800],
+            [waterExtent.xmin, waterExtent.ymin, 800]
           ]],
           spatialReference: {
             wkid: 102100
@@ -168,7 +171,14 @@
           }
         });
 
-        view.graphics.add(waterGraphic);
+        const waterLayer = new GraphicsLayer({
+          elevationInfo: {
+            mode: "absolute-height"
+          }
+        });
+
+        waterLayer.add(waterGraphic);
+        webscene.add(waterLayer);
 
         createPalmTree([35.83107814703555, 14.419950872084213, 200]);
         createPalmTree([35.81070010665252, 14.535001303083316, 200]);
@@ -196,46 +206,23 @@
 
         createLabels([{
           name: 'Valetta',
+          type: 'capital city',
           coordinates: [35.897341, 14.513617]
         }, {
-          name: 'Rabat',
-          coordinates: [35.885562, 14.372360]
+          name: 'Dingli Cliffs',
+          type: 'nature preserve',
+          coordinates: [35.851994, 14.385470]
         }]);
 
         function createLabels(labels) {
+          const graphics = [];
           for (var i = 0; i < labels.length; i++) {
             var label = labels[i];
             var graphic = new Graphic({
-              symbol: {
-                type: "point-3d", // autocasts as new PointSymbol3D()
-                symbolLayers: [{
-                  type: "text", // autocasts as new TextSymbol3DLayer()
-                  material: {
-                    color: [99, 63, 34]
-                  },
-                  halo: {
-                    color: [255, 255, 255, 0.7],
-                    size: 1
-                  },
-                  text: label.name,
-                  size: 14
-                }],
-                // Labels need a small vertical offset that will be used by the callout
-                verticalOffset: {
-                  screenLength: 100,
-                  maxWorldLength: 1000,
-                  minWorldLength: 30
-                },
-                // The callout has to have a defined type (currently only line is possible)
-                // The size, the color and the border color can be customized
-                callout: {
-                  type: "line", // autocasts as new LineCallout3D()
-                  size: 0.5,
-                  color: [99, 63, 34],
-                  border: {
-                    color: [255, 255, 255, 0.7]
-                  }
-                }
+              attributes: {
+                ObjectID: i,
+                name: label.name,
+                type: label.type
               },
               geometry: new Point({
                 latitude: label.coordinates[0],
@@ -245,17 +232,90 @@
                 }
               })
             });
-
-            view.graphics.add(graphic);
+            graphics.push(graphic);
           }
+
+          const labelLayer = new FeatureLayer({
+            elevationInfo: {
+              mode: "relative-to-scene"
+            },
+            copyright: `Application made with <a href="https://developers.arcgis.com/javascript/latest/">ArcGIS API for JavaScript</a>`,
+            fields: [
+              {
+                name: "ObjectID",
+                alias: "ObjectID",
+                type: "oid"
+              }, {
+                name: "type",
+                type: "string"
+              }, {
+                name: "name",
+                type: "string"
+              }],
+            objectIdField: "ObjectID", // inferred from fields array if not specified
+            geometryType: "point",
+            source: graphics,
+            renderer: {
+              type: "simple",
+              symbol: {
+                type: "point-3d",
+                symbolLayers: [{
+                  type: "icon",
+                  resource: { primitive: "circle" },
+                  material: {
+                    color: [0, 0, 0, 0]
+                  },
+                  size: 0,
+                }],
+                verticalOffset: {
+                  screenLength: 80,
+                  maxWorldLength: 1000,
+                  minWorldLength: 30
+                },
+                callout: {
+                  type: "line", // autocasts as new LineCallout3D()
+                  size: 1,
+                  color: [70, 70, 70],
+                }
+              }
+            },
+            screenSizePerspectiveEnabled: false,
+            labelingInfo: [
+              {
+                labelPlacement: "below-right",
+                labelExpressionInfo: {
+                  expression: ` "  " + $feature.name + TextFormatting.NewLine + "  (" + $feature.type + ")"`
+                },
+                symbol: {
+                  type: "label-3d", // autocasts as new LabelSymbol3D()
+                  symbolLayers: [
+                    {
+                      type: "text", // autocasts as new TextSymbol3DLayer()
+                      material: {
+                        color: [70, 70, 70]
+                      },
+                      size: 10
+                    }
+                  ],
+
+                }
+              }
+            ]
+          });
+          webscene.add(labelLayer);
+
         }
+
+        const daylight = new Daylight({ view: view });
+        view.ui.add(daylight, "top-right");
       });
 
   </script>
 </head>
 
 <body>
-  <div id="viewDiv"></div>
+  <div id="viewDiv">
+  </div>
 </body>
 
 </html>
