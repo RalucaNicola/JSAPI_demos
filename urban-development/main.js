@@ -2,13 +2,15 @@ require([
   "esri/WebScene",
   "esri/layers/SceneLayer",
   "esri/views/SceneView",
+  "esri/core/has",
   "dojo/domReady!"
 ], function (
   WebScene,
   SceneLayer,
-  SceneView
+  SceneView,
+  has
 ) {
-
+  has.add("enable-feature:alo10771/OIT", 1, true, true)
     const webscene = new WebScene({
       portalItem: {
         id: "e9a4025b24f4461aaf86f6d9b244a6be"
@@ -44,7 +46,7 @@ require([
           symbolLayers: [{
             type: "fill",
             material: {
-              color: "#ffffff"
+              color: [255, 255, 255, 0.6]
             },
             edges: {
               type: "solid",
@@ -70,7 +72,7 @@ require([
           symbolLayers: [{
             type: "fill",
             material: {
-              color: "#ffd375"
+              color: [255, 211, 117, 0.7]
             },
             edges: {
               type: "sketch",

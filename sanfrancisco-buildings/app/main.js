@@ -64,7 +64,7 @@ define([
         map: webscene
       });
 
-      /* add widgets for measurement, line of sight, and basemap toggle */
+      /* add widgets for measurement, line of sight, daylight settings and basemap toggle */
 
       const directLineMeasurement3D = new DirectLineMeasurement3D({
         view: view

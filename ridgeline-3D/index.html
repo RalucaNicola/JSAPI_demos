@@ -16,9 +16,11 @@
     }
   </style>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css" />
-  <script src="https://js.arcgis.com/4.15/"></script>
-
+  <!-- <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.15/"></script> -->
+  <link rel="stylesheet" href="../../../arcgis-js-api-4/esri/css/main.css" />
+  <script src="../../../arcgis-js-api-4/test-apps/dojo-config.js"></script>
+  <script src="../../../arcgis-js-api-4/dojo/dojo.js"></script>
   <script>
     require([
       "esri/Map",
@@ -33,7 +35,8 @@
       "esri/layers/ElevationLayer",
       "esri/core/promiseUtils",
       "esri/geometry/geometryEngine",
-      "esri/geometry/support/MeshMaterialMetallicRoughness"
+      "esri/geometry/support/MeshMaterialMetallicRoughness",
+      "esri/core/has"
     ], function (
       Map,
       SceneView,
@@ -47,8 +50,11 @@
       ElevationLayer,
       promiseUtils,
       geometryEngine,
-      MeshMaterialMetallicRoughness
+      MeshMaterialMetallicRoughness,
+      has
     ) {
+
+      has.add("enable-feature:alo10771/OIT", 1, true, true)
       const elevationLayer = new ElevationLayer({
         url: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"
       });
