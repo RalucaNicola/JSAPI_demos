@@ -106,11 +106,6 @@ require([
     const view = new SceneView({
       map: scene,
       container: "viewDiv",
-      constraints: {
-        collision: {
-          enabled: true
-        }
-      },
       padding: {
         bottom: 100
       },
