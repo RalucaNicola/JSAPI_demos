@@ -242,7 +242,7 @@ require([
 
   // Once the view is ready go to the extent of the buildings layer
   view.when(function() {
-    view.goTo({ target: buildingsLayer.fullExtent, tilt: 60, zoom: 15 });
+    view.goTo({ target: buildingsLayer.fullExtent, tilt: 60, zoom: 15 }).catch(function(error) {console.log(error);});
   });
 
 });
