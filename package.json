@@ -2,12 +2,6 @@
   "name": "jsapi-demos",
   "version": "1.0.0",
   "description": "Simple demos for ArcGIS API for JavaScript",
-  "scripts": {
-    "lint": "jshint ./ || true"
-  },
-  "devDependencies": {
-    "jshint": "^2.10.2"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RalucaNicola/JSAPI_demos.git"
