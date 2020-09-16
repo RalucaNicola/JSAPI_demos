@@ -8,14 +8,13 @@ body,
   background-color: floralwhite;
   font-family: 'Shadows Into Light Two', cursive;
 }
-
 .esri-popup__main-container {
   font-family: 'Shadows Into Light Two', cursive;
   font-size: 2em;
   background-image: url("./img/background.png");
   background-position: right center;
   background-repeat: no-repeat;
-  background-color: floralwhite;
+  background-color: floralwhite !important;
   margin-top: 50px;
 }
 

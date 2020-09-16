@@ -3,7 +3,7 @@ require([
   "esri/views/SceneView",
 
   "esri/layers/FeatureLayer",
-  "esri/layers/WebTileLayer",
+  "esri/layers/VectorTileLayer",
   "esri/layers/SceneLayer",
   "esri/layers/ElevationLayer",
 
@@ -21,7 +21,7 @@ require([
   "esri/widgets/Search",
   "dojo/domReady!"
 ], function (WebScene, SceneView,
-  FeatureLayer, WebTileLayer, SceneLayer, ElevationLayer,
+  FeatureLayer, VectorTileLayer, SceneLayer, ElevationLayer,
   ClassBreaksRenderer, SimpleRenderer,
   MeshSymbol3D, FillSymbol3DLayer, PointSymbol3D, IconSymbol3DLayer, LineCallout3D, LabelSymbol3D, TextSymbol3DLayer,
   Search) {
@@ -30,14 +30,10 @@ require([
    * Create basemap layers
    ***********************/
 
-  // create watercolor basemap from Stamen as a WebTileLayer
-  const basemapLayer = new WebTileLayer({
-    urlTemplate: "http://{subDomain}.tile.stamen.com/watercolor/{level}/{col}/{row}.png",
-    subDomains: ["a", "b", "c", "d"],
-    copyright: "Map tiles by <a href=\"http://stamen.com/\">Stamen Design</a>, " +
-    "under <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a>. " +
-    "Data by <a href=\"http://openstreetmap.org/\">OpenStreetMap</a>, " +
-    "under <a href=\"http://creativecommons.org/licenses/by-sa/3.0\">CC BY SA</a>.",
+  // create watercolor vector tile layer as basemap layer
+  const basemapLayer = new VectorTileLayer({
+    url:
+      "https://www.arcgis.com/sharing/rest/content/items/fdf540eef40344b79ead3c0c49be76a9/resources/styles/root.json",
     opacity: 0.5
   });
 
@@ -65,11 +61,18 @@ require([
   const view = new SceneView({
     container: "viewDiv",
     map: webscene,
+    alphaCompositingEnabled: true,
     environment: {
       lighting: {
         directShadowsEnabled: true,
-        ambientOcclusionEnabled: false
-      }
+        ambientOcclusionEnabled: false,
+      },
+      background: {
+        type: "color",
+        color: [0, 0, 0, 0]
+      },
+      starsEnabled: false,
+      atmosphereEnabled: false
     },
     popup: {
       dockEnabled: true,
