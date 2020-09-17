@@ -6,7 +6,7 @@ require([
   "esri/layers/TileLayer",
   "esri/widgets/Legend",
   "esri/widgets/HistogramRangeSlider",
-  "esri/renderers/smartMapping/statistics/histogram",
+  "esri/smartMapping/statistics/histogram",
   "esri/core/promiseUtils"
 ], function(Map, GeoJSONLayer, SceneView, Basemap, TileLayer, Legend, HistogramRangeSlider, histogram, promiseUtils) {
 

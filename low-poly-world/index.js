@@ -140,7 +140,6 @@ require([
         },
         spatialReference: equalEarth
       });
-      console.log(mesh);
 
       const graphic = new Graphic({
         geometry: mesh,
