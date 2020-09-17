@@ -1,10 +1,7 @@
 require([
   "esri/WebScene",
-  "esri/views/SceneView",
-  "esri/geometry/Point",
-  "esri/core/has"
-], function (WebScene, SceneView, Point, has) {
-  has.add("enable-feature:alo10771/OIT", 1, true, true)
+  "esri/views/SceneView"
+], function (WebScene, SceneView) {
   const webscene = new WebScene({
     portalItem: {
       id: "1dbcd382b2d847feb77131dd8aeeae8d"
@@ -40,7 +37,7 @@ require([
             symbolLayers:[{
               type: "fill",
               material: {
-                color: [255, 255, 255, 0.1],
+                color: [255, 255, 255, 0],
                 colorMixMode: "replace"
               },
               edges: {
@@ -69,38 +66,37 @@ require([
 
     const bins = 16;
 
-    // navigator.mediaDevices.getUserMedia({ audio: true })
-    //   .then(function (stream) {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(function (stream) {
 
-    //     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    //     const analyser = audioCtx.createAnalyser();
-    //     const source = audioCtx.createMediaStreamSource(stream);
-    //     source.connect(analyser);
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioCtx.createAnalyser();
+        const source = audioCtx.createMediaStreamSource(stream);
+        source.connect(analyser);
 
-    //     analyser.fftSize = bins * 2;
-    //     analyser.minDecibels = -60;
-    //     analyser.maxDecibels = -20;
-    //     analyser.smoothingTimeConstant = 0.8;
+        analyser.fftSize = bins * 2;
+        analyser.minDecibels = -60;
+        analyser.maxDecibels = -20;
+        analyser.smoothingTimeConstant = 0.8;
 
-    //     const dataArray = new Uint8Array(bins);
+        const dataArray = new Uint8Array(bins);
 
-    //     function glow() {
+        function glow() {
 
-    //       analyser.getByteFrequencyData(dataArray);
-    //       const avg = dataArray.reduce(function (accumulator, currentValue) { return accumulator + currentValue }, 0) / bins;
-    //       buildingLayer.opacity = Math.min(1, dataArray[0] / 256 + 0.3);
-    //       const hue = 50 + avg * 2 % 310;
-    //       container.style.filter = "drop-shadow(0 0 5px hsl(" + hue + ",100%,50%)";
+          analyser.getByteFrequencyData(dataArray);
+          const avg = dataArray.reduce(function (accumulator, currentValue) { return accumulator + currentValue }, 0) / bins;
+          buildingLayer.opacity = Math.min(1, dataArray[0] / 256 + 0.3);
+          const hue = 50 + avg * 2 % 310;
+          container.style.filter = "drop-shadow(0 0 5px hsl(" + hue + ",100%,50%)";
 
-    //       requestAnimationFrame(function() {
-    //         glow();
-    //       });
-    //     }
-    //     requestAnimationFrame(glow);
-    //   });
+          requestAnimationFrame(function() {
+            glow();
+          });
+        }
+        requestAnimationFrame(glow);
+      });
 
-  })
-    .catch(console.error);
+  }).catch(console.error);
 
   let musicPlaying = false;
 

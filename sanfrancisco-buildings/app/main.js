@@ -293,7 +293,7 @@ define([
           const query = bdgLayer.createQuery();
           query.outStatistics = statistics.totalStatDefinitions;
           return bdgLayer.queryFeatures(query).then(function(result) {
-            charts.updateCharts(result, appState.selection);
+            charts.updateCharts(result);
           }).catch(console.error);
         }
 

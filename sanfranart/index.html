@@ -46,12 +46,8 @@
     }
 
   </style>
-  <!-- <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.16/"></script> -->
-
-  <link rel="stylesheet" href="../../../arcgis-js-api-4/esri/css/main.css" />
-  <script src="../../../arcgis-js-api-4/test-apps/dojo-config.js"></script>
-  <script src="../../../arcgis-js-api-4/dojo/dojo.js"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.17/"></script>
 
   <script>
 
@@ -59,10 +55,8 @@
       "esri/WebScene",
       "esri/views/SceneView",
       "esri/layers/SceneLayer",
-      "esri/core/watchUtils",
-      "esri/core/has"
-    ], function(WebScene, SceneView, SceneLayer, watchUtils, has) {
-      has.add("enable-feature:alo10771/OIT", 1, true, true)
+      "esri/core/watchUtils"
+    ], function(WebScene, SceneView, SceneLayer, watchUtils) {
       // you can tweak these parameters to change
       // the style of the edges
       const sketchEdges = {
