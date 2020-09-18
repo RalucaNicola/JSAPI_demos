@@ -36,11 +36,6 @@ require([
     var view = new SceneView({
       map: map,
       container: "viewDiv",
-      constraints: {
-        collision: {
-          enabled: true
-        }
-      },
       camera: {
         position: {
           spatialReference: {
@@ -210,7 +205,9 @@ require([
             currentHighlight.remove();
           }
           currentHighlight = popLayerView.highlight([result.graphic.attributes.OBJECTID]);
-          document.getElementById("info").innerHTML = "Selected bar has a population of: " + result.graphic.attributes[`pop${currentYear}`].toLocaleString();
+          if (result.graphic.attributes[`pop${currentYear}`]) {
+            document.getElementById("info").innerHTML = "Selected bar has a population of: " + result.graphic.attributes[`pop${currentYear}`].toLocaleString();
+          }
         }
         else {
           if (currentHighlight) {

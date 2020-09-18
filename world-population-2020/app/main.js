@@ -6,7 +6,7 @@ require([
   "esri/symbols/PointSymbol3D",
   "esri/symbols/ObjectSymbol3DLayer",
   "utils",
-  "esri/renderers/smartMapping/statistics/summaryStatistics",
+  "esri/smartMapping/statistics/summaryStatistics",
   "dojo/domReady!"
 ], function (
   FeatureLayer,
@@ -91,11 +91,6 @@ require([
     const view = new SceneView({
       map: map,
       container: "viewDiv",
-      constraints: {
-        collision: {
-          enabled: true
-        }
-      },
       camera: {
         position: {
           spatialReference: {
@@ -138,15 +133,18 @@ require([
     })
       .then((result) => {
         const slider = utils.createSlider(Math.log(result.min), Math.log(result.max));
+        view.whenLayerView(populationLayer).then(function(populationLayerView) {
 
-        slider.on('end', function (values, handles, unencoded) {
-          const min = parseInt(Math.exp(unencoded[0]));
-          const max = parseInt(Math.exp(unencoded[1]));
-          populationLayer.definitionExpression =
-            `population_count >= ${min} AND population_count <= ${max}`;
+          slider.on('update', function (values, handles, unencoded) {
+            const min = parseInt(Math.exp(unencoded[0]));
+            const max = parseInt(Math.exp(unencoded[1]));
+            populationLayerView.filter = {
+              where: `population_count >= ${min} AND population_count <= ${max}`
+            };
+          });
         });
       })
-      .otherwise((err) => {
+      .catch((err) => {
         console.log(err);
       });
 

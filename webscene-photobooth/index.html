@@ -6,7 +6,7 @@
   <title>WebScene Photobooth</title>
   <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://js.arcgis.com/4.13/esri/css/main.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/css/main.css">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@nicolaraluk">
   <meta property="og:title" content="WebScene Photobooth">
@@ -21,7 +21,7 @@
       async: true
     };
   </script>
-  <script src="https://js.arcgis.com/4.13/"></script>
+  <script src="https://js.arcgis.com/4.17/"></script>
   <script>
     require([
       "app/main",
@@ -36,7 +36,7 @@
       <button id="screenshot-btn" class="action-btn">
         <img src="./assets/camera-retro-solid.svg" alt="take screenshot">
       </button>
-      <div id="attribution">
+      <div id="attribution-div">
           Made with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JavaScript</a> and
           <a href="http://joelb.me/jsmanipulate/" target="_blank">JSManipulate by Joel Besada</a>. Icons from <a href="https://fontawesome.com/icons/" target="_blank">FontAwesome</a>.
       </div>
@@ -59,5 +59,6 @@
       <button class="download hide" id="download-btn"><img src="./assets/download-solid.svg" alt="Download"></button>
       <div id="filters"></div>
     </div>
+
    </body>
   </html>

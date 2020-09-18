@@ -6,8 +6,8 @@
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>3D MapImageLayer w/ Popups</title>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/themes/light/main.css">
-  <script src="https://js.arcgis.com/4.10/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.17/"></script>
 
   <style>
     html,
@@ -71,10 +71,8 @@
         });
 
         const mSublayer = mlayer.findSublayerById(0);
-        const mSublayerFeatureLayer = mSublayer.createFeatureLayer();
-        map.add(mSublayerFeatureLayer);
-
-        mSublayerFeatureLayer.when(function () {
+        mSublayer.createFeatureLayer().then(function(mSublayerFeatureLayer) {
+          map.add(mSublayerFeatureLayer);
 
           // define popup template
           mSublayerFeatureLayer.popupTemplate = {

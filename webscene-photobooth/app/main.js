@@ -21,7 +21,7 @@ require([
 
   view.ui.empty("top-left");
   view.ui.add("screenshot-btn", "bottom-left");
-  view.ui.add("attribution", "bottom-right");
+  view.ui.add("attribution-div", "bottom-right");
 
   view.when(function() {
     document.getElementById("image-title").innerHTML = webscene.portalItem.title;

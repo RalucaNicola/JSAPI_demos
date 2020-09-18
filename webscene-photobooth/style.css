@@ -120,7 +120,7 @@ body {
   box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.7);
 }
 
-#attribution {
+#attribution-div {
   margin-right: -20px;
   width: 200px;
   background: rgba(255, 255, 255, 0.9);
@@ -131,7 +131,7 @@ body {
   line-height: 1.5em;
 }
 
-#attribution>a {
+#attribution-div>a {
   color: rgba(255, 224, 104, 1);
   font-weight: bold;
 }
