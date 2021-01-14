@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <title>Romania regions</title>
+
+    <link rel="stylesheet" href="https://jsdev.arcgis.com/4.19/esri/css/main.css" />
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        background-color: white;
+      }
+    </style>
+
+    <script src="https://jsdev.arcgis.com/4.19"></script>
+    <body>
+      <div id="viewDiv"></div>
+      <script>
+          require([
+            "esri/symbols/PictureFillSymbol",
+            "esri/symbols/SimpleFillSymbol",
+            "esri/layers/FeatureLayer",
+            "esri/layers/GraphicsLayer",
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/TileLayer",
+            "esri/layers/CSVLayer",
+            "esri/layers/support/LabelClass",
+            "esri/symbols/TextSymbol",
+            "esri/geometry/geometryEngine"
+          ], function (PictureFillSymbol, SimpleFillSymbol, FeatureLayer, GraphicsLayer, Map, MapView, TileLayer, CSVLayer, LabelClass, TextSymbol, geometryEngine) {
+            "use strict";
+            const romaniaPatternLayer = new FeatureLayer({
+                portalItem: {
+                    id: "53a1e68de7e4499cad77c80daba46a94"
+                },
+                definitionExpression: "COUNTRY='Romania'",
+                renderer: {
+                    type: "simple",
+                    symbol: new PictureFillSymbol({
+                        url: "./pattern.png",
+                        width: "200px",
+                        height: "200px",
+                    })
+                },
+                opacity: 0.2,
+                blendMode: "multiply"
+            });
+
+            const countryBorders = new FeatureLayer({
+                url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries_(Generalized)/FeatureServer",
+                definitionExpression: "COUNTRY<>'Romania'",
+                renderer: {
+                    type: "simple",
+                    symbol: new SimpleFillSymbol({
+                        color: "rgba(255, 255, 255, 0.6)",
+                        outline: {
+                            // autocasts as new SimpleLineSymbol()
+                            color: [168, 127, 104, 0.4],
+                            width: 0.5
+                        }
+                    })
+                }
+            });
+
+            const graphicsLayer = new GraphicsLayer({
+                effect: "drop-shadow(0, 0px, 6px, rgb(168, 127, 104))",
+                blendMode: "multiply",
+                title: "Romania inset drop shadow"
+            });
+
+            var hillshadeLayer = new TileLayer({
+                portalItem: {
+                    id: "1b243539f4514b6ba35e7d995890db1d" // world hillshade
+                },
+                opacity: 1
+            });
+
+            const gridLayer = new FeatureLayer({
+                url: "https://services.arcgis.com/nGt4QxSblgDfeJn9/arcgis/rest/services/Graticule/FeatureServer/5",
+                renderer: {
+                    type: "simple",
+                    symbol: {
+                        type: "simple-line",
+                        color: "rgba(50, 50, 50, 0.1)"
+                    }
+                }
+            });
+
+            const regionBorders = new FeatureLayer({
+                url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/BordersRegionsRomania/FeatureServer",
+                definitionExpression: "NAME IS NULL",
+                renderer: {
+                    type: "simple",
+                    symbol: {
+                        type: "simple-line",
+                        color: "rgb(168, 127, 104)",
+                        style: "dash",
+                        width: "1px"
+                    }
+                }
+            });
+
+            const regionNames = new FeatureLayer({
+                url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/BordersRegionsRomania/FeatureServer",
+                renderer: {
+                    type: "simple",
+                    symbol: {
+                        type: "simple-line",
+                        color: "rgba(255, 255, 255, 0.01)"
+                    }
+                },
+                definitionExpression: "NAME IS NOT NULL",
+                labelingInfo: [
+                    new LabelClass({
+                    labelExpressionInfo: { expression: "Upper($feature.NAME)" },
+                    symbol: new TextSymbol({
+                        font: {
+                        size: 20,
+                        family: 'Old Standard TT',
+                        style: "normal",
+                        weight: "normal"
+                        },
+                        color: [168, 127, 104],
+                        haloSize: 1,
+                        haloColor: [255, 255, 255, 0.5]
+                    }),
+                    labelPlacement: "above-along"
+                    })
+                ]
+            });
+
+            const seaLayer = new FeatureLayer({
+                url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries_(Generalized)/FeatureServer",
+                renderer: {
+                    type: "simple",
+                    symbol: {
+                        type: "simple-fill",
+                        color: "rgba(255, 255, 255, 1)",
+                        outline: null
+                    }
+                },
+                effect: "drop-shadow(0, 0px, 6px, rgb(196, 222, 242)) drop-shadow(0, 0px, 60px, rgb(196, 222, 242))",
+                blendMode: "multiply"
+            });
+
+            const cities = new CSVLayer({
+                url: "./cities_ro.csv",
+                renderer: {
+                    type: "class-breaks",
+                    field: "population",
+                    defaultSymbol: {
+                        type: "simple-marker",
+                        size: 3,
+                        color: [0, 0, 0, 0.1],
+                        outline: {
+                            width: 1,
+                            color: [0, 0, 0, 0.8]
+                        }
+                    },
+                    classBreakInfos: [
+                    {
+                      minValue: 150000,  // 0 acres
+                      maxValue: 20000000,  // 200,000 acres
+                      symbol: {
+                          type: "simple-marker",
+                          size: 5,
+                          color: [0, 0, 0, 0.1],
+                          outline: {
+                              width: 1,
+                              color: [0, 0, 0, 0.8]
+                          }
+                      }
+                    }
+                  ]
+                },
+                labelsVisible: true,
+                labelingInfo: [
+                    new LabelClass({
+                    labelExpressionInfo: { expression: "$feature.city" },
+                    symbol: new TextSymbol({
+                        font: {
+                        size: 11,
+                        family: 'Old Standard TT',
+                        style: "normal",
+                        weight: "normal"
+                        },
+                        color: [20, 20, 20],
+                        haloSize: 1,
+                        haloColor: [255, 255, 255, 0.5]
+                    }),
+                    labelPlacement: "above-center",
+                    where: "population > 150000"
+                    }),
+                    new LabelClass({
+                    labelExpressionInfo: { expression: "$feature.city" },
+                    symbol: new TextSymbol({
+                        font: {
+                        size: 10,
+                        family: 'Old Standard TT',
+                        style: "normal",
+                        weight: "normal"
+                        },
+                        color: [50, 50, 50],
+                        haloSize: 1,
+                        haloColor: [255, 255, 255, 0.5]
+                    }),
+                    labelPlacement: "above-center",
+                    where: "population <= 150000"
+                    })
+                ]
+                });
+            const map = new Map({
+                layers: [hillshadeLayer, romaniaPatternLayer, countryBorders,  gridLayer, cities, regionBorders, regionNames, seaLayer, graphicsLayer]
+            });
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                zoom: 8,
+                center: [25, 46],
+                constraints: {
+                    snapToZoom: false,
+                    minZoom: 7
+                }
+            });
+
+            countryBorders.queryFeatures({where: "COUNTRY='Romania'", returnGeometry: true}).then(function(result){
+                const polygon = result.features[0].geometry;
+
+                const geometry = geometryEngine.difference(polygon.extent.expand(10), polygon);
+
+                graphicsLayer.graphics.add({
+                    geometry: geometry,
+                    symbol: {
+                        type: "simple-fill",
+                        color: "rgba(255, 255, 255, 1)",
+                        outline: {
+                            // autocasts as new SimpleLineSymbol()
+                            color: [168, 127, 104, 1],
+                            width: 0.5
+                        }
+                    }
+                });
+            });
+
+        });
+      </script>
+    </body>
+  </head>
+</html>

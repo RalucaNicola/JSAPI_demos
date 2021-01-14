@@ -1,0 +1,43 @@
+city,lat,lng,country,iso2,admin,capital,population,population_proper
+Bucharest,44.433333,26.1,Romania,RO,Bucureşti,primary,1942000,1742194
+Iaşi,47.166667,27.6,Romania,RO,Iaşi,admin,325914,325914
+Cluj-Napoca,46.766667,23.6,Romania,RO,Cluj,admin,316748,282141
+Timişoara,45.749444,21.227222,Romania,RO,Timiş,admin,315053,304097
+Galaţi,45.45,28.05,Romania,RO,Galaţi,admin,311156,294087
+Braşov,45.633333,25.583333,Romania,RO,Braşov,admin,311044,276088
+Craiova,44.316667,23.8,Romania,RO,Dolj,admin,304142,298145
+Constanţa,44.183333,28.65,Romania,RO,Constanţa,admin,303399,266826
+Ploieşti,44.95,26.016667,Romania,RO,Prahova,admin,232542,228851
+Oradea,47.066667,21.933333,Romania,RO,Bihor,admin,213830,206614
+Brăila,45.266667,27.983333,Romania,RO,Brăila,admin,213569,213569
+Bacău,46.566667,26.9,Romania,RO,Bacău,admin,199668,171396
+Piteşti,44.85,24.866667,Romania,RO,Argeş,admin,171021,167669
+Arad,46.183333,21.316667,Romania,RO,Arad,admin,169065,149611
+Sibiu,45.8,24.15,Romania,RO,Sibiu,admin,155565,151894
+Târgu-Mureş,46.55,24.566667,Romania,RO,Mureş,admin,149433,146863
+Baia Mare,47.666667,23.583333,Romania,RO,Maramureş,admin,136553,132707
+Buzău,45.15,26.833333,Romania,RO,Buzău,admin,130954,130698
+Botoşani,47.75,26.666667,Romania,RO,Botoşani,admin,114783,111935
+Satu Mare,47.8,22.883333,Romania,RO,Satu Mare,admin,112490,112490
+Râmnicu Vâlcea,45.1,24.366667,Romania,RO,Vâlcea,admin,107558,107558
+Drobeta-Turnu Severin,44.631944,22.656111,Romania,RO,Mehedinţi,admin,106578,102346
+Focşani,45.7,27.183333,Romania,RO,Vrancea,admin,105112,80161
+Piatra Neamţ,46.916667,26.333333,Romania,RO,Neamţ,admin,102688,102688
+Târgu Jiu,45.05,23.283333,Romania,RO,Gorj,admin,97179,97179
+Tulcea,45.166667,28.8,Romania,RO,Tulcea,admin,92475,86288
+Târgovişte,44.933333,25.45,Romania,RO,Dâmboviţa,admin,88435,88435
+Reşiţa,45.300833,21.889167,Romania,RO,Caraş-Severin,admin,83324,81228
+Bistriţa,47.133333,24.483333,Romania,RO,Bistriţa-Năsăud,admin,81318,81318
+Călăraşi,44.2,27.333333,Romania,RO,Călăraşi,admin,73224,69167
+Vaslui,46.633333,27.733333,Romania,RO,Vaslui,admin,69225,69225
+Giurgiu,43.883333,25.966667,Romania,RO,Giurgiu,admin,69067,69067
+Deva,45.883333,22.9,Romania,RO,Hunedoara,,67802,67802
+Alba Iulia,46.066667,23.583333,Romania,RO,Alba,admin,66085,66085
+Zalău,47.2,23.05,Romania,RO,Sălaj,admin,63232,63232
+Sfântu-Gheorghe,45.866667,25.783333,Romania,RO,Covasna,admin,60677,60677
+Slobozia,44.566667,27.366667,Romania,RO,Ialomiţa,admin,52693,52693
+Alexandria,43.983333,25.333333,Romania,RO,Teleorman,admin,49346,49346
+Hunedoara,45.75,22.9,Romania,RO,Hunedoara,admin,393154,
+Miercurea-Ciuc,46.35,25.8,Romania,RO,Harghita,admin,42029,
+Slatina,44.433333,24.366667,Romania,RO,Olt,admin,70293,
+Suceava,47.633333,26.25,Romania,RO,Suceava,admin,105624,
