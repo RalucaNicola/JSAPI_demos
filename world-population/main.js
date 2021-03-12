@@ -227,7 +227,6 @@ require([
     const portrait = window.matchMedia("(max-width: 600px)");
     portrait.addListener(setPadding);
     function setPadding() {
-      console.log(portrait);
       if (portrait.matches) {
         view.padding = {
           bottom: 200
