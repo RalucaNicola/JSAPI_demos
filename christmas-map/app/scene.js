@@ -148,6 +148,22 @@ define([
         name: 'description',
         alias: 'description',
         type: 'string'
+      },{
+        name: 'image',
+        alias: 'image',
+        type: 'string'
+      },{
+        name: 'caption',
+        alias: 'caption',
+        type: 'string'
+      },{
+        name: 'language',
+        alias: 'language',
+        type: 'string'
+      },{
+        name: 'wish',
+        alias: 'wish',
+        type: 'string'
       }
     ];
     var layer = new FeatureLayer({
@@ -221,11 +237,13 @@ define([
       })
       // when animation finished, open popup with information
       .then(function(){
+        console.log(country.attributes);
         var image = country.attributes.image ? `<div class='img-popup'><img src='./data/images/${country.attributes.image}' alt='image'><p>${country.attributes.caption}</p></div>` : '';
         var language = ((country.attributes.language) && (country.attributes.language !== 'English')) ? `<div>Merry Christmas in ${country.attributes.language} is '${country.attributes.wish}!'</div>` : '';
         var imageAttribution = country.attributes.attribution ? `<div class='copyright-popup'>Image copyright: ${country.attributes.attribution}</div>` : '';
         var textAttribution = `<div class='copyright-popup'>Text information © <a href='https://www.whychristmas.com/cultures/'>www.whychristmas.com</a></div>`;
         var content = image + `<div>${country.attributes.description}</div>` + language + textAttribution + imageAttribution;
+        console.log(content);
         view.popup.open({
           content: content,
           location: country.geometry,
