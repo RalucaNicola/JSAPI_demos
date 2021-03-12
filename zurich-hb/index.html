@@ -39,8 +39,8 @@
     }
   </style>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css" />
-  <script src="https://js.arcgis.com/4.17/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.19/"></script>
 
   <script>
     require([
@@ -248,7 +248,6 @@
       function fadeAwayAreas(floors) {
         const floorEnumString = "'" + floors.join(" ") + "'";
         const expression = `IIf(Boolean(Find($feature.floor, ${floorEnumString}, 0) == -1), 1, 0.1)`;
-        console.log(expression);
         const opacityVariable = {
           type: "opacity",
           stops: [
@@ -558,7 +557,6 @@
       }
 
       slider.on("thumb-drag", function (event) {
-        console.log(event);
         if (event.state === "stop") {
           if (event.value === 0) {
             view.map.ground.opacity = groundOpacity;
@@ -579,22 +577,10 @@
           if (oldValue > newValue) {
             lowerPlane(oldValue, newValue);
           }
-
-          // let floors = [];
-          // for (let i = 0; i < event.value; i++) {
-          //   floors = floors.concat(floorMapping[i].originalNames);
-          // }
-          // console.log(floors);
-          // fadeAwayAreas(floors);
-
         }
       });
 
       view.ui.add("menu", "top-right");
-
-      view.on("click", function (event) {
-        console.log(event.mapPoint);
-      })
 
       window.view = view;
     });
