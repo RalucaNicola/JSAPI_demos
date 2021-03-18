@@ -26,10 +26,10 @@ require([
       this.addResolvingPromise(this._elevation.load());
     },
 
-    fetchTile: function (level, row, col) {
+    fetchTile: function (level, row, col, options) {
       // calls fetchTile() on the elevationlayer for the tiles
       // visible in the view
-      return this._elevation.fetchTile(level, row, col)
+      return this._elevation.fetchTile(level, row, col, options)
         .then(function (data) {
 
           var exaggeration = this.exaggeration;
