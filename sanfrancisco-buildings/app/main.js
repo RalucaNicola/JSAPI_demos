@@ -16,8 +16,9 @@ define([
   "app/statistics",
   "app/renderers",
   "app/charts",
-  "app/utils"
-], function (config,
+  "app/utils",
+], function (
+  config,
   WebScene,
   SceneView,
   GraphicsLayer,
@@ -34,8 +35,8 @@ define([
   statistics,
   renderers,
   charts,
-  utils) {
-
+  utils
+) {
   return {
     init: function () {
       esriConfig.portalUrl = config.portalUrl;
@@ -49,25 +50,25 @@ define([
         totalCount: null,
         filterGeometry: null,
         features: null,
-        selection: false
+        selection: false,
       };
 
       const webscene = new WebScene({
         portalItem: {
-          id: config.itemId
-        }
+          id: config.itemId,
+        },
       });
 
       const view = new SceneView({
         container: "viewDiv",
         qualityProfile: "high",
-        map: webscene
+        map: webscene,
       });
 
       /* add widgets for measurement, line of sight, daylight settings and basemap toggle */
 
       const directLineMeasurement3D = new DirectLineMeasurement3D({
-        view: view
+        view: view,
       });
 
       const lineMeasureExpand = new Expand({
@@ -75,19 +76,19 @@ define([
         content: directLineMeasurement3D,
         expandIconClass: "esri-icon-polyline",
         expandTooltip: "Start line measurement",
-        collapseTooltip: "Stop line measurement"
+        collapseTooltip: "Stop line measurement",
       });
 
-      lineMeasureExpand.watch("expanded", function(value) {
+      lineMeasureExpand.watch("expanded", function (value) {
         if (!value) {
-          directLineMeasurement3D.viewModel.clearMeasurement();
+          directLineMeasurement3D.viewModel.clear();
         } else {
-          directLineMeasurement3D.viewModel.newMeasurement();
+          directLineMeasurement3D.viewModel.start();
         }
       });
 
       const areaMeasurement3D = new AreaMeasurement3D({
-        view: view
+        view: view,
       });
 
       const areaMeasureExpand = new Expand({
@@ -95,30 +96,28 @@ define([
         content: areaMeasurement3D,
         expandIconClass: "esri-icon-polygon",
         expandTooltip: "Start area measurement",
-        collapseTooltip: "Stop area measurement"
+        collapseTooltip: "Stop area measurement",
       });
 
-      areaMeasureExpand.watch("expanded", function(value) {
+      areaMeasureExpand.watch("expanded", function (value) {
         if (!value) {
-          areaMeasurement3D.viewModel.clearMeasurement();
+          areaMeasurement3D.viewModel.clear();
         } else {
-          areaMeasurement3D.viewModel.newMeasurement();
+          areaMeasurement3D.viewModel.start();
         }
       });
 
-      const lineOfSight = new LineOfSight({
-        view: view
-      });
+      const lineOfSight = new LineOfSight({ view: view });
 
       const lineOfSightExpand = new Expand({
         view: view,
         content: lineOfSight,
         expandIconClass: "esri-icon-visible",
         expandTooltip: "Start line of sight",
-        collapseTooltip: "Stop line of sight"
+        collapseTooltip: "Stop line of sight",
       });
 
-      lineOfSightExpand.watch("expanded", function(value) {
+      lineOfSightExpand.watch("expanded", function (value) {
         if (!value) {
           lineOfSight.viewModel.clear();
         } else {
@@ -128,30 +127,43 @@ define([
 
       const basemapToggle = new BasemapToggle({
         view: view,
-        nextBasemap: "satellite"
+        nextBasemap: "satellite",
       });
 
       const daylightExpand = new Expand({
         view: view,
         content: new Daylight({
-          view: view
+          view: view,
         }),
         expandIconClass: "esri-icon-environment-settings",
         expandTooltip: "Open daylight settings",
-        collapseTooltip: "Close daylight settings"
-      })
-      view.ui.add([lineMeasureExpand, areaMeasureExpand, lineOfSightExpand, daylightExpand, basemapToggle], "top-left");
+        collapseTooltip: "Close daylight settings",
+      });
+      view.ui.add(
+        [
+          lineMeasureExpand,
+          areaMeasureExpand,
+          lineOfSightExpand,
+          daylightExpand,
+          basemapToggle,
+        ],
+        "top-left"
+      );
 
       view.ui.add("statsContainer", "top-right");
       view.when(function () {
-        webscene.allLayers.forEach(layer => {
+        webscene.allLayers.forEach((layer) => {
           if (layer.title === config.buildingLayerTitle) {
             bdgLayer = layer;
             bdgLayer.popupTemplate = {
               content: `Building is {${config.heightField}}m tall, was built in
-              {${config.yearField}} and is has a {${config.usageField}} use.`
+              {${config.yearField}} and is has a {${config.usageField}} use.`,
             };
-            bdgLayer.outFields = [config.heightField, config.yearField, config.usageField];
+            bdgLayer.outFields = [
+              config.heightField,
+              config.yearField,
+              config.usageField,
+            ];
 
             view.whenLayerView(layer).then(function (lyrView) {
               bdgLayerView = lyrView;
@@ -170,14 +182,16 @@ define([
       });
 
       function addChartEventListeners() {
-        charts.usageChart.options.hover.onHover = function(event, elements) {
+        charts.usageChart.options.hover.onHover = function (event, elements) {
           if (elements[0]) {
             let whereClause = "";
             try {
-              const element = config.usageValues.find(usage => usage.label === elements[0]._model.label);
+              const element = config.usageValues.find(
+                (usage) => usage.label === elements[0]._model.label
+              );
               whereClause = `${config.usageField} = '${element.value}'`;
             } catch {
-              sqlClauses = config.usageValues.map(function(e) {
+              sqlClauses = config.usageValues.map(function (e) {
                 return `${config.usageField} <> '${e.value}'`;
               });
               whereClause = sqlClauses.join(" AND ");
@@ -190,44 +204,48 @@ define([
               }
             } else {
               bdgLayerView.filter = {
-                where: whereClause
-              }
+                where: whereClause,
+              };
             }
           } else {
             removeWhereFilter();
           }
-        }
+        };
 
-        charts.yearChart.options.hover.onHover = function(event, elements) {
+        charts.yearChart.options.hover.onHover = function (event, elements) {
           if (elements[0]) {
-            const element = config.yearClasses.find(yearClass => yearClass.label === elements[0]._model.label);
+            const element = config.yearClasses.find(
+              (yearClass) => yearClass.label === elements[0]._model.label
+            );
             const whereClause = `${config.yearField} < ${element.maxYear} AND ${config.yearField} >= ${element.minYear}`;
             if (bdgLayerView.filter) {
               bdgLayerView.filter.where = whereClause;
             } else {
               bdgLayerView.filter = {
-                where: whereClause
-              }
+                where: whereClause,
+              };
             }
           } else {
             removeWhereFilter();
           }
-        }
+        };
 
-        charts.heightChart.options.hover.onHover = function(event, elements) {
+        charts.heightChart.options.hover.onHover = function (event, elements) {
           if (elements[0]) {
-            const element = utils.heightBins.find(heightBin => heightBin.label === elements[0]._model.label);
+            const element = utils.heightBins.find(
+              (heightBin) => heightBin.label === elements[0]._model.label
+            );
             if (bdgLayerView.filter) {
               bdgLayerView.filter.where = element.whereClause;
             } else {
               bdgLayerView.filter = {
-                where: element.whereClause
-              }
+                where: element.whereClause,
+              };
             }
           } else {
             removeWhereFilter();
           }
-        }
+        };
       }
 
       function removeWhereFilter() {
@@ -235,8 +253,8 @@ define([
           bdgLayerView.filter.where = null;
         } else {
           bdgLayerView.filter = {
-            where: null
-          }
+            where: null,
+          };
         }
       }
 
@@ -244,8 +262,8 @@ define([
 
       const sketchLayer = new GraphicsLayer({
         elevationInfo: {
-          mode: "on-the-ground"
-        }
+          mode: "on-the-ground",
+        },
       });
       webscene.add(sketchLayer);
 
@@ -253,9 +271,9 @@ define([
         layer: sketchLayer,
         defaultUpdateOptions: {
           tool: "reshape",
-          toggleToolOnClick: false
+          toggleToolOnClick: false,
         },
-        view: view
+        view: view,
       });
 
       sketchViewModel.on("create", function (event) {
@@ -263,7 +281,7 @@ define([
           appState.filterGeometry = event.graphic.geometry;
           bdgLayerView.filter = {
             geometry: appState.filterGeometry,
-            spatialRelationship: "intersects"
+            spatialRelationship: "intersects",
           };
           runQuery();
         }
@@ -274,29 +292,33 @@ define([
           appState.filterGeometry = event.graphics[0].geometry;
           bdgLayerView.filter = {
             geometry: appState.filterGeometry,
-            spatialRelationship: "intersects"
+            spatialRelationship: "intersects",
           };
           runQuery();
         }
       });
 
       const debouncedRunQuery = promiseUtils.debounce(function () {
-
         if (appState.selection) {
           const query = bdgLayerView.createQuery();
           query.geometry = appState.filterGeometry;
           query.outStatistics = statistics.totalStatDefinitions;
-          return bdgLayerView.queryFeatures(query).then(function(result) {
-            charts.updateCharts(result, appState.selection);
-          }).catch(console.error);
+          return bdgLayerView
+            .queryFeatures(query)
+            .then(function (result) {
+              charts.updateCharts(result, appState.selection);
+            })
+            .catch(console.error);
         } else {
           const query = bdgLayer.createQuery();
           query.outStatistics = statistics.totalStatDefinitions;
-          return bdgLayer.queryFeatures(query).then(function(result) {
-            charts.updateCharts(result);
-          }).catch(console.error);
+          return bdgLayer
+            .queryFeatures(query)
+            .then(function (result) {
+              charts.updateCharts(result);
+            })
+            .catch(console.error);
         }
-
       });
 
       function runQuery() {
@@ -308,39 +330,51 @@ define([
         });
       }
 
-      document.getElementById("drawPolygon").addEventListener("click", function () {
-        appState.selection = true;
-        sketchViewModel.create("polygon");
-      });
+      document
+        .getElementById("drawPolygon")
+        .addEventListener("click", function () {
+          appState.selection = true;
+          sketchViewModel.create("polygon");
+        });
 
-      document.getElementById("clearSelection").addEventListener("click", function () {
-        appState.filterGeometry = null;
-        appState.selection = false;
-        bdgLayerView.filter = null;
-        sketchViewModel.cancel();
-        sketchLayer.removeAll();
-        runQuery();
-      });
+      document
+        .getElementById("clearSelection")
+        .addEventListener("click", function () {
+          appState.filterGeometry = null;
+          appState.selection = false;
+          bdgLayerView.filter = null;
+          sketchViewModel.cancel();
+          sketchLayer.removeAll();
+          runQuery();
+        });
 
-      document.getElementById("applyYearRenderer").addEventListener("click", function () {
-        renderers.applyYearRenderer(bdgLayer);
-      });
+      document
+        .getElementById("applyYearRenderer")
+        .addEventListener("click", function () {
+          renderers.applyYearRenderer(bdgLayer);
+        });
 
-      document.getElementById("applyHeightRenderer").addEventListener("click", function () {
-        renderers.applyHeightRenderer(bdgLayer);
-      });
+      document
+        .getElementById("applyHeightRenderer")
+        .addEventListener("click", function () {
+          renderers.applyHeightRenderer(bdgLayer);
+        });
 
-      document.getElementById("applyUsageRenderer").addEventListener("click", function () {
-        renderers.applyUsageRenderer(bdgLayer);
-      });
+      document
+        .getElementById("applyUsageRenderer")
+        .addEventListener("click", function () {
+          renderers.applyUsageRenderer(bdgLayer);
+        });
 
-      document.getElementById("clearRenderer").addEventListener("click", function () {
-        renderers.applyOriginalTexture(bdgLayer);
-      });
+      document
+        .getElementById("clearRenderer")
+        .addEventListener("click", function () {
+          renderers.applyOriginalTexture(bdgLayer);
+        });
 
       function updateMap() {
         bdgLayer.definitionExpression = `${config.yearField} <= ${appState.maxYear}`;
       }
-    }
-  }
+    },
+  };
 });
