@@ -1,106 +1,110 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Malta in contour lines</title>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>Malta in contour lines</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.20/"></script>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.19/"></script>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
 
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
+      a,
+      esri-attribution__link esri-widget__anchor {
+        text-decoration: none;
+        font-weight: bold;
+        color: rgba(245, 105, 66) !important;
+      }
+    </style>
 
-    a, esri-attribution__link esri-widget__anchor {
-      text-decoration: none;
-      font-weight: bold;
-      color:rgba(245, 105, 66) !important;
-    }
-  </style>
+    <script>
+      require([
+        "esri/config",
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/FeatureLayer",
+        "dojo/dom",
+        "dojo/on",
+        "esri/layers/GraphicsLayer",
 
-  <script>
-    require([
-      "esri/config",
-      "esri/WebScene",
-      "esri/views/SceneView",
-      "esri/layers/FeatureLayer",
-      "dojo/dom",
-      "dojo/on",
-      "esri/layers/GraphicsLayer",
+        "esri/Graphic",
+        "esri/geometry/Point",
+        "esri/geometry/Polyline",
+        "esri/geometry/Polygon",
 
-      "esri/Graphic",
-      "esri/geometry/Point",
-      "esri/geometry/Polyline",
-      "esri/geometry/Polygon",
+        "esri/renderers/SimpleRenderer",
 
-      "esri/renderers/SimpleRenderer",
+        "esri/symbols/PointSymbol3D",
+        "esri/symbols/TextSymbol3DLayer",
 
-      "esri/symbols/PointSymbol3D",
-      "esri/symbols/TextSymbol3DLayer",
+        "esri/widgets/Daylight",
 
-      "esri/widgets/Daylight",
-
-      "dojo/domReady!"
-    ],
-      function (
-        esriConfig, WebScene, SceneView, FeatureLayer, dom, on,
+        "dojo/domReady!",
+      ], function (
+        esriConfig,
+        WebScene,
+        SceneView,
+        FeatureLayer,
+        dom,
+        on,
         GraphicsLayer,
-        Graphic, Point, Polyline, Polygon,
+        Graphic,
+        Point,
+        Polyline,
+        Polygon,
         SimpleRenderer,
-        PointSymbol3D, TextSymbol3DLayer, Daylight
+        PointSymbol3D,
+        TextSymbol3DLayer,
+        Daylight
       ) {
-
         const webscene = new WebScene({
           ground: {
-            opacity: 0
-          }
+            opacity: 0,
+          },
         });
 
         const waterExtent = {
           xmin: 1521098.8175,
-          xmax: 1701900.7220,
+          xmax: 1701900.722,
           ymin: 4214845.6469,
           ymax: 4358527.1603,
-          spatialReference: 102100
-        }
+          spatialReference: 102100,
+        };
         const view = new SceneView({
           container: "viewDiv",
           map: webscene,
-          viewingMode: 'global',
+          viewingMode: "global",
           qualityProfile: "high",
           clippingArea: waterExtent,
           camera: {
-            position: [
-              14.23626865,
-              35.86805744,
-              2779.39878
-            ],
+            position: [14.23626865, 35.86805744, 2779.39878],
             heading: 99.49,
-            tilt: 78.96
+            tilt: 78.96,
           },
           environment: {
             atmosphere: {
               // creates a realistic view of the atmosphere
-              quality: "high"
+              quality: "high",
             },
             lighting: {
               date: "Mon Mar 16 2020 08:33:03 GMT+0100 (Central European Standard Time)",
               directShadowsEnabled: true,
               ambientOcclusionEnabled: true,
-              waterReflectionEnabled: true
-            }
+              waterReflectionEnabled: true,
+            },
           },
           spatialReference: {
-            wkid: 102100
-          }
+            wkid: 102100,
+          },
         });
 
         // add contour lines layer
@@ -111,70 +115,82 @@
           elevationInfo: {
             mode: "relative-to-ground",
             featureExpressionInfo: {
-              expression: "$feature.elevation * 4"
-            }
+              expression: "$feature.elevation * 4",
+            },
           },
           renderer: {
             type: "simple",
             symbol: {
               type: "polygon-3d", // autocasts as new PolygonSymbol3D()
-              symbolLayers: [{
-                type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
-                material: {
-                  color: "#ccf1ff"
+              symbolLayers: [
+                {
+                  type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
+                  material: {
+                    color: "#ccf1ff",
+                  },
+                  size: 100,
                 },
-                size: 100
-              }]
+              ],
             },
-            visualVariables: [{
-              type: 'color',
-              field: 'elevation',
-              stops: [{
-                value: 25,
-                color: '#F2E6C9',
-              }, {
-                value: 100,
-                color: '#d3a561'
-              }, {
-                value: 200,
-                color: [186, 121, 68]
-              }]
-            }]
-          }
+            visualVariables: [
+              {
+                type: "color",
+                field: "elevation",
+                stops: [
+                  {
+                    value: 25,
+                    color: "#F2E6C9",
+                  },
+                  {
+                    value: 100,
+                    color: "#d3a561",
+                  },
+                  {
+                    value: 200,
+                    color: [186, 121, 68],
+                  },
+                ],
+              },
+            ],
+          },
         });
         webscene.add(contourLayer);
 
         const polygon = new Polygon({
-          rings: [[
-            [waterExtent.xmin, waterExtent.ymin, 800],
-            [waterExtent.xmax, waterExtent.ymin, 800],
-            [waterExtent.xmax, waterExtent.ymax, 800],
-            [waterExtent.xmin, waterExtent.ymax, 800],
-            [waterExtent.xmin, waterExtent.ymin, 800]
-          ]],
+          rings: [
+            [
+              [waterExtent.xmin, waterExtent.ymin, 800],
+              [waterExtent.xmax, waterExtent.ymin, 800],
+              [waterExtent.xmax, waterExtent.ymax, 800],
+              [waterExtent.xmin, waterExtent.ymax, 800],
+              [waterExtent.xmin, waterExtent.ymin, 800],
+            ],
+          ],
           spatialReference: {
-            wkid: 102100
-          }
+            wkid: 102100,
+          },
         });
 
         const waterGraphic = new Graphic({
           geometry: polygon,
           symbol: {
             type: "polygon-3d",
-            symbolLayers: [{
-              type: "water",
-              waveDirection: 260,
-              color: "#5ef2ff",
-              waveStrength: "moderate",
-              waterbodySize: "large"
-            }]
-          }
+            symbolLayers: [
+              {
+                type: "water",
+                waveDirection: 260,
+                color: "#5ef2ff",
+                waveStrength: "moderate",
+                waterbodySize: "large",
+              },
+            ],
+          },
         });
 
         const waterLayer = new GraphicsLayer({
           elevationInfo: {
-            mode: "absolute-height"
-          }
+            mode: "absolute-height",
+          },
         });
 
         waterLayer.add(waterGraphic);
@@ -189,30 +205,34 @@
             geometry: new Point({
               latitude: coordinates[0],
               longitude: coordinates[1],
-              z: coordinates[2]
+              z: coordinates[2],
             }),
             symbol: {
               type: "point-3d",
-              symbolLayers: [{
-                type: "object",
-                resource: { href: "./assets/QueenPalmTree.gltf" },
-                height: 600,
-              }]
-            }
+              symbolLayers: [
+                {
+                  type: "object",
+                  resource: { href: "./assets/QueenPalmTree.gltf" },
+                  height: 600,
+                },
+              ],
+            },
           });
           view.graphics.add(palmTreeGraphic);
-
         }
 
-        createLabels([{
-          name: 'Valetta',
-          type: 'capital city',
-          coordinates: [35.897341, 14.513617]
-        }, {
-          name: 'Dingli Cliffs',
-          type: 'nature preserve',
-          coordinates: [35.851994, 14.385470]
-        }]);
+        createLabels([
+          {
+            name: "Valetta",
+            type: "capital city",
+            coordinates: [35.897341, 14.513617],
+          },
+          {
+            name: "Dingli Cliffs",
+            type: "nature preserve",
+            coordinates: [35.851994, 14.38547],
+          },
+        ]);
 
         function createLabels(labels) {
           const graphics = [];
@@ -222,36 +242,39 @@
               attributes: {
                 ObjectID: i,
                 name: label.name,
-                type: label.type
+                type: label.type,
               },
               geometry: new Point({
                 latitude: label.coordinates[0],
                 longitude: label.coordinates[1],
                 spatialReference: {
-                  wkid: 3857
-                }
-              })
+                  wkid: 3857,
+                },
+              }),
             });
             graphics.push(graphic);
           }
 
           const labelLayer = new FeatureLayer({
             elevationInfo: {
-              mode: "relative-to-scene"
+              mode: "relative-to-scene",
             },
             copyright: `Application made with <a href="https://developers.arcgis.com/javascript/latest/">ArcGIS API for JavaScript</a>`,
             fields: [
               {
                 name: "ObjectID",
                 alias: "ObjectID",
-                type: "oid"
-              }, {
+                type: "oid",
+              },
+              {
                 name: "type",
-                type: "string"
-              }, {
+                type: "string",
+              },
+              {
                 name: "name",
-                type: "string"
-              }],
+                type: "string",
+              },
+            ],
             objectIdField: "ObjectID", // inferred from fields array if not specified
             geometryType: "point",
             source: graphics,
@@ -259,32 +282,34 @@
               type: "simple",
               symbol: {
                 type: "point-3d",
-                symbolLayers: [{
-                  type: "icon",
-                  resource: { primitive: "circle" },
-                  material: {
-                    color: [0, 0, 0, 0]
+                symbolLayers: [
+                  {
+                    type: "icon",
+                    resource: { primitive: "circle" },
+                    material: {
+                      color: [0, 0, 0, 0],
+                    },
+                    size: 0,
                   },
-                  size: 0,
-                }],
+                ],
                 verticalOffset: {
                   screenLength: 80,
                   maxWorldLength: 1000,
-                  minWorldLength: 30
+                  minWorldLength: 30,
                 },
                 callout: {
                   type: "line", // autocasts as new LineCallout3D()
                   size: 1,
                   color: [70, 70, 70],
-                }
-              }
+                },
+              },
             },
             screenSizePerspectiveEnabled: false,
             labelingInfo: [
               {
                 labelPlacement: "below-right",
                 labelExpressionInfo: {
-                  expression: ` "  " + $feature.name + TextFormatting.NewLine + "  (" + $feature.type + ")"`
+                  expression: ` "  " + $feature.name + TextFormatting.NewLine + "  (" + $feature.type + ")"`,
                 },
                 symbol: {
                   type: "label-3d", // autocasts as new LabelSymbol3D()
@@ -292,30 +317,25 @@
                     {
                       type: "text", // autocasts as new TextSymbol3DLayer()
                       material: {
-                        color: [70, 70, 70]
+                        color: [70, 70, 70],
                       },
-                      size: 10
-                    }
+                      size: 10,
+                    },
                   ],
-
-                }
-              }
-            ]
+                },
+              },
+            ],
           });
           webscene.add(labelLayer);
-
         }
 
         const daylight = new Daylight({ view: view });
         view.ui.add(daylight, "top-right");
       });
+    </script>
+  </head>
 
-  </script>
-</head>
-
-<body>
-  <div id="viewDiv">
-  </div>
-</body>
-
+  <body>
+    <div id="viewDiv"></div>
+  </body>
 </html>

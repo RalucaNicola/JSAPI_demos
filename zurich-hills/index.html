@@ -1,194 +1,192 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Zurich's hills</title>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>Zurich's hills</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.20/"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet" />
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.19/"></script>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
+      body {
+        background-color: #f4efe3;
+        font-family: "Open Sans", sans-serif;
+      }
 
-    body {
-      background-color: #f4efe3;
-      font-family: 'Open Sans', sans-serif;
-    }
+      canvas {
+        filter: drop-shadow(0px 0px 5px #56481f);
+      }
 
-    canvas {
-      filter: drop-shadow(0px 0px 5px #56481f);
-    }
+      .esri-widget {
+        background-color: transparent;
+      }
 
-    .esri-widget {
-      background-color: transparent;
-    }
+      .esri-widget--button {
+        background-color: transparent;
+      }
 
-    .esri-widget--button {
-      background-color: transparent;
-    }
+      .esri-ui-corner .esri-component {
+        box-shadow: none;
+      }
 
-    .esri-ui-corner .esri-component {
-      box-shadow: none;
-    }
+      .esri-zoom .esri-widget--button:last-child {
+        border-top: 1px solid #56481f;
+      }
 
-    .esri-zoom .esri-widget--button:last-child {
-      border-top: 1px solid #56481f;
-    }
+      .esri-navigation-toggle:hover,
+      .esri-navigation-toggle:focus {
+        background-color: transparent;
+      }
 
-    .esri-navigation-toggle:hover,
-    .esri-navigation-toggle:focus {
-      background-color: transparent;
-    }
+      .esri-widget--button {
+        color: #56481f;
+        background-color: #f4efe3;
+        border: 1px solid #56481f;
+        border-radius: 50%;
+        margin-top: 3px;
+      }
 
-    .esri-widget--button {
-      color: #56481f;
-      background-color: #f4efe3;
-      border: 1px solid #56481f;
-      border-radius: 50%;
-      margin-top: 3px;
-    }
+      .esri-widget--button:hover {
+        background-color: #c9c1ae;
+        color: #56481f;
+      }
 
-    .esri-widget--button:hover {
-      background-color: #c9c1ae;
-      color: #56481f;
-    }
+      .esri-attribution__sources[role="button"] {
+        color: #56481f;
+      }
 
-    .esri-attribution__sources[role="button"] {
-      color: #56481f;
-    }
+      #contentDiv {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 300px;
+        width: 30%;
+        max-height: 100%;
+        background-color: #f4efe3;
+        color: #56481f;
+        padding: 2.5em;
+        line-height: 1.8em;
+        overflow-y: auto;
+        box-sizing: border-box;
+      }
 
-    #contentDiv {
-      position: absolute;
-      top: 0;
-      right: 0;
-      min-width: 300px;
-      width: 30%;
-      max-height: 100%;
-      background-color: #f4efe3;
-      color: #56481f;
-      padding: 2.5em;
-      line-height: 1.8em;
-      overflow-y: auto;
-      box-sizing: border-box;
-    }
+      h1 {
+        padding: 1.5em 0 0.5em;
+        margin: 0;
+      }
 
-    h1 {
-      padding: 1.5em 0 0.5em;
-      margin: 0;
-    }
+      .title {
+        cursor: pointer;
+        padding: 1.5em 0 0.5em;
+        margin: 0;
+        font-weight: bold;
+      }
 
-    .title {
-      cursor: pointer;
-      padding: 1.5em 0 0.5em;
-      margin: 0;
-      font-weight: bold;
-    }
+      .map-icon {
+        height: 20px;
+        vertical-align: middle;
+      }
 
-    .map-icon {
-      height: 20px;
-      vertical-align: middle;
-    }
+      .indicator {
+        cursor: pointer;
+        border-bottom: 1px dashed #56481f;
+      }
 
-    .indicator {
-      cursor: pointer;
-      border-bottom: 1px dashed #56481f;
-    }
+      .indicator:hover {
+        border-bottom: 1px solid #56481f;
+      }
 
-    .indicator:hover {
-      border-bottom: 1px solid #56481f;
-    }
+      footer {
+        font-size: 0.8em;
+        line-height: 1.3em;
+        border-top: 1px solid #56481f;
+        padding-top: 2em;
+        margin-top: 2em;
+      }
 
-    footer {
-      font-size: 0.8em;
-      line-height: 1.3em;
-      border-top: 1px solid #56481f;
-      padding-top: 2em;
-      margin-top: 2em;
-    }
+      footer > a {
+        text-decoration: none;
+        border-bottom: 1px dashed #56481f;
+        color: #56481f;
+      }
 
-    footer>a {
-      text-decoration: none;
-      border-bottom: 1px dashed #56481f;
-      color: #56481f;
-    }
+      footer > a:hover {
+        border-bottom: 1px solid #56481f;
+      }
+    </style>
 
-    footer>a:hover {
-      border-bottom: 1px solid #56481f;
-    }
+    <script src="main.js"></script>
+  </head>
 
-  </style>
+  <body>
+    <div id="viewDiv"></div>
+    <div id="contentDiv">
+      <h1>Zurich's Hills</h1>
+      <p>
+        Switzerland's mountains are amazing. However, its "hills" are pretty awesome too. This map shows the
+        <span class="indicator home">hills around Zurich <img src="map.png" class="map-icon" /></span> in contour lines.
+      </p>
+      <p class="title home">Overview</p>
+      <p>
+        On the west side of Zurich Lake (called Zürichsee in German), the
+        <span class="indicator albis">Albis chain <img src="map.png" class="map-icon" /></span> stretches for about
+        19km. It was formed as the left moraine of the glacier bed which is now Lake Zurich. Being very near to the city
+        of Zurich, the area is heavily visited, especially near its northern end, and includes a large number of
+        restaurants along the summit (from Uetliberg to Mätteli), as well as hiking trails. On the
+        <span class="indicator east">east side <img src="map.png" class="map-icon" /></span>, a range of peaks separate
+        Greifensee from Zürichsee. The upper part of the mountain is mostly woodland and a popular recreational area
+        with picnic sites. In winter season a cross-country skiing trail is a popular point of interest.
+      </p>
+      <p class="title uetliberg">Uetliberg</p>
+      <p>
+        <span class="indicator uetliberg">Uetliberg <img src="map.png" class="map-icon" /></span> (also known as
+        Üetliberg) is a mountain in the Swiss plateau, part of the Albis chain, rising to 870 m (2,850 ft). The mountain
+        offers an impressive panoramic view of the entire city of Zurich and the Lake of Zurich and it's a popular
+        attraction for tourists. A train takes tourists from the main station in Zurich all the way to Utto Kulm, the
+        summit of Uetliberg.
+      </p>
+      <p class="title felsenegg">Felsenegg</p>
+      <p>
+        At over 2,624 ft (800m) altitude, on
+        <span class="indicator felsenegg">Felsenegg <img src="map.png" class="map-icon" /></span>
+        you can enjoy breathtaking views over Lake Zurich and the distant mountains. A "Planet path" leads from
+        Uetliberg to Felsenegg, which reflects the distances in the solar system. Every meter of the path corresponds to
+        a distance of 1 million kilometers. The fascinating 2-hour hike takes you from the sun past the eight planets as
+        far as the dwarf planet Pluto.
+      </p>
+      <p class="title zurichberg">Zürichberg</p>
+      <p>
+        The <span class="indicator zurichberg">Zürichberg <img src="map.png" class="map-icon" /></span>
+        is a wooded hill rising to 679 m (2,228 feet), overlooking Lake Zurich and located immediately to the east of
+        the city of Zurich. It is a picturesque location, and the lower western side of the hill is now part of the
+        residential district of Zurich. The Zurich Zoo and FIFA's headquarters are located on the Zürichberg as well.
+        The upper part of the hill is mostly woodland and a popular recreational area.
+      </p>
 
-  <script src="main.js"></script>
-</head>
-
-<body>
-  <div id="viewDiv"></div>
-  <div id="contentDiv">
-    <h1>Zurich's Hills</h1>
-    <p>Switzerland's mountains are amazing. However, its "hills" are pretty awesome too.
-      This map shows the <span class="indicator home">hills around Zurich <img src="map.png" class="map-icon"></span> in contour lines.
-    </p>
-    <p class="title home">Overview</p>
-    <p>On the west side of Zurich Lake (called Zürichsee in German),
-      the <span class="indicator albis">Albis chain <img src="map.png" class="map-icon"></span>
-      stretches for about 19km. It was formed as the left moraine of the glacier bed which is now Lake Zurich.
-      Being very near to the city of Zurich, the area is heavily visited, especially near its northern end,
-      and includes a large number of restaurants along the summit (from Uetliberg to Mätteli),
-      as well as hiking trails.
-      On the <span class="indicator east">east side <img src="map.png" class="map-icon"></span>,
-      a range of peaks separate Greifensee from Zürichsee.
-      The upper part of the mountain is mostly woodland and a popular recreational area with picnic sites.
-      In winter season a cross-country skiing trail is a popular point of interest.
-    </p>
-    <p class="title uetliberg"> Uetliberg</p>
-    <p><span class="indicator uetliberg">Uetliberg <img src="map.png" class="map-icon"></span> (also known as Üetliberg)
-      is a mountain in the Swiss plateau, part of the Albis chain, rising to 870 m (2,850 ft).
-      The mountain offers an impressive panoramic view of the entire city of Zurich and the Lake of Zurich
-      and it's a popular attraction for tourists. A train takes tourists from the main station in Zurich all the
-      way to Utto Kulm, the summit of Uetliberg.
-    </p>
-    <p class="title felsenegg">Felsenegg</p>
-    <p>At over 2,624 ft (800m) altitude, on <span class="indicator felsenegg">Felsenegg <img src="map.png"
-          class="map-icon"></span>
-      you can enjoy breathtaking views over Lake Zurich and the distant mountains.
-      A "Planet path" leads from Uetliberg to Felsenegg, which reflects the
-      distances in the solar system. Every meter of the path corresponds to a distance of 1 million
-      kilometers. The fascinating 2-hour hike takes you from the sun past the eight planets as far as
-      the dwarf planet Pluto.
-    </p>
-    <p class="title zurichberg">Zürichberg</p>
-    <p>The <span class="indicator zurichberg">Zürichberg <img src="map.png" class="map-icon"></span>
-      is a wooded hill rising to 679 m (2,228 feet), overlooking Lake Zurich and located
-      immediately to the east of the city of Zurich. It is a picturesque location, and the lower western
-      side of the hill is now part of the residential district of Zurich. The Zurich Zoo and FIFA's
-      headquarters are located on the Zürichberg as well. The upper part of the hill is mostly woodland
-      and a popular recreational area.
-    </p>
-
-    <footer>
-      Map made by <a href="https://raluca-nicola.net/" target="_blank">Raluca</a> as a fun contour lines project
-      because she can never remember the names of the peaks around Zurich.
-      I downloaded SRTM based contour line data from <a href="https://opendem.info/download_contours.html"
-        target="_blank">OpenDEM</a>
-      and the waterbodies from <a href="https://www.geofabrik.de/data/download.html" target="_blank">OSM Geofabrik</a>.
-      Both datasets are provided under an <a href="https://opendatacommons.org/licenses/odbl/index.html"
-        target="_blank">ODbL license</a>.
-      The peaks stem from the <a href="https://shop.swisstopo.admin.ch/en/products/landscape/names3D" target="_blank">swissNAMES3D</a> dataset,
-      published by the Federal Office of Topography Swisstopo (Bundesamt für Landestopografie).
-      I processed and published the data with
-      <a href="https://pro.arcgis.com/en/pro-app/" target="_blank">ArcGIS Pro</a> and created the map with
-      <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JavaScript</a>.
-    </footer>
-  </div>
-</body>
-
+      <footer>
+        Map made by <a href="https://raluca-nicola.net/" target="_blank">Raluca</a> as a fun contour lines project
+        because she can never remember the names of the peaks around Zurich. I downloaded SRTM based contour line data
+        from <a href="https://opendem.info/download_contours.html" target="_blank">OpenDEM</a> and the waterbodies from
+        <a href="https://www.geofabrik.de/data/download.html" target="_blank">OSM Geofabrik</a>. Both datasets are
+        provided under an
+        <a href="https://opendatacommons.org/licenses/odbl/index.html" target="_blank">ODbL license</a>. The peaks stem
+        from the
+        <a href="https://shop.swisstopo.admin.ch/en/products/landscape/names3D" target="_blank">swissNAMES3D</a>
+        dataset, published by the Federal Office of Topography Swisstopo (Bundesamt für Landestopografie). I processed
+        and published the data with <a href="https://pro.arcgis.com/en/pro-app/" target="_blank">ArcGIS Pro</a> and
+        created the map with
+        <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JavaScript</a>.
+      </footer>
+    </div>
+  </body>
 </html>

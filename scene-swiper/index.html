@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1">
-  <title>Scene Swiper</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <link rel="stylesheet" href="custom.css">
-  <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
-  <script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
+    <title>Scene Swiper</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <link rel="stylesheet" href="custom.css" />
+    <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+    <script>
       var dojoConfig = {
-        packages: [{
-          name: "app",
-          location: location.pathname.replace(/\/[^/]+$/, "") + "app"
-        }],
-        async: true
+        packages: [
+          {
+            name: "app",
+            location: location.pathname.replace(/\/[^/]+$/, "") + "app",
+          },
+        ],
+        async: true,
       };
     </script>
-  <script src="https://js.arcgis.com/4.19/"></script>
-</head>
+    <script src="https://js.arcgis.com/4.20/"></script>
+  </head>
 
-<body>
-  <div id="containerBottom">
-    <div id="viewBottom" touch-action="none"></div>
-  </div>
-  <div id="containerTop">
-    <div id="viewTop" touch-action="none"></div>
-  </div>
-  <header>Scene Swiper</header>
-  <script>
-  require([
-      "app/main",
-      "dojo/domReady!"
-    ]);
-  </script>
-</body>
+  <body>
+    <div id="containerBottom">
+      <div id="viewBottom" touch-action="none"></div>
+    </div>
+    <div id="containerTop">
+      <div id="viewTop" touch-action="none"></div>
+    </div>
+    <header>Scene Swiper</header>
+    <script>
+      require(["app/main", "dojo/domReady!"]);
+    </script>
+  </body>
 </html>

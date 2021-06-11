@@ -1,41 +1,34 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Distance to public transport in San Francisco</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.20/"></script>
 
-<head>
-  <meta charset="utf-8">
-  <title>Distance to public transport in San Francisco</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.19/"></script>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
 
-  <style>
-    html,
-    body,
-    #viewDiv {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-
-  <script>
-    require([
-      "esri/WebScene",
-      "esri/layers/SceneLayer",
-      "esri/views/SceneView",
-      "esri/widgets/Legend",
-      "dojo/domReady!"
-    ], function (
-      WebScene,
-      SceneLayer,
-      SceneView,
-      Legend
-    ) {
-
+    <script>
+      require([
+        "esri/WebScene",
+        "esri/layers/SceneLayer",
+        "esri/views/SceneView",
+        "esri/widgets/Legend",
+        "dojo/domReady!",
+      ], function (WebScene, SceneLayer, SceneView, Legend) {
         const webscene = new WebScene({
           portalItem: {
-            id: "03054c6a97f2423f93ff3679008658bb"
-          }
+            id: "03054c6a97f2423f93ff3679008658bb",
+          },
         });
 
         const view = new SceneView({
@@ -45,88 +38,91 @@
           environment: {
             lighting: {
               directShadowsEnabled: true,
-              ambientOcclusionEnabled: true
+              ambientOcclusionEnabled: true,
             },
             atmosphereEnabled: true,
             atmosphere: {
-              quality: "high"
-            }
-          }
+              quality: "high",
+            },
+          },
         });
 
         window.view = view;
 
         const buildingsLayer = new SceneLayer({
           portalItem: {
-            id: "f5c497819a374941b0ce8d9b0e979819"
+            id: "f5c497819a374941b0ce8d9b0e979819",
           },
           title: "San Francisco buildings",
           renderer: {
             type: "simple",
             symbol: {
               type: "mesh-3d",
-              symbolLayers: [{
-                type: "fill",
-                material: {
-                  color: "#ffffff",
-                  colorMixMode: "replace"
+              symbolLayers: [
+                {
+                  type: "fill",
+                  material: {
+                    color: "#ffffff",
+                    colorMixMode: "replace",
+                  },
+                  edges: {
+                    type: "solid",
+                    color: [255, 255, 255, 0.4],
+                    size: 1,
+                  },
                 },
-                edges: {
-                  type: "solid",
-                  color: [255, 255, 255, 0.4],
-                  size: 1
-                }
-              }]
+              ],
             },
-            visualVariables: [{
-              type: "color",
-              field: "walkTimeToStopsInService",
-              legendOptions: {
-                title: "Walking time to public transport"
+            visualVariables: [
+              {
+                type: "color",
+                field: "walkTimeToStopsInService",
+                legendOptions: {
+                  title: "Walking time to public transport",
+                },
+                stops: [
+                  {
+                    value: 1,
+                    label: "less than 1 minute",
+                    color: [96, 109, 148, 1],
+                  },
+                  {
+                    value: 5,
+                    label: "5 minutes",
+                    color: [164, 141, 158, 1],
+                  },
+                  {
+                    value: 10,
+                    label: "10 minutes",
+                    color: [197, 156, 164, 1],
+                  },
+                  {
+                    value: 14,
+                    label: "14 minutes",
+                    color: [232, 201, 179, 1],
+                  },
+                  {
+                    value: 19,
+                    label: "more than 19 minutes",
+                    color: [233, 215, 184, 1],
+                  },
+                ],
               },
-              stops: [
-                {
-                  value: 1,
-                  label: "less than 1 minute",
-                  color: [96, 109, 148, 1]
-                },
-                {
-                  value: 5,
-                  label: "5 minutes",
-                  color: [164, 141, 158, 1]
-                },
-                {
-                  value: 10,
-                  label: "10 minutes",
-                  color: [197, 156, 164, 1]
-                },
-                {
-                  value: 14,
-                  label: "14 minutes",
-                  color: [232, 201, 179, 1]
-                },
-                {
-                  value: 19,
-                  label: "more than 19 minutes",
-                  color: [233, 215, 184, 1]
-                }
-              ]
-            }]
-          }
+            ],
+          },
         });
 
         webscene.add(buildingsLayer);
 
         const legend = new Legend({
-          view: view
+          view: view,
         });
         view.ui.add(legend, "bottom-right");
       });
-  </script>
-</head>
+    </script>
+  </head>
 
-<body>
-  <div id="viewDiv"></div>
-</body>
-
+  <body>
+    <div id="viewDiv"></div>
+  </body>
 </html>

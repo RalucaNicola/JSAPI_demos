@@ -65,8 +65,8 @@
       }
     </style>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css" />
-    <script src="https://js.arcgis.com/4.19/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.20/"></script>
 
     <script>
       require([
@@ -79,8 +79,8 @@
         "esri/widgets/Zoom",
         "esri/widgets/TimeSlider",
         "esri/widgets/Expand",
-        "esri/widgets/Bookmarks"
-      ], function(
+        "esri/widgets/Bookmarks",
+      ], function (
         esriRequest,
         TimeExtent,
         WebScene,
@@ -103,7 +103,7 @@
             symbol: {
               type: "simple-marker",
               color: [255, 91, 59, 0.9],
-              outline: { color: [255, 91, 59, 0], width: 0 }
+              outline: { color: [255, 91, 59, 0], width: 0 },
             },
             visualVariables: [
               {
@@ -112,39 +112,39 @@
                 stops: [
                   {
                     value: 2,
-                    size: "1.5625px"
+                    size: "1.5625px",
                   },
                   {
                     value: 3,
-                    size: "3.125px"
+                    size: "3.125px",
                   },
                   {
                     value: 4,
-                    size: "6.25px"
+                    size: "6.25px",
                   },
                   {
                     value: 5,
-                    size: "12.5px"
+                    size: "12.5px",
                   },
                   {
                     value: 6,
-                    size: "25px"
+                    size: "25px",
                   },
                   {
                     value: 7,
-                    size: "50px"
+                    size: "50px",
                   },
                   {
                     value: 8,
-                    size: "100px"
+                    size: "100px",
                   },
                   {
                     value: 9,
-                    size: "200px"
-                  }
-                ]
-              }
-            ]
+                    size: "200px",
+                  },
+                ],
+              },
+            ],
           };
 
           const layer = new GeoJSONLayer({
@@ -159,18 +159,18 @@
               { name: "mag", type: "double" },
               { name: "time", type: "date" },
               { name: "type", type: "string" },
-              { name: "detail", type: "string" }
+              { name: "detail", type: "string" },
             ],
             elevationInfo: {
               mode: "absolute-height",
               unit: "kilometers",
               featureExpressionInfo: {
-                expression: "Geometry($feature).z * -1"
-              }
+                expression: "Geometry($feature).z * -1",
+              },
             },
             timeInfo: {
-              startField: "time"
-            }
+              startField: "time",
+            },
           });
 
           const projectedLayer = new GeoJSONLayer({
@@ -184,24 +184,24 @@
               { name: "mag", type: "double" },
               { name: "time", type: "date" },
               { name: "type", type: "string" },
-              { name: "detail", type: "string" }
+              { name: "detail", type: "string" },
             ],
             elevationInfo: {
-              mode: "on-the-ground"
+              mode: "on-the-ground",
             },
             timeInfo: {
-              startField: "time"
+              startField: "time",
             },
-            opacity: 0.4
+            opacity: 0.4,
           });
 
           // Query for the earthquakes ordered by magnitude.
           // This will give us the last earthquake in the last week
           const {
-            features: [lastBigEarthquake]
+            features: [lastBigEarthquake],
           } = await layer.queryFeatures({
             orderByFields: ["mag DESC", "time DESC"],
-            returnGeometry: true
+            returnGeometry: true,
           });
 
           // - Get a 50 kilometers buffer for the clipping area
@@ -210,13 +210,13 @@
             layer.queryExtent({
               geometry: lastBigEarthquake.geometry,
               distance: 65,
-              units: "kilometers"
+              units: "kilometers",
             }),
             layer.queryFeatures({
               geometry: lastBigEarthquake.geometry,
               distance: 20,
-              units: "kilometers"
-            })
+              units: "kilometers",
+            }),
           ]);
 
           // Get the full time extent for those nearby earthquakes
@@ -224,7 +224,7 @@
             nearbyEarthquakes.reduce(
               (timeExtent, feature) => ({
                 start: Math.min(timeExtent.start, feature.attributes.time),
-                end: Math.max(timeExtent.end, feature.attributes.time)
+                end: Math.max(timeExtent.end, feature.attributes.time),
               }),
               { start: Number.POSITIVE_INFINITY, end: Number.NEGATIVE_INFINITY }
             )
@@ -232,20 +232,20 @@
           // see 12 hours of data around the earthquake
           const timeExtent = new TimeExtent({
             start: new Date(lastBigEarthquake.attributes.time - 6 * 60 * 60 * 1000),
-            end: new Date(lastBigEarthquake.attributes.time + 6 * 60 * 60 * 1000)
+            end: new Date(lastBigEarthquake.attributes.time + 6 * 60 * 60 * 1000),
           });
 
           const scene = new WebScene({
             portalItem: {
-              id: "da51d41a9b234e80b43998531aa906e6"
-            }
+              id: "da51d41a9b234e80b43998531aa906e6",
+            },
           });
 
           scene.layers.addMany([layer, projectedLayer]);
 
           scene.ground.surfaceColor = "#ffffff";
           scene.ground.navigationConstraint = {
-            type: "none"
+            type: "none",
           };
 
           const view = new SceneView({
@@ -260,30 +260,30 @@
               starsEnabled: false,
               background: {
                 type: "color",
-                color: "white"
-              }
+                color: "white",
+              },
             },
             popup: null,
             highlightOptions: {
               fillOpacity: 0,
               haloOpacity: 0.5,
-              color: [255, 91, 59]
+              color: [255, 91, 59],
             },
             ui: {
               padding: {
-                top: 80
+                top: 80,
               },
-              components: ["attribution"]
-            }
+              components: ["attribution"],
+            },
           });
 
           const zoom = new Zoom({ view, layout: "horizontal" });
           view.ui.add(zoom, "bottom-left");
           view.ui.add("undergroundBtn", "top-right");
-          document.getElementById("undergroundBtn").addEventListener("click", function() {
+          document.getElementById("undergroundBtn").addEventListener("click", function () {
             // slide 0 of the webscene presentation has a viewpoint that is underground
             view.goTo(view.map.presentation.slides.getItemAt(0).viewpoint, {
-              duration: 4000
+              duration: 4000,
             });
           });
 
@@ -293,7 +293,7 @@
               where: `mag = ${lastBigEarthquake.attributes.mag}`,
               labelPlacement: "above-center",
               labelExpressionInfo: {
-                value: "Magnitude {mag}"
+                value: "Magnitude {mag}",
               },
               symbol: {
                 type: "text",
@@ -301,10 +301,10 @@
                 haloSize: "2px",
                 color: "white",
                 font: {
-                  size: 16
-                }
-              }
-            }
+                  size: 16,
+                },
+              },
+            },
           ];
 
           const { data: detail } = await esriRequest(lastBigEarthquake.attributes.detail);
@@ -319,7 +319,7 @@
           }, { animate: false }); */
           document.getElementById("loadingDiv").remove();
 
-          view.whenLayerView(layer).then(layerView => {
+          view.whenLayerView(layer).then((layerView) => {
             layerView.highlight(lastBigEarthquake);
             const timeSlider = new TimeSlider({
               view,
@@ -328,18 +328,18 @@
               stops: {
                 interval: {
                   value: 1,
-                  unit: "hours"
-                }
+                  unit: "hours",
+                },
               },
-              values: [timeExtent.start, timeExtent.end],
-              fullTimeExtent
+              timeExtent,
+              fullTimeExtent,
             });
             view.ui.add(timeSlider, "manual");
           });
 
           let layers = await Promise.all([loadContours(detail), loadNearbyCities(detail)]);
 
-          layers = layers.filter(layer => !!layer);
+          layers = layers.filter((layer) => !!layer);
           scene.addMany(layers);
         })();
 
@@ -356,16 +356,16 @@
                   type: "path",
                   profile: "quad",
                   material: {
-                    color
+                    color,
                   },
                   width: 200,
                   height: height * 3,
                   join: "round",
                   cap: "round",
                   anchor: "center",
-                  profileRotation: "heading"
-                }
-              ]
+                  profileRotation: "heading",
+                },
+              ],
             };
           }
 
@@ -381,9 +381,9 @@
                 { value: 7.5, symbol: createSymbol(Math.pow(2.2, 7.5), "#ffad00") },
                 { value: 8, symbol: createSymbol(Math.pow(2.2, 8), "#ee6a00") },
                 { value: 8.5, symbol: createSymbol(Math.pow(2.2, 8.5), "#f24c0d") },
-                { value: 9, symbol: createSymbol(Math.pow(2.2, 9), "#f41c1c") }
-              ]
-            }
+                { value: 9, symbol: createSymbol(Math.pow(2.2, 9), "#f41c1c") },
+              ],
+            },
           });
         }
 
@@ -395,7 +395,7 @@
           const { data: nearbyCities } = await esriRequest(
             earthquakeDetails.properties.products["nearby-cities"][0].contents["nearby-cities.json"].url,
             {
-              responseType: "json"
+              responseType: "json",
             }
           );
 
@@ -404,19 +404,19 @@
             fields: [
               { name: "direction", type: "string" },
               { name: "distance", type: "double" },
-              { name: "name", type: "string" }
+              { name: "name", type: "string" },
             ],
             source: nearbyCities.map(({ name, longitude, latitude, distance, direction }) => ({
               geometry: {
                 type: "point",
                 longitude,
-                latitude
+                latitude,
               },
               attributes: {
                 name,
                 distance,
-                direction
-              }
+                direction,
+              },
             })),
             screenSizePerspectiveEnabled: false,
             renderer: {
@@ -427,21 +427,21 @@
                   {
                     type: "icon",
                     resource: {
-                      primitive: "circle"
+                      primitive: "circle",
                     },
                     material: {
-                      color: "black"
+                      color: "black",
                     },
-                    size: 4
-                  }
-                ]
-              }
+                    size: 4,
+                  },
+                ],
+              },
             },
             labelingInfo: [
               {
                 labelPlacement: "above-center",
                 labelExpressionInfo: {
-                  value: "{name} - {distance}kms"
+                  value: "{name} - {distance}kms",
                 },
                 symbol: {
                   type: "label-3d",
@@ -449,31 +449,31 @@
                     {
                       type: "text",
                       material: {
-                        color: [20, 20, 20]
+                        color: [20, 20, 20],
                       },
                       halo: {
                         color: [255, 255, 255, 0.7],
-                        size: 2
+                        size: 2,
                       },
-                      size: 12
-                    }
+                      size: 12,
+                    },
                   ],
                   verticalOffset: {
                     screenLength: 50,
                     maxWorldLength: 20000,
-                    minWorldLength: 2000
+                    minWorldLength: 2000,
                   },
                   callout: {
                     type: "line",
                     size: 0.8,
                     color: [20, 20, 20],
                     border: {
-                      color: [255, 255, 255, 0.7]
-                    }
-                  }
-                }
-              }
-            ]
+                      color: [255, 255, 255, 0.7],
+                    },
+                  },
+                },
+              },
+            ],
           });
         }
       });

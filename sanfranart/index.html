@@ -1,147 +1,142 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
+    <title>San Fran Art</title>
+    <link href="https://fonts.googleapis.com/css?family=Reenie+Beanie" rel="stylesheet" />
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1">
-  <title>San Fran Art</title>
-  <link href="https://fonts.googleapis.com/css?family=Reenie+Beanie" rel="stylesheet">
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
+      #viewDiv {
+        filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
+      }
 
-    #viewDiv {
-      filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
-    }
+      #controls {
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.9);
+      }
 
-    #controls {
-      padding: 10px;
-      background-color: rgba(255, 255, 255, 0.9);
-    }
+      #image {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-image: url("./background.jpg");
+        background-size: cover;
+        opacity: 0.7;
+      }
 
-    #image {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-image:url('./background.jpg');
-      background-size: cover;
-      opacity: 0.7;
-    }
+      #artist {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        font-family: "Reenie Beanie", cursive;
+        transform: rotate(-5deg);
+        font-size: 1.1em;
+      }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.20/"></script>
 
-    #artist {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      font-family: 'Reenie Beanie', cursive;
-      transform: rotate(-5deg);
-      font-size: 1.1em;
-    }
+    <script>
+      require(["esri/WebScene", "esri/views/SceneView", "esri/layers/SceneLayer", "esri/core/watchUtils"], function (
+        WebScene,
+        SceneView,
+        SceneLayer,
+        watchUtils
+      ) {
+        // you can tweak these parameters to change
+        // the style of the edges
+        const sketchEdges = {
+          type: "sketch",
+          color: [0, 0, 0, 0.6],
+          size: 2,
+          extensionLength: 10,
+        };
 
-  </style>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.19/"></script>
+        // this renderers all the layers with semi-transparent white faces
+        // and displays the geometry with sketch edges
+        const renderer = {
+          type: "simple", // autocasts as new SimpleRenderer()
+          symbol: {
+            type: "mesh-3d",
+            symbolLayers: [
+              {
+                type: "fill",
+                material: {
+                  color: [255, 255, 255, 0.1],
+                  colorMixMode: "replace",
+                },
+                edges: sketchEdges,
+              },
+            ],
+          },
+        };
 
-  <script>
+        // load the scene layer from ArcGIS Online
+        // and set the renderer we defined above
+        const sceneLayer = new SceneLayer({
+          portalItem: {
+            id: "f5c497819a374941b0ce8d9b0e979819",
+          },
+          renderer: renderer,
+          popupEnabled: false,
+        });
 
-    require([
-      "esri/WebScene",
-      "esri/views/SceneView",
-      "esri/layers/SceneLayer",
-      "esri/core/watchUtils"
-    ], function(WebScene, SceneView, SceneLayer, watchUtils) {
-      // you can tweak these parameters to change
-      // the style of the edges
-      const sketchEdges = {
-        type: "sketch",
-        color: [0, 0, 0, 0.6],
-        size: 2,
-        extensionLength: 10
-      };
+        // I've created a webscene in ArcGIS Online
+        // the webscene has a transparent background,
+        // so that I can display the paper background
+        const webscene = new WebScene({
+          portalItem: {
+            id: "df4deb734f8d49d1a441d2fccd752628",
+          },
+          layers: [sceneLayer],
+        });
 
-      // this renderers all the layers with semi-transparent white faces
-      // and displays the geometry with sketch edges
-      const renderer = {
-        type: "simple", // autocasts as new SimpleRenderer()
-        symbol: {
-          type: "mesh-3d",
-          symbolLayers: [{
-            type: "fill",
-            material: {
-              color: [255, 255, 255, 0.1],
-              colorMixMode: "replace"
-            },
-            edges: sketchEdges
-          }]
-        }
-      };
+        // define the view
+        const view = new SceneView({
+          container: "viewDiv",
+          map: webscene,
+          // this property should be set to true
+          // so that we can set a transparent background
+          alphaCompositingEnabled: true,
+          ui: {
+            components: [],
+          },
+        });
 
-      // load the scene layer from ArcGIS Online
-      // and set the renderer we defined above
-      const sceneLayer = new SceneLayer({
-        portalItem: {
-          id: "f5c497819a374941b0ce8d9b0e979819"
-        },
-        renderer: renderer,
-        popupEnabled: false
-      });
-
-      // I've created a webscene in ArcGIS Online
-      // the webscene has a transparent background,
-      // so that I can display the paper background
-      const webscene = new WebScene({
-        portalItem: {
-          id: "df4deb734f8d49d1a441d2fccd752628"
-        },
-        layers: [sceneLayer]
-      });
-
-      // define the view
-      const view = new SceneView({
-        container: "viewDiv",
-        map: webscene,
-        // this property should be set to true
-        // so that we can set a transparent background
-        alphaCompositingEnabled: true,
-        ui: {
-          components: []
-        }
-      });
-
-      // this part makes sure that the sceneLayer is rendered
-      // when we start the animation in the begining
-      view.whenLayerView(sceneLayer)
-        .then(function(layerView) {
-          watchUtils.whenFalseOnce(layerView, "updating", function(value) {
-            view.goTo(webscene.presentation.slides.getItemAt(0).viewpoint,
-            {
+        // this part makes sure that the sceneLayer is rendered
+        // when we start the animation in the begining
+        view.whenLayerView(sceneLayer).then(function (layerView) {
+          watchUtils.whenFalseOnce(layerView, "updating", function (value) {
+            view.goTo(webscene.presentation.slides.getItemAt(0).viewpoint, {
               // make the animation really slow
               speedFactor: 0.05,
               // use the same speed all the time during the animation
-              easing: "linear"
+              easing: "linear",
             });
           });
         });
 
-      window.view = view;
-    });
+        window.view = view;
+      });
+    </script>
+  </head>
 
-  </script>
-</head>
-
-<body>
-  <div id="image"></div>
-  <div id="viewDiv"></div>
-  <div id="artist">
-    <span>San Francisco - ArcGIS API for JavaScript 2021</span>
-  </div>
-</body>
-
+  <body>
+    <div id="image"></div>
+    <div id="viewDiv"></div>
+    <div id="artist">
+      <span>San Francisco - ArcGIS API for JavaScript 2021</span>
+    </div>
+  </body>
 </html>

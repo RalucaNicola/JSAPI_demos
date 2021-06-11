@@ -1,38 +1,39 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
+    <title>World population</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.20/"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1">
-  <title>World population</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.19/"></script>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="main.js"></script>
-</head>
-
-<body>
-  <div id="viewDiv"></div>
-  <aside>
-    <h1>World population count</h1>
-    <ul id="populationYear">
-      <li class="selected">2000</li>
-      <li>2005</li>
-      <li>2010</li>
-      <li>2015</li>
-      <li>2020</li>
-    </ul>
-    <p>World population count visualization based on the grid world population dataset by
-      <a href="http://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev10/data-download" target="_blank">SEDAC</a>.
-    The grid has a resolution of aproximatively 110km.
-    The height and the color of the bars represent the number of persons per grid unit.</p>
-    <div id="legend"></div>
-    <p id="info"></p>
-  </aside>
-  <div id="loader">
-    <img src="img/loading-pop.gif"/>
-  </div>
-</body>
-
+  <body>
+    <div id="viewDiv"></div>
+    <aside>
+      <h1>World population count</h1>
+      <ul id="populationYear">
+        <li class="selected">2000</li>
+        <li>2005</li>
+        <li>2010</li>
+        <li>2015</li>
+        <li>2020</li>
+      </ul>
+      <p>
+        World population count visualization based on the grid world population dataset by
+        <a href="http://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev10/data-download" target="_blank"
+          >SEDAC</a
+        >. The grid has a resolution of aproximatively 110km. The height and the color of the bars represent the number
+        of persons per grid unit.
+      </p>
+      <div id="legend"></div>
+      <p id="info"></p>
+    </aside>
+    <div id="loader">
+      <img src="img/loading-pop.gif" />
+    </div>
+  </body>
 </html>

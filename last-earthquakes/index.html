@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>A classical earthquake 3D visualization</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://js.arcgis.com/4.20/"></script>
+    <script src="./main.js"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>A classical earthquake 3D visualization</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <link rel="stylesheet" href="./style.css">
-  <script src="https://js.arcgis.com/4.19/"></script>
-  <script src="./main.js"></script>
-</head>
-
-<body>
-  <div id="viewDiv">
-    <div id ="sidePanelInfo">
-      <div id="legend"></div>
-      <div id="histContainer">
-        <div class="title">Magnitude histogram</div>
-        <div id="histogram"></div>
-        <div class="description" id="histCount"></div>
+  <body>
+    <div id="viewDiv">
+      <div id="sidePanelInfo">
+        <div id="legend"></div>
+        <div id="histContainer">
+          <div class="title">Magnitude histogram</div>
+          <div id="histogram"></div>
+          <div class="description" id="histCount"></div>
+        </div>
       </div>
     </div>
-  </div>
-
-</body>
-
+  </body>
 </html>

@@ -1,147 +1,138 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
+    <title>Berlin Palace</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.20/"></script>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1">
-  <title>Berlin Palace</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.19/"></script>
-
-  <style>
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      font-family: 'Roboto', Arial, Helvetica, sans-serif;
-    }
-
-    h1 {
-      font-size: 2em;
-      margin: 0;
-      max-height: 70px;
-      padding-top: 0.5em;
-      font-weight: normal;
-    }
-
-    #viewDiv {
-      position: absolute;
-      top: 70px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-
-    .esri-overlay-surface {
-      box-shadow: inset 0 0 20px 20px #fff;
-    }
-
-    .radio-list {
-      position: absolute;
-      bottom: 30px;
-      left: 0;
-      right: 0;
-      height: 3.2em;
-      text-align: center;
-    }
-
-    .radio-list>span {
-      font-size: 1.5em;
-      margin: 0.5em;
-    }
-
-    .radio-list-container {
-      border: 1px solid rgba(0, 0, 0, 0.8);
-      height: 0px;
-      min-width: 300px;
-      flex-basis: 80%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 0 auto;
-    }
-
-    .radio-item {
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 1);
-      box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.4);
-      height: 20px;
-      width: 20px;
-    }
-
-    .radio-item:hover {
-      box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.4);
-      cursor: pointer;
-    }
-
-    footer.attribution {
-      color: #323232;
-      background-color: rgba(255,255,255, 0.65);
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      font-size: 0.7em;
-      padding: 0 5px;
-    }
-
-    footer a {
-      color: rgb(150, 81, 105);
-      text-decoration: none;
-    }
-
-    @media (max-width: 400px) {
-      .radio-item {
-        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.4);
-        height: 10px;
-        width: 10px;
-      }
-      .radio-item:hover {
-        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.4);
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        font-family: "Roboto", Arial, Helvetica, sans-serif;
       }
 
-      .radio-list-container {
-        min-width: 100px;
-      }
-
-      .radio-list>span {
-        font-size: 1em;
-        margin: 0.1em;
-      }
-    }
-
-    @media (max-width: 700px) {
       h1 {
-        font-size: 1.5em;
-        max-height: 40px;
+        font-size: 2em;
+        margin: 0;
+        max-height: 70px;
+        padding-top: 0.5em;
+        font-weight: normal;
       }
 
       #viewDiv {
-        top: 40px;
+        position: absolute;
+        top: 70px;
+        bottom: 0;
+        left: 0;
+        right: 0;
       }
-    }
-  </style>
 
-  <script>
-    require([
-      "esri/WebScene",
-      "esri/views/SceneView",
-      "dojo/domReady!"
-    ], function (
-      WebScene,
-      SceneView
-    ) {
+      .esri-overlay-surface {
+        box-shadow: inset 0 0 20px 20px #fff;
+      }
 
+      .radio-list {
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        right: 0;
+        height: 3.2em;
+        text-align: center;
+      }
+
+      .radio-list > span {
+        font-size: 1.5em;
+        margin: 0.5em;
+      }
+
+      .radio-list-container {
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        height: 0px;
+        min-width: 300px;
+        flex-basis: 80%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 auto;
+      }
+
+      .radio-item {
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 1);
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.4);
+        height: 20px;
+        width: 20px;
+      }
+
+      .radio-item:hover {
+        box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+      }
+
+      footer.attribution {
+        color: #323232;
+        background-color: rgba(255, 255, 255, 0.65);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        font-size: 0.7em;
+        padding: 0 5px;
+      }
+
+      footer a {
+        color: rgb(150, 81, 105);
+        text-decoration: none;
+      }
+
+      @media (max-width: 400px) {
+        .radio-item {
+          box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.4);
+          height: 10px;
+          width: 10px;
+        }
+        .radio-item:hover {
+          box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .radio-list-container {
+          min-width: 100px;
+        }
+
+        .radio-list > span {
+          font-size: 1em;
+          margin: 0.1em;
+        }
+      }
+
+      @media (max-width: 700px) {
+        h1 {
+          font-size: 1.5em;
+          max-height: 40px;
+        }
+
+        #viewDiv {
+          top: 40px;
+        }
+      }
+    </style>
+
+    <script>
+      require(["esri/WebScene", "esri/views/SceneView", "dojo/domReady!"], function (WebScene, SceneView) {
         let palaceLayer;
 
         const webscene = new WebScene({
           portalItem: {
-            id: "c5ea2c766162440bb7df630c4984a790"
-          }
+            id: "c5ea2c766162440bb7df630c4984a790",
+          },
         });
 
         const view = new SceneView({
@@ -152,26 +143,28 @@
             lighting: {
               directShadowsEnabled: true,
               ambientOcclusionEnabled: false,
-              date: "Thu Mar 15 2018 14:55:00 GMT+0100 (Central European Standard Time)"
+              date: "Thu Mar 15 2018 14:55:00 GMT+0100 (Central European Standard Time)",
             },
             atmosphereEnabled: false,
             background: {
               type: "color",
-              color: "white"
+              color: "white",
             },
-            starsEnabled: false
+            starsEnabled: false,
           },
           ui: {
-            components: []
-          }
+            components: [],
+          },
         });
 
         window.view = view;
 
         view.when(function () {
-          palaceLayer = webscene.layers.filter(function (layer) {
-            return layer.title === "Berlin Palace";
-          }).getItemAt(0);
+          palaceLayer = webscene.layers
+            .filter(function (layer) {
+              return layer.title === "Berlin Palace";
+            })
+            .getItemAt(0);
         });
 
         const options = document.getElementsByClassName("radio-item");
@@ -181,100 +174,118 @@
             switch (style) {
               case "realistic":
                 palaceLayer.renderer = {
-                  type: 'simple',
+                  type: "simple",
                   symbol: {
-                    type: 'mesh-3d',
-                    symbolLayers: [{
-                      type: 'fill',
-                      material: null
-                    }]
-                  }
+                    type: "mesh-3d",
+                    symbolLayers: [
+                      {
+                        type: "fill",
+                        material: null,
+                      },
+                    ],
+                  },
                 };
                 break;
               case "gray":
                 palaceLayer.renderer = {
-                  type: 'simple',
+                  type: "simple",
                   symbol: {
-                    type: 'mesh-3d',
-                    symbolLayers: [{
-                      type: 'fill',
-                      material: {
-                        color: '#ffffff',
-                        colorMixMode: 'tint'
+                    type: "mesh-3d",
+                    symbolLayers: [
+                      {
+                        type: "fill",
+                        material: {
+                          color: "#ffffff",
+                          colorMixMode: "tint",
+                        },
+                        edges: {
+                          type: "solid",
+                          color: [0, 0, 0, 0.7],
+                        },
                       },
-                      edges: {
-                        type: 'solid',
-                        color: [0, 0, 0, 0.7]
-                      }
-                    }]
-                  }
+                    ],
+                  },
                 };
                 break;
               case "abstract":
                 palaceLayer.renderer = {
-                  type: 'simple',
+                  type: "simple",
                   symbol: {
-                    type: 'mesh-3d',
-                    symbolLayers: [{
-                      type: 'fill',
-                      material: {
-                        color: '#ffffff',
-                        colorMixMode: 'replace'
+                    type: "mesh-3d",
+                    symbolLayers: [
+                      {
+                        type: "fill",
+                        material: {
+                          color: "#ffffff",
+                          colorMixMode: "replace",
+                        },
+                        edges: {
+                          type: "solid",
+                          color: [0, 0, 0, 0.7],
+                        },
                       },
-                      edges: {
-                        type: 'solid',
-                        color: [0, 0, 0, 0.7]
-                      }
-                    }]
-                  }
+                    ],
+                  },
                 };
                 break;
               case "sketch":
-              palaceLayer.renderer = {
-                type: 'simple',
-                symbol: {
-                  type: 'mesh-3d',
-                  symbolLayers: [{
-                    type: 'fill',
-                    material: {
-                      color: "#efe8da",
-                      colorMixMode: 'replace'
-                    },
-                    edges: {
-                      type: 'sketch',
-                      color: "#534026",
-                      size: 1,
-                      extensionLength: 2
-                    }
-                  }]
-                }
-              };
+                palaceLayer.renderer = {
+                  type: "simple",
+                  symbol: {
+                    type: "mesh-3d",
+                    symbolLayers: [
+                      {
+                        type: "fill",
+                        material: {
+                          color: "#efe8da",
+                          colorMixMode: "replace",
+                        },
+                        edges: {
+                          type: "sketch",
+                          color: "#534026",
+                          size: 1,
+                          extensionLength: 2,
+                        },
+                      },
+                    ],
+                  },
+                };
                 break;
             }
-          })
-        };
-
+          });
+        }
       });
+    </script>
+  </head>
 
-  </script>
-</head>
-
-<body>
-  <h1>Berlin Palace</h1>
-  <div id="viewDiv"></div>
-  <div class="radio-list">
-    <span>Realistic</span>
-    <div class="radio-list-container">
-      <div class='radio-item' data-style="realistic"></div>
-      <div class='radio-item' data-style="gray"></div>
-      <div class='radio-item' data-style="abstract"></div>
-      <div class='radio-item' data-style="sketch"></div>
+  <body>
+    <h1>Berlin Palace</h1>
+    <div id="viewDiv"></div>
+    <div class="radio-list">
+      <span>Realistic</span>
+      <div class="radio-list-container">
+        <div class="radio-item" data-style="realistic"></div>
+        <div class="radio-item" data-style="gray"></div>
+        <div class="radio-item" data-style="abstract"></div>
+        <div class="radio-item" data-style="sketch"></div>
+      </div>
+      <span>Abstract</span>
     </div>
-    <span>Abstract</span>
-  </div>
-  <footer class='attribution'>
-      Data provided by <a href='https://www.stadtentwicklung.berlin.de/planen/stadtmodelle/de/digitale_innenstadt/3d/download/index.shtml' target='_blank'>Berlin's Senatsverwaltung für Stadtentwicklung und Wohnen</a> and processed in <a href='https://www.esri.com/en-us/arcgis/products/esri-cityengine/overview' target='_blank'>CityEngine</a> by <a href='https://robotized.arisona.ch' target='_blank'>Stefan Arisona</a> in <a href='https://github.com/arisona/berlin_3d' target='_blank'>DEMO:POLIS</a> | <a href='http://www.stadtentwicklung.berlin.de/geoinformation/download/nutzIII.pdf' target='_blank'>See data license</a> | Map created with <a href='https://developers.arcgis.com/javascript/' target='_blank'>ArcGIS API for JS</a>.
-  </footer>
-</body>
-
+    <footer class="attribution">
+      Data provided by
+      <a
+        href="https://www.stadtentwicklung.berlin.de/planen/stadtmodelle/de/digitale_innenstadt/3d/download/index.shtml"
+        target="_blank"
+        >Berlin's Senatsverwaltung für Stadtentwicklung und Wohnen</a
+      >
+      and processed in
+      <a href="https://www.esri.com/en-us/arcgis/products/esri-cityengine/overview" target="_blank">CityEngine</a> by
+      <a href="https://robotized.arisona.ch" target="_blank">Stefan Arisona</a> in
+      <a href="https://github.com/arisona/berlin_3d" target="_blank">DEMO:POLIS</a> |
+      <a href="http://www.stadtentwicklung.berlin.de/geoinformation/download/nutzIII.pdf" target="_blank"
+        >See data license</a
+      >
+      | Map created with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JS</a>.
+    </footer>
+  </body>
 </html>

@@ -1,64 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1">
-  <title>WebScene Photobooth</title>
-  <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:creator" content="@nicolaraluk">
-  <meta property="og:title" content="WebScene Photobooth">
-  <meta property="og:description" content="Create a screenshot of your webscene and apply filters.">
-  <meta property="og:image" content="https://ralucanicola.github.io/JSAPI_demos/webscene-photobooth/assets/screenshot.jpg">
-  <script>
-    var dojoConfig = {
-      packages: [{
-        name: "app",
-        location: location.pathname.replace(/\/[^/]+$/, "") + "/app"
-      }],
-      async: true
-    };
-  </script>
-  <script src="https://js.arcgis.com/4.19/"></script>
-  <script>
-    require([
-      "app/main",
-      "dojo/domReady!"
-    ]);
-  </script>
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
+    <title>WebScene Photobooth</title>
+    <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@nicolaraluk" />
+    <meta property="og:title" content="WebScene Photobooth" />
+    <meta property="og:description" content="Create a screenshot of your webscene and apply filters." />
+    <meta
+      property="og:image"
+      content="https://ralucanicola.github.io/JSAPI_demos/webscene-photobooth/assets/screenshot.jpg"
+    />
+    <script>
+      var dojoConfig = {
+        packages: [
+          {
+            name: "app",
+            location: location.pathname.replace(/\/[^/]+$/, "") + "/app",
+          },
+        ],
+        async: true,
+      };
+    </script>
+    <script src="https://js.arcgis.com/4.20/"></script>
+    <script>
+      require(["app/main", "dojo/domReady!"]);
+    </script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   </head>
 
   <body>
     <div id="scene-view">
       <button id="screenshot-btn" class="action-btn">
-        <img src="./assets/camera-retro-solid.svg" alt="take screenshot">
+        <img src="./assets/camera-retro-solid.svg" alt="take screenshot" />
       </button>
       <div id="attribution-div">
-          Made with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JavaScript</a> and
-          <a href="http://joelb.me/jsmanipulate/" target="_blank">JSManipulate by Joel Besada</a>. Icons from <a href="https://fontawesome.com/icons/" target="_blank">FontAwesome</a>.
+        Made with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JavaScript</a> and
+        <a href="http://joelb.me/jsmanipulate/" target="_blank">JSManipulate by Joel Besada</a>. Icons from
+        <a href="https://fontawesome.com/icons/" target="_blank">FontAwesome</a>.
       </div>
     </div>
     <div id="screenshot">
       <div class="social-media">
-        <a href="https://twitter.com/share?url=https://ralucanicola.github.io/JSAPI_demos/webscene-photobooth/index.html" id="twitter-link" class="twitter-share-button" data-show-count="false">Tweet</a>
+        <a
+          href="https://twitter.com/share?url=https://ralucanicola.github.io/JSAPI_demos/webscene-photobooth/index.html"
+          id="twitter-link"
+          class="twitter-share-button"
+          data-show-count="false"
+          >Tweet</a
+        >
       </div>
       <div class="polaroid-image-frame">
         <div id="image-container">
-          <p>
-            Take a screenshot of the webscene.
-          </p>
-          <p>
-            Try out a filter if you like.
-          </p>
+          <p>Take a screenshot of the webscene.</p>
+          <p>Try out a filter if you like.</p>
         </div>
         <p id="image-title"></p>
       </div>
-      <button class="download hide" id="download-btn"><img src="./assets/download-solid.svg" alt="Download"></button>
+      <button class="download hide" id="download-btn"><img src="./assets/download-solid.svg" alt="Download" /></button>
       <div id="filters"></div>
     </div>
-
-   </body>
-  </html>
+  </body>
+</html>

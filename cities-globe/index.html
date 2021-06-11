@@ -1,46 +1,44 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
+    <title>World's biggest cities</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <link rel="stylesheet" href="custom.css" />
+    <script>
+      var dojoConfig = {
+        packages: [
+          {
+            name: "app",
+            location: location.pathname.replace(/\/[^/]+$/, "") + "app",
+          },
+        ],
+        async: true,
+      };
+    </script>
+    <script src="https://js.arcgis.com/4.20/"></script>
+    <!-- polyfill for shape-outside css -->
+    <script src="./lib/shapes-polyfill.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1">
-  <title>World's biggest cities</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <link rel="stylesheet" href="custom.css">
-  <script>
-    var dojoConfig = {
-      packages: [{
-        name: "app",
-        location: location.pathname.replace(/\/[^/]+$/, "") + "app"
-      }],
-      async: true
-    };
-  </script>
-  <script src="https://js.arcgis.com/4.19/"></script>
-  <!-- polyfill for shape-outside css -->
-  <script src="./lib/shapes-polyfill.min.js"></script>
-</head>
-
-<body>
-  <header>
-    <div id="circle"></div>
-    <div id="floating-text">
-      <h2>World's biggest cities</h2>
-      <p>
-        <span>Shanghai</span> seems to be the most populated city in the world with 24 million inhabitants, followed by
-        <span>Beijing</span> with 21 million. On the third place is the city of
-        <span>Delhi</span> with 16 million people. </p>
-    </div>
-  </header>
-  <div id="view"></div>
-  <script>
-    require([
-      "app/main",
-      "dojo/domReady!"
-    ], function(app) {
-      app.init();
-    });
-  </script>
-</body>
-
+  <body>
+    <header>
+      <div id="circle"></div>
+      <div id="floating-text">
+        <h2>World's biggest cities</h2>
+        <p>
+          <span>Shanghai</span> seems to be the most populated city in the world with 24 million inhabitants, followed
+          by <span>Beijing</span> with 21 million. On the third place is the city of <span>Delhi</span> with 16 million
+          people.
+        </p>
+      </div>
+    </header>
+    <div id="view"></div>
+    <script>
+      require(["app/main", "dojo/domReady!"], function (app) {
+        app.init();
+      });
+    </script>
+  </body>
 </html>

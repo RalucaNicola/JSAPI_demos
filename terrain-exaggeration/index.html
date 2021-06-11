@@ -1,46 +1,43 @@
-
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
+    <title>Terrain exaggeration</title>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1">
-  <title>Terrain exaggeration</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
 
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
+      #viewDiv {
+        filter: drop-shadow(0px 0px 25px rgba(77, 40, 0, 0.4));
+      }
 
-    #viewDiv {
-      filter: drop-shadow(0px 0px 25px rgba(77, 40, 0, 0.4))
-    }
+      h3 {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        color: gray;
+        font-family: sans-serif;
+        text-align: center;
+        letter-spacing: 3px;
+      }
+    </style>
 
-    h3 {
-      position: absolute;
-      top: 0;
-      width: 100%;
-      color: gray;
-      font-family: sans-serif;
-      text-align: center;
-      letter-spacing: 3px;
-    }
+    <script src="https://js.arcgis.com/4.20/"></script>
 
-  </style>
-
-  <script src="https://js.arcgis.com/4.19/"></script>
-
-  <script src="main.js"></script>
-</head>
-<body>
-  <div id="viewDiv"></div>
-  <h3>the amargosa river of the mojave desert</h3>
-</body>
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <h3>the amargosa river of the mojave desert</h3>
+  </body>
 </html>

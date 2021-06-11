@@ -1,42 +1,37 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Extrude building footprints based on real world heights - 4.10</title>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>Extrude building footprints based on real world heights - 4.10</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.20/"></script>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.19/"></script>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      .esri-legend__layer-caption {
+        display: none;
+      }
+    </style>
 
-  <style>
-    html,
-    body,
-    #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-    .esri-legend__layer-caption {
-      display: none;
-    }
-
-  </style>
-
-  <script>
-    require([
-      "esri/WebScene",
-      "esri/views/SceneView",
-      "esri/layers/FeatureLayer",
-      "esri/layers/TileLayer",
-      "esri/widgets/Legend"
-    ], function (
-      WebScene, SceneView, FeatureLayer, TileLayer, Legend
-    ) {
-
-      // Arcade expression to aggregate periods in the original data
-      const periodExpression =`
+    <script>
+      require([
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/FeatureLayer",
+        "esri/layers/TileLayer",
+        "esri/widgets/Legend",
+      ], function (WebScene, SceneView, FeatureLayer, TileLayer, Legend) {
+        // Arcade expression to aggregate periods in the original data
+        const periodExpression = `
         var period = $feature.C_PERCONST;
         var p = Dictionary(
           '1801 - 1850', 'Before 1850',
@@ -57,124 +52,132 @@
         return value;
       `;
 
-      function getSymbol(color) {
-        return {
-          type: "polygon-3d", // autocasts as new PolygonSymbol3D()
-          symbolLayers: [{
-            type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
-            material: {
-              color: color
-            }
-          }]
-        };
-      }
-
-      const renderer = {
-        type: "unique-value", // autocasts as new UniqueValueRenderer()
-        valueExpression: periodExpression,
-        uniqueValueInfos: [{
-            value: "Before 1850",
-            symbol: getSymbol("#6F2806"),
-            label: "Before 1850"
-          },
-          {
-            value: "1851 - 1914",
-            symbol: getSymbol("#CC5106"),
-            label: "1851 - 1914"
-          },
-          {
-            value: "1915 - 1967",
-            symbol: getSymbol("#FDA535"),
-            label: "1915 - 1967"
-          },
-          {
-            value: "1968 - 1999",
-            symbol: getSymbol("#FEE79B"),
-            label: "1968 - 1999"
-          },
-          {
-            value: "After 2000",
-            symbol: getSymbol("#FFFDD9"),
-            label: "After 2000"
-          },
-          {
-            value: "No data",
-            symbol: getSymbol("#aaa"),
-            label: "No data"
-          }
-        ],
-        visualVariables: [{
-          type: "size",
-          field: "H_MED",
-          valueUnit: "meters" // Converts and extrudes all data values in meters
-        }]
-      }
-
-      // Set the renderer on the layer
-      const buildings3DLayer = new FeatureLayer({
-        url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/ArcGIS/rest/services/Paris_Building_Footprints/FeatureServer/0",
-        renderer: renderer,
-        outFields: ["H_MED", "C_PERCONST"],
-        popupEnabled: true,
-        popupTemplate: {
-          content: "Building has a <b>medium height</b> of {H_MED} meters.<br><b>Period of construction:</b> {expression/period}",
-          expressionInfos: [{
-            name: "period",
-            expression: periodExpression
-          }]
-        },
-        minScale: 10000,
-        legendEnabled: false
-      });
-
-      const buildingsTiledLayer = new TileLayer({
-        url: "https://tiles.arcgis.com/tiles/V6ZHFr6zdgNZuVG0/arcgis/rest/services/PARIS_BUILDINGS/MapServer",
-        title: "Buildings Paris",
-        copyright: "Data from <a href='http://opendata.apur.org/datasets/emprise-batie-paris'>APUR - Open Data Paris</a>."
-      });
-
-      const webscene = new WebScene({
-        basemap: "gray",
-        layers: [buildings3DLayer, buildingsTiledLayer]
-      });
-
-      const view = new SceneView({
-        container: "viewDiv",
-        map: webscene,
-        camera: {
-          position: [2.34484772, 48.85254353, 11398.98704],
-          heading: 360.00,
-          tilt: 0.50
-        },
-        qualityProfile: "high",
-        environment: {
-          lighting: {
-            date: "Fri Mar 15 2019 11:50:41 GMT+0100 (Central European Standard Time)",
-            directShadowsEnabled: true
-          }
+        function getSymbol(color) {
+          return {
+            type: "polygon-3d", // autocasts as new PolygonSymbol3D()
+            symbolLayers: [
+              {
+                type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
+                material: {
+                  color: color,
+                },
+              },
+            ],
+          };
         }
+
+        const renderer = {
+          type: "unique-value", // autocasts as new UniqueValueRenderer()
+          valueExpression: periodExpression,
+          uniqueValueInfos: [
+            {
+              value: "Before 1850",
+              symbol: getSymbol("#6F2806"),
+              label: "Before 1850",
+            },
+            {
+              value: "1851 - 1914",
+              symbol: getSymbol("#CC5106"),
+              label: "1851 - 1914",
+            },
+            {
+              value: "1915 - 1967",
+              symbol: getSymbol("#FDA535"),
+              label: "1915 - 1967",
+            },
+            {
+              value: "1968 - 1999",
+              symbol: getSymbol("#FEE79B"),
+              label: "1968 - 1999",
+            },
+            {
+              value: "After 2000",
+              symbol: getSymbol("#FFFDD9"),
+              label: "After 2000",
+            },
+            {
+              value: "No data",
+              symbol: getSymbol("#aaa"),
+              label: "No data",
+            },
+          ],
+          visualVariables: [
+            {
+              type: "size",
+              field: "H_MED",
+              valueUnit: "meters", // Converts and extrudes all data values in meters
+            },
+          ],
+        };
+
+        // Set the renderer on the layer
+        const buildings3DLayer = new FeatureLayer({
+          url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/ArcGIS/rest/services/Paris_Building_Footprints/FeatureServer/0",
+          renderer: renderer,
+          outFields: ["H_MED", "C_PERCONST"],
+          popupEnabled: true,
+          popupTemplate: {
+            content:
+              "Building has a <b>medium height</b> of {H_MED} meters.<br><b>Period of construction:</b> {expression/period}",
+            expressionInfos: [
+              {
+                name: "period",
+                expression: periodExpression,
+              },
+            ],
+          },
+          minScale: 10000,
+          legendEnabled: false,
+        });
+
+        const buildingsTiledLayer = new TileLayer({
+          url: "https://tiles.arcgis.com/tiles/V6ZHFr6zdgNZuVG0/arcgis/rest/services/PARIS_BUILDINGS/MapServer",
+          title: "Buildings Paris",
+          copyright:
+            "Data from <a href='http://opendata.apur.org/datasets/emprise-batie-paris'>APUR - Open Data Paris</a>.",
+        });
+
+        const webscene = new WebScene({
+          basemap: "gray",
+          layers: [buildings3DLayer, buildingsTiledLayer],
+        });
+
+        const view = new SceneView({
+          container: "viewDiv",
+          map: webscene,
+          camera: {
+            position: [2.34484772, 48.85254353, 11398.98704],
+            heading: 360.0,
+            tilt: 0.5,
+          },
+          qualityProfile: "high",
+          environment: {
+            lighting: {
+              date: "Fri Mar 15 2019 11:50:41 GMT+0100 (Central European Standard Time)",
+              directShadowsEnabled: true,
+            },
+          },
+        });
+
+        view
+          .whenLayerView(buildings3DLayer)
+          .then(function (lyrView) {
+            lyrView.maximumNumberOfFeatures = 30000;
+          })
+          .catch(console.error);
+
+        const legend = new Legend({
+          view: view,
+        });
+
+        view.ui.add(legend, "bottom-right");
+
+        window.view = view;
       });
+    </script>
+  </head>
 
-      view.whenLayerView(buildings3DLayer)
-        .then(function(lyrView) {
-          lyrView.maximumNumberOfFeatures = 30000;
-        })
-        .catch(console.error);
-
-      const legend = new Legend({
-        view: view
-      });
-
-      view.ui.add(legend, "bottom-right");
-
-      window.view = view;
-    });
-
-  </script>
-</head>
-
-<body>
-  <div id="viewDiv"></div>
-</body>
-
+  <body>
+    <div id="viewDiv"></div>
+  </body>
 </html>
