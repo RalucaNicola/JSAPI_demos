@@ -5,8 +5,8 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <title>Extrude building footprints based on real world heights - 4.10</title>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/css/main.css" />
-    <script src="https://js.arcgis.com/4.20/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.22/"></script>
 
     <style>
       html,
@@ -138,7 +138,7 @@
         });
 
         const webscene = new WebScene({
-          basemap: "gray",
+          basemap: "gray-vector", // basemap "gray" is not longer supported and was replaced by gray-vector
           layers: [buildings3DLayer, buildingsTiledLayer],
         });
 
