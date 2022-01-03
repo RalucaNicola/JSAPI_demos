@@ -70,7 +70,7 @@ require([], function() {
       syncUtil
     ) {
       const webscene = generateWebScene("dfdcdaef528b4f94b951262b4df38c86");
-      const webmap = generateWebMap("a37060f4a15e49498d8af4db9e3cc6f7");
+      const webmap = generateWebMap("510957a9e885403cb27abf5dab1575fc");
 
       const mapView = new MapView({
         container: "mapDiv",

@@ -97,7 +97,7 @@
         // so that I can display the paper background
         const webscene = new WebScene({
           portalItem: {
-            id: "df4deb734f8d49d1a441d2fccd752628",
+            id: "b9b2ba7b09dc4c1b82fdf4edfc04f095",
           },
           layers: [sceneLayer],
         });
@@ -109,6 +109,14 @@
           // this property should be set to true
           // so that we can set a transparent background
           alphaCompositingEnabled: true,
+          environment: {
+            background: {
+              type: "color",
+              color: [255, 255, 255, 0],
+            },
+            atmosphereEnabled: false,
+            starsEnabled: false,
+          },
           ui: {
             components: [],
           },

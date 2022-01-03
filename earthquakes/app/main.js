@@ -95,7 +95,7 @@ require([
 
     const scene = new WebScene({
       portalItem: {
-        id: "f5941614c9934b4a9346e732fb1af400"
+        id: "8e192660aa2b44e6b0b0dc241c2a3999"
       }
     });
 
