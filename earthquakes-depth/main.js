@@ -208,6 +208,7 @@ require([
     return `${day} ${month} ${year}, at ${hours}:${prefix}${minutes}`;
   }
 
+  let zooming = false;
   earthquakeLayer
     .queryFeatures({
       where: "mag > 7",
@@ -230,7 +231,7 @@ require([
         const goToButton = document.createElement("button");
         goToButton.innerText = "Zoom to earthquake";
         goToButton.addEventListener("click", function() {
-          console.log(earthquake);
+          zooming = true;
           view.goTo({ target: earthquake, zoom: 4 }, { speedFactor: 0.5 });
           if (earthquakeLayerView) {
             if (highlightHandler) {
@@ -260,7 +261,7 @@ require([
 
 
   function rotate() {
-    if (!view.interacting) {
+    if (!view.interacting && !zooming) {
       const camera = view.camera.clone();
       camera.position.longitude -= 0.1;
       view.camera = camera;
