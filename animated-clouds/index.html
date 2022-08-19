@@ -1,0 +1,132 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Animated clouds with MediaLayer and PixiJS (3D)</title>
+
+  <script src="https://pixijs.download/release/pixi.js"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/dark/main.css" />
+  <script src="https://js.arcgis.com/4.24/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+<script>
+  require([
+    "esri/Map",
+    "esri/views/SceneView",
+    "esri/layers/MediaLayer",
+    "esri/layers/support/VideoElement",
+    "esri/layers/support/ExtentAndRotationGeoreference",
+    "esri/Basemap",
+    "esri/geometry/Extent",
+    "esri/Ground",
+    "esri/layers/TileLayer",
+    "esri/layers/ElevationLayer"
+  ], (
+    Map, SceneView, MediaLayer, VideoElement, ExtentAndRotationGeoreference, Basemap, Extent, Ground, TileLayer, ElevationLayer
+  ) => {
+    let app = new PIXI.Application({ width: 1920, height: 1080 });
+    app.renderer.backgroundAlpha = 0;
+
+    const container = new PIXI.Container();
+    app.stage.addChild(container);
+
+    const clouds = PIXI.Sprite.from('./clouds-nasa.png');
+    container.addChild(clouds);
+    clouds.x = 0;
+    clouds.y = 0;
+
+    const displacementSprite = PIXI.Sprite.from('./displacement_map_repeat.jpeg');
+    displacementSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+    const displacementFilter = new PIXI.filters.DisplacementFilter(displacementSprite);
+    displacementFilter.padding = 10;
+
+    displacementSprite.position = clouds.position;
+
+    app.stage.addChild(displacementSprite);
+
+    clouds.filters = [displacementFilter];
+
+    displacementFilter.scale.x = 50;
+    displacementFilter.scale.y = 100;
+
+    app.ticker.add(() => {
+      displacementSprite.x += 0.3;
+      if (displacementSprite.x > displacementSprite.width) { displacementSprite.x = 0; }
+    });
+
+    const stream = app.view.captureStream(30);
+    const video = document.createElement("video");
+    video.muted = true;
+    video.autoplay = true;
+    video.srcObject = stream;
+
+    const element = new VideoElement({
+      video,
+      georeference: new ExtentAndRotationGeoreference({
+        extent: new Extent({
+          spatialReference: {
+            wkid: 4326
+          },
+          xmin: -180,
+          xmax: 180,
+          ymin: -80,
+          ymax: 80
+        })
+      })
+    });
+
+    // add the video element to the media layer
+    const layer = new MediaLayer({
+      source: [element]
+    });
+
+    const map = new Map({
+      ground: new Ground({
+        layers: [new ElevationLayer({
+          url: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"
+        })],
+        surfaceColor: [144, 198, 222]
+      }),
+      basemap: new Basemap({
+        baseLayers: [
+          new TileLayer({
+            url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+            opacity: 0.8
+          }),
+        ]
+      }),
+      layers: [layer]
+    });
+
+    const view = new SceneView({
+      container: "viewDiv",
+      map: map,
+      center: [-80, 40],
+      constraints: {
+        snapToZoom: false,
+        altitude: {
+          min: 2000000
+        }
+      }
+    });
+
+  });
+</script>
+
+</html>
