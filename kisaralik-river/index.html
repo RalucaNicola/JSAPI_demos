@@ -1,0 +1,187 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>
+    Kisaralik river
+  </title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/dark/main.css" />
+
+  <script src="https://js.arcgis.com/4.24/"></script>
+
+  <script>
+    require([
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/layers/ElevationLayer",
+      "esri/layers/BaseElevationLayer",
+      "esri/layers/support/LabelClass",
+      "esri/layers/TileLayer"
+    ], (
+      WebScene,
+      SceneView,
+      ElevationLayer,
+      BaseElevationLayer,
+      LabelClass,
+      TileLayer
+    ) => {
+
+      const scene = new WebScene({
+        portalItem: {
+          id: "e0dfb64a9d704533ad04e8d7ed3b88d6"
+        }
+      });
+
+      const ExaggeratedElevationLayer = BaseElevationLayer.createSubclass({
+
+        properties: {
+          exaggeration: 4
+        },
+
+        load: function () {
+          this._elevation = new ElevationLayer({
+            url: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"
+          });
+
+          this.addResolvingPromise(
+            this._elevation.load().then(() => {
+              this.tileInfo = this._elevation.tileInfo;
+              this.spatialReference = this._elevation.spatialReference;
+              this.fullExtent = this._elevation.fullExtent;
+            })
+          );
+
+          return this;
+        },
+
+        fetchTile: function (level, row, col, options) {
+          return this._elevation.fetchTile(level, row, col, options).then(
+            function (data) {
+              const exaggeration = this.exaggeration;
+              for (let i = 0; i < data.values.length; i++) {
+                data.values[i] = data.values[i] * exaggeration;
+              }
+
+              return data;
+            }.bind(this)
+          );
+        }
+      });
+
+      const elevationLayer = new ExaggeratedElevationLayer();
+
+
+      const view = new SceneView({
+        container: "viewDiv",
+        map: scene,
+        qualityProfile: "high",
+        popup: {
+          dockEnabled: true,
+          dockOptions: {
+            position: "top-right",
+            breakpoint: false,
+            buttonEnabled: false
+          },
+          collapseEnabled: false
+        },
+        highlightOptions: {
+          color: [255, 255, 255],
+          haloOpacity: 0.5
+        }
+      });
+
+      view.ui.add("credits", "top-right");
+
+      scene.when(() => {
+        scene.ground.layers.add(elevationLayer);
+
+        const pointsLayer = scene.layers.filter(layer => layer.title === "Kisaralik_pois").getItemAt(0);
+        pointsLayer.renderer = {
+          type: "simple",
+          symbol: {
+            type: "point-3d",
+            symbolLayers: [{
+              type: "icon",
+              resource: { href: "./graphic.png" },
+              material: { color: [255, 255, 255, 1] },
+              size: 50,
+              anchor: "bottom"
+            }]
+          }
+        };
+        pointsLayer.labelsVisible = true;
+        pointsLayer.labelingInfo = [
+          new LabelClass({
+            labelExpressionInfo: { expression: `$feature.name + TextFormatting.NewLine` },
+            labelPlacement: "center-right",
+            symbol: {
+              type: "label-3d",
+              symbolLayers: [{
+                type: "text",
+                material: {
+                  color: [255, 255, 255, 1]
+                },
+                halo: {
+                  size: 1,
+                  color: [0, 0, 0, 0.2]
+                },
+                lineHeight: 3,
+                font: {
+                  family: `"Avenir Next", "Avenir", "Helvetica Neue", sans-serif`,
+                  size: 10
+                }
+              }]
+            }
+          })
+        ]
+      })
+    });
+  </script>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(36, 36, 36, 1);
+    }
+
+    #credits {
+      background: linear-gradient(180deg, rgba(36, 36, 36, 1), rgba(36, 36, 36, 0));
+      max-width: 300px;
+      padding: 20px;
+      color: rgb(255, 255, 255);
+      box-shadow: none;
+    }
+
+    #credits h1 {
+      font-size: 1.5rem;
+      margin-top: 0;
+    }
+
+    #credits a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="viewDiv">
+    <div id="credits">
+      <h1>Kisaralik river</h1>
+      <p>Map made by <a href="https://twitter.com/g_fiske">Greg Fiske</a> and <a
+          href="https://twitter.com/Cchurchili">Carl Churchill</a> using the <a
+          href="https://github.com/gzt5142/OrientationTools">Shader Toolbox for ArcGIS Pro</a>.</p>
+      <p>Interactivity and 3D visualization using <a href="https://developers.arcgis.com/javascript/latest/">ArcGIS API
+          for JavaScript</a>.</p>
+    </div>
+  </div>
+</body>
+
+</html>
