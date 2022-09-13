@@ -13,6 +13,7 @@
     html,
     body,
     #viewDiv {
+      background: black;
       height: 100%;
       width: 100%;
       margin: 0;
@@ -40,18 +41,22 @@
   ], (
     Map, SceneView, MediaLayer, VideoElement, ExtentAndRotationGeoreference, Basemap, Extent, Ground, TileLayer, ElevationLayer
   ) => {
-    let app = new PIXI.Application({ width: 1920, height: 1080 });
+    let app = new PIXI.Application({ width: 2048, height: 1024 });
     app.renderer.backgroundAlpha = 0;
 
     const container = new PIXI.Container();
     app.stage.addChild(container);
 
-    const clouds = PIXI.Sprite.from('./clouds-nasa.png');
+    const clouds = PIXI.Sprite.from('./clouds-nasa.png',
+      { alphaMode: PIXI.ALPHA_MODES.PREMULTIPLIED_ALPHA }
+    );
     container.addChild(clouds);
     clouds.x = 0;
     clouds.y = 0;
 
-    const displacementSprite = PIXI.Sprite.from('./displacement_map_repeat.jpeg');
+    const displacementSprite = PIXI.Sprite.from('./displacement_map_repeat.jpeg',
+      { alphaMode: PIXI.ALPHA_MODES.PREMULTIPLIED_ALPHA }
+    );
     displacementSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
     const displacementFilter = new PIXI.filters.DisplacementFilter(displacementSprite);
     displacementFilter.padding = 10;
@@ -76,6 +81,9 @@
     video.autoplay = true;
     video.srcObject = stream;
 
+    // document.body.appendChild(video);
+    // document.body.appendChild(app.view);
+
     const element = new VideoElement({
       video,
       georeference: new ExtentAndRotationGeoreference({
@@ -93,7 +101,7 @@
 
     // add the video element to the media layer
     const layer = new MediaLayer({
-      source: [element]
+      source: [element],
     });
 
     const map = new Map({
@@ -123,7 +131,8 @@
         altitude: {
           min: 2000000
         }
-      }
+      }, qualityProfile: "high",
+      viewingMode: "local"
     });
 
   });
