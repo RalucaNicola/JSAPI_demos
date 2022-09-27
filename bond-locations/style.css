@@ -1,0 +1,32 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: black;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #d1d1d1;
+}
+
+.capital {
+  --color: rgb(0, 255, 255);
+  --border-width: 8px;
+  padding: 0 80px 80px 40px;
+  font-family: "robotomedium";
+  font-weight: 400;
+  color: white;
+  border-left: solid var(--border-width) var(--color);
+}
+
+.capital__movie {
+  display: inline-block;
+  font-size: 100px;
+  white-space: nowrap;
+}
+
+.capital__year,
+.capital__description {
+  font-size: 60px;
+}

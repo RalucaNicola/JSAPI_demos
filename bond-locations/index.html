@@ -1,0 +1,308 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>
+    Capitals - smallest and largest
+  </title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/dark/main.css" />
+  <script src="./papaparse.min.js"></script>
+  <script src="./libs/html-to-image.js"></script>
+  <script src="https://js.arcgis.com/4.24/"></script>
+
+
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+  <div id="viewDiv">
+  </div>
+
+  <template id="template">
+    <div class="capital">
+      <div class="capital__movie" data-id="movie"></div>
+      <div class="capital__year" data-id="year"></div>
+      <div class="capital__description" data-id="description"></div>
+    </div>
+  </template>
+</body>
+<script src="./fonts.js">
+
+
+</script>
+<script>
+  require([
+    "esri/WebScene",
+    "esri/views/SceneView",
+    "esri/layers/GraphicsLayer",
+    "esri/layers/GeoJSONLayer",
+    "esri/Graphic",
+    "esri/core/scheduling",
+    "esri/Color",
+    "esri/widgets/TimeSlider",
+    "esri/rest/support/Query",
+    "esri/rest/query",
+    "esri/widgets/LayerList",
+    "esri/widgets/Daylight",
+    "esri/geometry/Point",
+    "esri/geometry/Extent",
+    "esri/geometry/Mesh",
+    "esri/geometry/support/MeshMaterialMetallicRoughness",
+    "esri/layers/MediaLayer",
+    "esri/layers/support/VideoElement",
+    "esri/layers/support/ExtentAndRotationGeoreference",
+    "esri/layers/support/LocalMediaElementSource"
+  ], (WebScene, SceneView, GraphicsLayer, GeoJSONLayer, Graphic, scheduling, Color, TimeSlider, Query, query, LayerList, Daylight, Point, Extent, Mesh, MeshMaterialMetallicRoughness, MediaLayer,
+    VideoElement,
+    ExtentAndRotationGeoreference, LocalMediaElementSource) => {
+    const graphics = [];
+    const graphicsLayer = new GraphicsLayer({
+      elevationInfo: {
+        mode: "relative-to-scene"
+      }
+    });
+    let layer = null;
+    const spatialReference = {
+      wkid: 4326
+    };
+    let domContainer = null;
+    const color = new Color({ r: 0, g: 255, b: 255 });
+    let annotationWidth = 1000;
+    let annotationHeight = 500;
+
+    Papa.parse("./locations.csv", {
+      header: true, delimiter: ";",
+      download: true, complete: function (results) {
+        for (let i = 0; i < results.data.length; i++) {
+          const data = results.data[i];
+          const geometry = getGeometry(new Point({
+            latitude: Math.round(data.latitude * 100) / 100,
+            longitude: Math.round(data.longitude * 100) / 100,
+            z: 0,
+            spatialReference
+          }), 500000, color);
+
+          graphicsLayer.add(new Graphic({
+            geometry,
+            attributes: {
+              location: data.location,
+              description: data.description,
+              year: data.year,
+              movie: data.movie
+            },
+            symbol: {
+              type: "mesh-3d",
+              symbolLayers: [
+                {
+                  type: "fill",
+                  material: { color: [255, 255, 255, 1] }
+                }
+              ]
+            }
+          }));
+
+        }
+        createMap();
+      }
+    });
+
+    const formatNumber = (number) => {
+      return new Intl.NumberFormat('en-US').format(number);
+    };
+
+    function createMap() {
+      const view = new SceneView({
+        container: "viewDiv",
+        map: new WebScene({
+          portalItem: {
+            id: "92df2dfd636c43c4a3bfa0f3fc20e811"
+          }
+        }),
+        qualityProfile: "high",
+      });
+      view.environment.lighting.directShadowsEnabled = false;
+      view.environment.lighting.waterReflectionEnabled = false;
+      view.map.addMany([graphicsLayer]);
+
+      view.on('click', (event) => {
+        view.hitTest(event, { include: graphicsLayer }).then(hitTestResult => {
+          const results = hitTestResult.results;
+          if (results && results.length > 0) {
+            const graphic = results[0].graphic;
+            view.goTo({ target: graphic, tilt: 30, heading: 0 })
+              .then(() => {
+                const extent = graphic.geometry.extent
+                const position = new Point({
+                  x: (extent.xmax + extent.xmin) / 2,
+                  y: (extent.ymax + extent.ymin) / 2,
+                  spatialReference
+                });
+                if (layer) {
+                  view.map.remove(layer);
+                }
+                console.log(graphic.attributes);
+                layer = getAnnotationLayer(position, graphic.attributes);
+                view.map.add(layer);
+              });
+          }
+        }).catch(console.error);
+      })
+    }
+
+    const getGeometry = (geometry, size, color) => {
+      const cubeGeometry = Mesh.createBox(geometry, { size: { height: size, width: 25000, depth: 25000 } });
+      cubeGeometry.components[0].material = new MeshMaterialMetallicRoughness({
+        color,
+        emissiveColor: [color.r, color.g, color.b]
+      });
+      const coordinateColors = [];
+      const topColor = [0, 0, 0, 255];
+      const baseColor = [0, 0, 0, 0];
+      for (let i = 0; i < 24; i += 4) {
+        if (i < 16) {
+          coordinateColors.push(baseColor, baseColor, topColor, topColor);
+        }
+        if (i === 20) {
+          coordinateColors.push(baseColor, baseColor, baseColor, baseColor);
+        }
+        if (i === 16) {
+          coordinateColors.push(topColor, topColor, topColor, topColor);
+        }
+      }
+      const colorVertices = Uint8Array.from(coordinateColors.flat())
+      cubeGeometry.vertexAttributes.color = colorVertices;
+      return cubeGeometry;
+    }
+
+    const getSizeFromValue = (value) => {
+      const stops = [{ value: 0, size: 150 },
+      { value: 600, size: 400 }];
+      for (let i = 0; i < stops.length; i++) {
+        const stop = stops[i];
+        if (value < stop.value) {
+          if (i === 0) {
+            return stop.size;
+          }
+          const prev = stops[i - 1];
+          const weight = (value - prev.value) / (stop.value - prev.value);
+          return Math.abs((stop.size - prev.size) * weight);
+        }
+      }
+      return stops[stops.length - 1].size;
+    }
+
+    function makeRender(ctx, element) {
+      return async function () {
+        const width = annotationWidth;
+        const height = annotationHeight;
+        const newFrame = await htmlToImage.toCanvas(element, {
+          pixelRatio: 1,
+          fontEmbedCSS,
+          skipFonts: true,
+          skipAutoScale: true,
+          canvasWidth: width,
+          canvasHeight: height
+        });
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(newFrame, 0, 0);
+      }
+
+    }
+
+    function createCanvasFromHTMLElement(element) {
+      const canvas = document.createElement("canvas");
+      canvas.width = annotationWidth;
+      canvas.height = annotationHeight;
+      const ctx = canvas.getContext("2d");
+      const render = makeRender(ctx, element);
+      render();
+      return { canvas, render };
+    }
+
+    function createVideoFromHTMLElement(element) {
+      const { canvas, render } = createCanvasFromHTMLElement(element);
+
+      const stream = canvas.captureStream(60);
+      const video = document.createElement("video");
+      video.muted = true;
+      video.autoplay = true;
+      video.srcObject = stream;
+
+      return { video, render };
+    }
+
+    function calculateWidthAndHeight(template, data) {
+      const element = template.content.firstElementChild.cloneNode(true);
+      element.querySelector(`[data-id="movie"]`).textContent = data.movie;
+      element.querySelector(`[data-id="year"]`).textContent = data.year;
+      element.querySelector(`[data-id="description"]`).textContent = data.description;
+      if (!domContainer) {
+        domContainer = document.body.appendChild(document.createElement("div"));
+        Object.assign(domContainer.style, {
+          position: "absolute",
+          boxSizing: "border-box",
+          top: "0",
+          left: "0",
+          height: "0",
+          opacity: "0",
+          overflow: "hidden",
+          pointerEvents: "none",
+        });
+      }
+      domContainer.appendChild(element);
+      annotationHeight = element.offsetHeight;
+      annotationWidth = element.offsetWidth;
+    }
+
+    function getAnnotationLayer(position, data) {
+      const template = document.getElementById("template");
+      calculateWidthAndHeight(template, data);
+      const dom = template.content.firstElementChild.cloneNode(true);
+      let typedData = "";
+      let i = 0;
+      const update = () => {
+        dom.querySelector(`[data-id="movie"]`).textContent = data.movie;
+        dom.querySelector(`[data-id="year"]`).textContent = data.year;
+        dom.querySelector(`[data-id="description"]`).textContent = typedData;
+      };
+
+      const { video, render } = createVideoFromHTMLElement(dom);
+
+      const animate = () => {
+        if (i < data.description.length) {
+          typedData += data.description[i];
+          i++;
+          update();
+          render();
+
+          setTimeout(animate, 50);
+        }
+      };
+
+      setTimeout(animate, 50);
+
+      const scale = 0.06;
+
+      const extent = new Extent({
+        xmin: position.x,
+        ymin: position.y - dom.offsetHeight * scale,
+        xmax: position.x + dom.offsetWidth * scale,
+        ymax: position.y,
+        spatialReference
+      });
+
+      const georeference = new ExtentAndRotationGeoreference({ extent });
+      const element = new VideoElement({ video, georeference });
+      const source = new LocalMediaElementSource({ elements: [element] });
+
+      return new MediaLayer({ source });;
+    }
+
+  });
+</script>
+
+</html>
