@@ -111,9 +111,10 @@
           result="edges_inverted" />
 
         <feComponentTransfer in="edges_inverted" result="edges_cleaned">
-          <feFuncR type="table" tableValues="0 0 1 1 1 1 1 1 1 1" />
-          <feFuncG type="table" tableValues="0 0 1 1 1 1 1 1 1 1" />
-          <feFuncB type="table" tableValues="0 0 1 1 1 1 1 1 1 1" />
+          <feFuncR type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
+          <feFuncG type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
+          <feFuncB type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
+          <feFuncA type="table" tableValues="0 0 0 0 0 0.5 0.5 0.5 0.5 0.8" />
         </feComponentTransfer>
 
       </filter>
