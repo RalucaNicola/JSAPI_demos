@@ -9,6 +9,13 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/dark/main.css" />
   <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/1.0.0-beta.94/calcite.css" />
   <style>
+    .calcite-theme-dark,
+    :root {
+      --calcite-ui-brand: #ffffff;
+      --calcite-ui-brand-hover: #959595;
+      --calcite-ui-text-3: rgb(255, 255, 255);
+    }
+
     html,
     body,
     #viewDiv {
@@ -45,14 +52,22 @@
       left: 0;
       bottom: 20px;
       background-color: rgba(0, 0, 0, 0.9);
-      padding: 10px 5px 0 5px;
+      padding: 10px 5px 5px 5px;
+      color: var(--calcite-ui-text-3);
     }
 
-    .calcite-theme-dark,
-    :root {
-      --calcite-ui-brand: #ffffff;
-      --calcite-ui-brand-hover: #959595;
-      --calcite-ui-text-3: rgb(255, 255, 255);
+    p {
+      padding: 0;
+      margin: 0;
+      font-size: var(--calcite-font-size--1);
+    }
+
+    a {
+      color: var(--calcite-ui-text-3);
+    }
+
+    a:hover {
+      color: var(--calcite-ui-brand-hover);
     }
   </style>
   <script type="module" src="https://js.arcgis.com/calcite-components/1.0.0-beta.94/calcite.esm.js"></script>
@@ -72,53 +87,56 @@
     <calcite-label layout="inline">Apply sketch filter
       <calcite-switch checked id="sketchSwitch"></calcite-switch>
     </calcite-label>
-    <svg>
-      <filter id="cel-shade" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"
-        primitiveUnits="userSpaceOnUse" x="0%" y="0%" width="100%" height="100%">
+    <p>SVG filters applied to canvas technique from <a
+        href="https://twitter.com/steveattewell/status/1574719517267197955">Steve Attewell</a>.</p>
+  </div>
+  <svg>
+    <filter id="cel-shade" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"
+      primitiveUnits="userSpaceOnUse" x="0%" y="0%" width="100%" height="100%">
 
-        <feColorMatrix type="matrix" values="0.33 0.59 0.11 0 0 0.33 0.59 0.11 0 0 0.33 0.59 0.11 0 0 0 0 0 1 0"
-          in="SourceGraphic" result="grayscale" />
+      <feColorMatrix type="matrix" values="0.33 0.59 0.11 0 0 0.33 0.59 0.11 0 0 0.33 0.59 0.11 0 0 0 0 0 1 0"
+        in="SourceGraphic" result="grayscale" />
 
-        <feConvolveMatrix order="5 5" bias="1" divisor="10" kernelUnitLength="1"
-          kernelMatrix="-5 -8 -10 -8 -5 -4 -10 -20 -10 -4 0 0 0 0 0 4 10 20 10 4 5 8 10 8 5" edgeMode="duplicate"
-          in="grayscale" result="sobel_90" />
-        <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="sobel_90"
-          result="sobel_90_inverted" />
+      <feConvolveMatrix order="5 5" bias="1" divisor="10" kernelUnitLength="1"
+        kernelMatrix="-5 -8 -10 -8 -5 -4 -10 -20 -10 -4 0 0 0 0 0 4 10 20 10 4 5 8 10 8 5" edgeMode="duplicate"
+        in="grayscale" result="sobel_90" />
+      <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="sobel_90"
+        result="sobel_90_inverted" />
 
-        <feConvolveMatrix order="5 5" bias="1" divisor="10" kernelUnitLength="1"
-          kernelMatrix="5 8 10 8 5 4 10 20 10 4 0 0 0 0 0 -4 -10 -20 -10 -4 -5 -8 -10 -8 -5" edgeMode="duplicate"
-          in="grayscale" resullt="sobel_270" />
-        <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="sobel_270"
-          result="sobel_270_inverted" />
+      <feConvolveMatrix order="5 5" bias="1" divisor="10" kernelUnitLength="1"
+        kernelMatrix="5 8 10 8 5 4 10 20 10 4 0 0 0 0 0 -4 -10 -20 -10 -4 -5 -8 -10 -8 -5" edgeMode="duplicate"
+        in="grayscale" resullt="sobel_270" />
+      <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="sobel_270"
+        result="sobel_270_inverted" />
 
-        <feConvolveMatrix order="5 5" bias="1" divisor="10" kernelUnitLength="1"
-          kernelMatrix="5 4 0 -4 -5 8 10 0 -10 -8 10 20 0 -20 -10 8 10 0 -10 -8 5 4 0 -4 -5" edgeMode="duplicate"
-          in="grayscale" resullt="sobel_0" />
-        <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="sobel_0"
-          result="sobel_0_inverted" />
+      <feConvolveMatrix order="5 5" bias="1" divisor="10" kernelUnitLength="1"
+        kernelMatrix="5 4 0 -4 -5 8 10 0 -10 -8 10 20 0 -20 -10 8 10 0 -10 -8 5 4 0 -4 -5" edgeMode="duplicate"
+        in="grayscale" resullt="sobel_0" />
+      <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="sobel_0"
+        result="sobel_0_inverted" />
 
-        <feConvolveMatrix order="5 5" bias="1" divisor="10" kernelUnitLength="1"
-          kernelMatrix="-5 -4 0 4 5 -8 -10 0 10 8 -10 -20 0 20 10 -8 -10 0 10 8 -5 -4 0 4 5" edgeMode="duplicate"
-          in="grayscale" resullt="sobel_180" />
-        <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="sobel_180"
-          result="sobel_180_inverted" />
+      <feConvolveMatrix order="5 5" bias="1" divisor="10" kernelUnitLength="1"
+        kernelMatrix="-5 -4 0 4 5 -8 -10 0 10 8 -10 -20 0 20 10 -8 -10 0 10 8 -5 -4 0 4 5" edgeMode="duplicate"
+        in="grayscale" resullt="sobel_180" />
+      <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="sobel_180"
+        result="sobel_180_inverted" />
 
-        <feBlend in="sobel_90_inverted" in2="sobel_270_inverted" mode="lighten" result="edges_h" />
-        <feBlend in="sobel_0_inverted" in2="sobel_180_inverted" mode="lighten" result="edges_v" />
-        <feBlend in="edges_h" in2="edges_v" mode="lighten" result="edges" />
+      <feBlend in="sobel_90_inverted" in2="sobel_270_inverted" mode="lighten" result="edges_h" />
+      <feBlend in="sobel_0_inverted" in2="sobel_180_inverted" mode="lighten" result="edges_v" />
+      <feBlend in="edges_h" in2="edges_v" mode="lighten" result="edges" />
 
-        <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="edges"
-          result="edges_inverted" />
+      <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" in="edges"
+        result="edges_inverted" />
 
-        <feComponentTransfer in="edges_inverted" result="edges_cleaned">
-          <feFuncR type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
-          <feFuncG type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
-          <feFuncB type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
-          <feFuncA type="table" tableValues="0 0 0 0 0 0.5 0.5 0.5 0.5 0.8" />
-        </feComponentTransfer>
+      <feComponentTransfer in="edges_inverted" result="edges_cleaned">
+        <feFuncR type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
+        <feFuncG type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
+        <feFuncB type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
+        <feFuncA type="table" tableValues="0 0 0 0 0 0.5 0.5 0.5 0.5 0.8" />
+      </feComponentTransfer>
 
-      </filter>
-    </svg>
+    </filter>
+  </svg>
 </body>
 <script src="main.js"></script>
 
