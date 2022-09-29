@@ -8,12 +8,12 @@
   <script src="https://pixijs.download/release/pixi.js"></script>
   <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/dark/main.css" />
   <script src="https://js.arcgis.com/4.24/"></script>
+  <script type="text/javascript" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/896175/perlin.js"></script>
 
   <style>
     html,
     body,
     #viewDiv {
-      background: black;
       height: 100%;
       width: 100%;
       margin: 0;
@@ -26,6 +26,51 @@
 <body>
   <div id="viewDiv"></div>
 </body>
+<script type="shader" id="advection-shader">
+  varying vec2 vTextureCoord;
+
+  uniform sampler2D uSampler;
+  uniform sampler2D uvSampler;
+  uniform sampler2D velocitySampler;
+  uniform float scale;
+  uniform int reset;
+
+  // https://www.shadertoy.com/view/3ssXWB
+  float modulo( float a, float b ){
+    return (a)-(floor((a)/(b))*(b));
+  }
+
+  void main(void){
+    // advect density
+    //vec2 velocity =  texture2D(velocitySampler, vTextureCoord).xy*scale;
+    //vec2 p0 = vec2(modulo(vTextureCoord.x - velocity.x, 1.0), modulo(vTextureCoord.y - velocity.y, 1.0));
+    //gl_FragColor = texture2D(uSampler, p0);
+
+    // advect uv
+    vec2 velocity = texture2D(velocitySampler, vTextureCoord).xy*scale;
+    vec2 currentUV = reset != 0 ? vec2(vTextureCoord.x, vTextureCoord.y) : texture2D(uvSampler, vTextureCoord).xy;
+    //vec2 currentUV = vec2(vTextureCoord.x, vTextureCoord.y);
+    vec2 nextUV = vec2(modulo(currentUV.x - velocity.x, 1.0), modulo(currentUV.y - velocity.y, 1.0));
+    //gl_FragColor = vec4(currentUV.x, currentUV.y, 0.0, 1.0);
+    gl_FragColor = vec4(nextUV.x, nextUV.y, 0.0, 1.0);
+    //gl_FragColor = vec4(vTextureCoord.x, vTextureCoord.y, 0.0, 1.0);
+  }
+</script>
+<script type="shader" id="sample-shader">
+  varying vec2 vTextureCoord;
+
+  uniform sampler2D uvSampler;
+  uniform sampler2D cloudSampler;
+
+  uniform float alpha;
+
+  void main(void){
+    vec2 uv = texture2D(uvSampler, vTextureCoord).xy;
+    vec4 col = texture2D(cloudSampler, uv);
+    col.a *= alpha;
+    gl_FragColor = col;
+  }
+</script>
 <script>
   require([
     "esri/Map",
@@ -37,103 +82,280 @@
     "esri/geometry/Extent",
     "esri/Ground",
     "esri/layers/TileLayer",
-    "esri/layers/ElevationLayer"
+    "esri/layers/ElevationLayer",
+    "esri/views/3d/externalRenderers",
+    "esri/request"
   ], (
-    Map, SceneView, MediaLayer, VideoElement, ExtentAndRotationGeoreference, Basemap, Extent, Ground, TileLayer, ElevationLayer
+    Map, SceneView, MediaLayer, VideoElement, ExtentAndRotationGeoreference, Basemap, Extent, Ground, TileLayer, ElevationLayer, externalRenderers, esriRequest
   ) => {
-    let app = new PIXI.Application({ width: 2048, height: 1024 });
-    app.renderer.backgroundAlpha = 0;
+    externalRenderers.forceWebGLContext(1);
 
-    const container = new PIXI.Container();
-    app.stage.addChild(container);
+    PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.LINEAR;
+    const ALPHA_POWER = 0.25;
+    const width = 2048;
+    const height = 1024;
+    noise.seed(Math.random());
 
-    const clouds = PIXI.Sprite.from('./clouds-nasa.png',
-      { alphaMode: PIXI.ALPHA_MODES.PREMULTIPLIED_ALPHA }
-    );
-    container.addChild(clouds);
-    clouds.x = 0;
-    clouds.y = 0;
-
-    const displacementSprite = PIXI.Sprite.from('./displacement_map_repeat.jpeg',
-      { alphaMode: PIXI.ALPHA_MODES.PREMULTIPLIED_ALPHA }
-    );
-    displacementSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-    const displacementFilter = new PIXI.filters.DisplacementFilter(displacementSprite);
-    displacementFilter.padding = 10;
-
-    displacementSprite.position = clouds.position;
-
-    app.stage.addChild(displacementSprite);
-
-    clouds.filters = [displacementFilter];
-
-    displacementFilter.scale.x = 50;
-    displacementFilter.scale.y = 100;
-
-    app.ticker.add(() => {
-      displacementSprite.x += 0.3;
-      if (displacementSprite.x > displacementSprite.width) { displacementSprite.x = 0; }
-    });
-
-    const stream = app.view.captureStream(30);
-    const video = document.createElement("video");
-    video.muted = true;
-    video.autoplay = true;
-    video.srcObject = stream;
-
-    // document.body.appendChild(video);
-    // document.body.appendChild(app.view);
-
-    const element = new VideoElement({
-      video,
-      georeference: new ExtentAndRotationGeoreference({
-        extent: new Extent({
-          spatialReference: {
-            wkid: 4326
-          },
-          xmin: -180,
-          xmax: 180,
-          ymin: -80,
-          ymax: 80
-        })
-      })
-    });
-
-    // add the video element to the media layer
-    const layer = new MediaLayer({
-      source: [element],
-    });
-
-    const map = new Map({
-      ground: new Ground({
-        layers: [new ElevationLayer({
-          url: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"
-        })],
-        surfaceColor: [144, 198, 222]
-      }),
-      basemap: new Basemap({
-        baseLayers: [
-          new TileLayer({
-            url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
-            opacity: 0.8
-          }),
-        ]
-      }),
-      layers: [layer]
-    });
-
-    const view = new SceneView({
-      container: "viewDiv",
-      map: map,
-      center: [-80, 40],
-      constraints: {
-        snapToZoom: false,
-        altitude: {
-          min: 2000000
+    function createRenderTexture() {
+      return PIXI.RenderTexture.create(
+        {
+          width: width,
+          height: height,
+          scaleMode: PIXI.SCALE_MODES.LINEAR,
+          multisample: PIXI.MSAA_QUALITY.NONE,
+          type: PIXI.TYPES.FLOAT
         }
-      }, qualityProfile: "high",
-      viewingMode: "local"
-    });
+      )
+    }
+
+    function createSpriteFromTexture(texture) {
+      const sprite = PIXI.Sprite.from(texture, { alphaMode: PIXI.ALPHA_MODES.PMA });
+      // align the sprite
+      sprite.x = 0;
+      sprite.y = 0;
+      return sprite;
+    }
+
+    // create velocity vector field texture
+    function curlNoise(x, y) {
+      var eps = 0.0001;
+
+      //Find rate of change in X direction
+      var n1 = noise.simplex2(x + eps, y);
+      var n2 = noise.simplex2(x - eps, y);
+      //Average to find approximate derivative
+      var a = (n1 - n2) / (2 * eps);
+
+      //Find rate of change in Y direction
+      var n1 = noise.simplex2(x, y + eps);
+      var n2 = noise.simplex2(x, y - eps);
+      //Average to find approximate derivative
+      var b = (n1 - n2) / (2 * eps);
+
+      //Curl
+      return [b, -a];
+    }
+
+    async function loadClouds() {
+      // Load cloud image into a canvas.
+      const { data } = await esriRequest('./clouds-nasa.png', { responseType: 'image' });
+      const { width, height } = data;
+      const cloudsCanvas = document.createElement('canvas');
+      cloudsCanvas.width = width;
+      cloudsCanvas.height = height;
+      const cloudsContext = cloudsCanvas.getContext('2d');
+      cloudsContext.drawImage(data, 0, 0);
+
+      // Iterate on each pixel and raise the opacity to the ALPHA_POWER.
+      const imageData = cloudsContext.getImageData(0, 0, width, height);
+      for (let i = 0; i < imageData.width * imageData.height; i++) {
+        const a = imageData.data[i * 4 + 3] / 255;
+        imageData.data[i * 4 + 3] = Math.floor(Math.pow(a, ALPHA_POWER) * 255);
+      }
+      cloudsContext.putImageData(imageData, 0, 0);
+
+      return cloudsCanvas;
+    }
+
+    async function main() {
+
+      let app = new PIXI.Application({ width, height });
+      app.renderer.backgroundAlpha = 0;
+      // create two render textures. These dynamic textures will be used to draw the scene into itself
+      let renderTexture_current = createRenderTexture();
+      let renderTexture_next = createRenderTexture();
+      let renderTexture1_current = createRenderTexture();
+      let renderTexture1_next = createRenderTexture();
+
+      const cloudsCanvas = await loadClouds();
+      const cloudTexture = PIXI.Texture.from(cloudsCanvas, { alphaMode: PIXI.ALPHA_MODES.PMA });
+
+      // the two textures
+      const outputSprite = createSpriteFromTexture(renderTexture_current);
+      app.stage.addChild(outputSprite);
+      const outputSprite1 = createSpriteFromTexture(renderTexture_current);
+      app.stage.addChild(outputSprite1);
+
+      // velocity texture
+      const velocityTextureContent = new Float32Array(width * height * 4);
+      for (let i = 0; i < width; ++i) {
+        for (let j = 0; j < height; ++j) {
+          const index = (j * width + i) * 4;
+          const u = i / (width - 1);
+          const v = j / (height - 1);
+          const step = 0.001;
+          const cn = curlNoise(i * step, j * step);
+          velocityTextureContent[index + 0] = cn[0];
+          velocityTextureContent[index + 1] = cn[1];
+          velocityTextureContent[index + 2] = 0;
+          velocityTextureContent[index + 3] = 1.0;
+        }
+      }
+      const velocityTexture = PIXI.Texture.fromBuffer(velocityTextureContent, width, height);
+
+      // advection sprite and advection filter ---
+      const advectionStep = new PIXI.Container();
+      const advectionSprite = new PIXI.Sprite(renderTexture_current);
+      advectionStep.addChild(advectionSprite);
+      advectionSprite.x = 0;
+      advectionSprite.y = 0;
+
+      const advectionFilterFragmentSrc = document.getElementById('advection-shader').innerHTML;
+      const advectionFilter = new PIXI.Filter(undefined, advectionFilterFragmentSrc, {
+        uvSampler: renderTexture_current,
+        velocitySampler: velocityTexture,
+        scale: 0.00005,
+        reset: 0
+      });
+      advectionSprite.filters = [advectionFilter];
+
+      // uv sample filter for outputSprinte ---
+      const sampleFilterFragmentSrc = document.getElementById('sample-shader').innerHTML;
+      const sampleFilter = new PIXI.Filter(undefined, sampleFilterFragmentSrc, {
+        uvSampler: renderTexture_current,
+        cloudSampler: cloudTexture,
+        alpha: 1
+      });
+      outputSprite.filters = [sampleFilter];
+
+      const sampleFilter1 = new PIXI.Filter(undefined, sampleFilterFragmentSrc, {
+        uvSampler: renderTexture1_current,
+        cloudSampler: cloudTexture,
+        alpha: 1
+      });
+      outputSprite1.filters = [sampleFilter1];
+
+      const cycleDuration = 12; // in s
+
+      let start = new Date().getTime();
+      let currentCycle0 = -1;
+      let currentCycle1 = -1;
+
+      let reset0 = false;
+      let reset1 = false;
+
+      app.ticker.add(() => {
+
+        const currentTime = new Date().getTime();
+        const elapsed = (currentTime - start) / 1000;
+
+        // layer 0 -----------
+        const elapsedCycle0 = elapsed / cycleDuration;
+        let cycle0 = Math.floor(elapsedCycle0);
+        let t0 = elapsedCycle0 - cycle0;
+
+        if (cycle0 != currentCycle0) {
+          currentCycle0 = cycle0;
+          reset0 = true;
+        }
+
+        advectionFilter.uniforms.uvSampler = renderTexture_current;
+        advectionFilter.uniforms.reset = reset0 ? 1 : 0;
+        advectionSprite.texture = renderTexture_current;
+        app.renderer.render(advectionStep, { renderTexture: renderTexture_next, clear: true });
+        reset0 = false;
+
+        // layer 1 -----------
+        const elapsedCycle1 = elapsedCycle0 + 0.5; // second cycle is half a cycle ahead
+        let cycle1 = Math.floor(elapsedCycle1);
+        let t1 = elapsedCycle1 - cycle1;
+
+        if (cycle1 != currentCycle1) {
+          currentCycle1 = cycle1;
+          reset1 = true;
+        }
+
+        advectionFilter.uniforms.uvSampler = renderTexture1_current;
+        advectionFilter.uniforms.reset = reset1 ? 1 : 0;
+        advectionSprite.texture = renderTexture1_current;
+        app.renderer.render(advectionStep, { renderTexture: renderTexture1_next, clear: true });
+        reset1 = false;
+
+
+        // swap the buffers ...
+        const temp = renderTexture_next;
+        renderTexture_next = renderTexture_current;
+        renderTexture_current = temp;
+
+        const temp1 = renderTexture1_next;
+        renderTexture1_next = renderTexture1_current;
+        renderTexture1_current = temp1;
+
+        sampleFilter.uniforms.uvSampler = renderTexture_current;
+        sampleFilter.uniforms.alpha = 1.0 - Math.abs((t0 - 0.5) * 2.0);
+
+        sampleFilter1.uniforms.uvSampler = renderTexture1_current;
+        sampleFilter1.uniforms.alpha = Math.abs((t0 - 0.5) * 2.0);
+      });
+
+      const stream = app.view.captureStream(30);
+      const video = document.createElement("video");
+      video.muted = true;
+      video.autoplay = true;
+      video.srcObject = stream;
+
+      const element = new VideoElement({
+        video,
+        georeference: new ExtentAndRotationGeoreference({
+          extent: new Extent({
+            spatialReference: {
+              wkid: 4326
+            },
+            xmin: -180,
+            xmax: 180,
+            ymin: -80,
+            ymax: 80
+          })
+        })
+      });
+
+      // add the video element to the media layer
+      const layer = new MediaLayer({
+        source: [element]
+      });
+
+      const map = new Map({
+        ground: new Ground({
+          layers: [new ElevationLayer({
+            url: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"
+          })],
+          surfaceColor: [144, 198, 222]
+        }),
+        basemap: new Basemap({
+          baseLayers: [
+            new TileLayer({
+              url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+              opacity: 0.8
+            }),
+          ]
+        }),
+        layers: [layer]
+      });
+
+      const view = new SceneView({
+        container: "viewDiv",
+        map: map,
+        center: [-80, 40],
+        constraints: {
+          snapToZoom: false,
+          altitude: {
+            min: 2000000
+          }
+        }
+      });
+
+      const resetButton = document.createElement("input");
+      resetButton.type = "button";
+      resetButton.addEventListener("click", () => {
+        reset = true;
+      })
+      view.ui.add(resetButton, "top-right");
+
+    }
+
+    main();
+
+
 
   });
 </script>
