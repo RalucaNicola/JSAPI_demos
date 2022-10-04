@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>3D labels</title>
+  <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/1.0.0-beta.94/calcite.css" />
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css" />
+  <script>
+    var locationPath = location.origin + location.pathname.replace(/\/[^\/]+$/, "");
+    window.dojoConfig = {
+      packages: [
+        {
+          name: "lib",
+          location: locationPath + "/lib",
+        },
+      ],
+    };
+  </script>
+  <script type="module" src="https://js.arcgis.com/calcite-components/1.0.0-beta.94/calcite.esm.js"></script>
+  <script src="https://js.arcgis.com/4.24/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #viewDiv canvas {
+      filter: saturate(2);
+    }
+
+    #menu {
+      position: absolute;
+      bottom: 20px;
+      right: 0;
+      left: 0;
+    }
+  </style>
+
+  <script>
+    require([
+      "esri/WebScene",
+      "esri/views/SceneView",
+      "esri/Graphic",
+      "esri/geometry/Point",
+      "esri/geometry/Extent",
+      "esri/geometry/Mesh",
+      "lib/font",
+      "lib/fontmesh",
+      "esri/layers/support/ExtentAndRotationGeoreference",
+      "esri/layers/GraphicsLayer",
+      "esri/layers/MediaLayer",
+      "esri/layers/support/ImageElement",
+      "esri/geometry/support/MeshMaterial",
+      "esri/widgets/Daylight"
+    ], function (WebScene, SceneView, Graphic, Point, Extent, Mesh, font, fontmesh, ExtentAndRotationGeoreference, GraphicsLayer, MediaLayer, ImageElement, MeshMaterial, Daylight) {
+
+      const position = [-46.8877, -72.0890];
+      const origin = new Point({
+        latitude: position[0],
+        longitude: position[1],
+        z: 3000,
+        spatialReference: { wkid: 4326 }
+      });
+
+      const map = new WebScene({
+        portalItem: {
+          id: "5b013031e2784002855f7508585a0eb6",
+        },
+      });
+
+      const view = new SceneView({
+        container: "viewDiv",
+        map: map,
+        qualityProfile: "high"
+      });
+
+      /***************************
+       * Billboarded labels - uses a
+       * graphic with an icon symbol
+       **************************/
+
+      const billboardedLayer = new GraphicsLayer({
+        visible: true,
+        minScale: 1000000,
+        elevationInfo: { mode: "relative-to-ground" }
+      });
+      billboardedLayer.add(new Graphic({
+        geometry: new Point({
+          latitude: position[0],
+          longitude: position[1],
+          z: 0,
+          spatialReference: { wkid: 4326 }
+        }),
+        symbol: {
+          type: "point-3d",
+          symbolLayers: [{
+            type: "icon",
+            resource: { href: "./assets/label-billboard.png" },
+            size: 130,
+            anchor: "bottom"
+          }],
+          verticalOffset: {
+            screenLength: 20,
+            minWorldLength: 20
+          },
+          callout: {
+            type: "line",
+            size: 1,
+            color: [0, 0, 0, 0.7],
+            border: {
+              color: [0, 0, 0, 0]
+            }
+          }
+        }
+      }));
+
+      /***************************
+       * Floating labels - create a
+       * 3D plane and add a
+       * texture with the text
+       **************************/
+
+      const floatingLayer = new GraphicsLayer({ visible: false });
+      const mesh = Mesh.createPlane(origin, { size: { width: 40000, height: 10000 }, material: new MeshMaterial({ colorTexture: "./assets/label-floating.png", alphaCutoff: 0.1 }) });
+      mesh.rotate(0, 0, 90, { origin });
+      floatingLayer.add(new Graphic({
+        geometry: mesh,
+        symbol: {
+          type: "mesh-3d",
+          symbolLayers: [
+            {
+              type: "fill",
+              material: { color: [255, 255, 255, 1] }
+            }
+          ]
+        }
+      }));
+
+      /***************************
+       * Draped labels - the image
+       * is added as a MediaLayer
+       **************************/
+
+      const drapedLayer = new MediaLayer({
+        source: [new ImageElement({
+          image: "./assets/label-draped.png",
+
+          georeference: new ExtentAndRotationGeoreference({
+            extent: new Extent({
+              spatialReference: {
+                wkid: 4326
+              },
+              xmin: position[1] - 0.1,
+              ymin: position[0] - 0.05,
+              xmax: position[1] + 0.1,
+              ymax: position[0] + 0.05
+            }),
+            rotation: 270
+          })
+        })], visible: false, opacity: 0.8
+      });
+
+      /***************************
+       * 3D labels - actual 3D geometry
+       * created with a third party library
+       **************************/
+
+      const horizontalExtrudedLayer = new GraphicsLayer({ visible: false });
+
+      const verticalExtrudedLayer = new GraphicsLayer({ visible: false });
+
+      function makeGraphic(text, coordinates, size = 500, extrusion = 10, xRotation, font) {
+
+        const origin = new Point({
+          latitude: coordinates[0],
+          longitude: coordinates[1],
+          z: coordinates[2],
+          spatialReference: { wkid: 4326 }
+        })
+
+        const mesh = fontmesh.fromString(font, text, origin, { size, alignment: { x: "center" }, extrusion });
+
+        // Rotate so it stands up
+        mesh.rotate(xRotation, 0, 90, { origin });
+
+        graphic = new Graphic({
+          geometry: mesh,
+          symbol: {
+            type: "mesh-3d",
+            symbolLayers: [
+              {
+                type: "fill",
+                material: { color: [255, 255, 255, 1] }
+              }
+            ]
+          }
+        });
+
+        return graphic;
+      }
+
+      font
+        .create("./assets/Lato-Regular.ttf")
+        .then(font => {
+          const graphic1 = makeGraphic('Parque Nacional', [-46.87732, -72.1513, 500], 5000, 1500, 0, font);
+          const graphic2 = makeGraphic('Patagonia', [-46.86945, -72.0569, 500], 5000, 1500, 0, font);
+          horizontalExtrudedLayer.addMany([graphic1, graphic2]);
+
+          const graphic3 = makeGraphic('Parque Nacional', [-46.86945, -72.0569, 7500], 5000, 200, 90, font);
+          const graphic4 = makeGraphic('Patagonia', [-46.86945, -72.0569, 2500], 5000, 200, 90, font);
+          verticalExtrudedLayer.addMany([graphic3, graphic4]);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+
+      const layers = [horizontalExtrudedLayer, verticalExtrudedLayer, floatingLayer, drapedLayer, billboardedLayer];
+
+      view.map.addMany(layers);
+
+      document.getElementById("label-type").addEventListener("calciteRadioGroupChange", (evt) => {
+        layers.forEach(l => l.visible = false);
+        layers[parseInt(evt.detail)].visible = true;
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+  <div id="menu">
+    <calcite-radio-group id="label-type">
+      <calcite-radio-group-item value="0">Horizontal extruded 3D label</calcite-radio-group-item>
+      <calcite-radio-group-item value="1">Vertical extruded 3D label</calcite-radio-group-item>
+      <calcite-radio-group-item value="2">Floating label</calcite-radio-group-item>
+      <calcite-radio-group-item value="3">Draped label</calcite-radio-group-item>
+      <calcite-radio-group-item value="4" checked>Billboarded label</calcite-radio-group-item>
+    </calcite-radio-group>
+  </div>
+</body>
+
+</html>

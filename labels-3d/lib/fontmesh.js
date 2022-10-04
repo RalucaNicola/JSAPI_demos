@@ -14,7 +14,7 @@ define(["esri/geometry", "esri/geometry/support/meshUtils", "./layout", "esri/ge
       const {polygon, mesh} = glyphPathsToMesh(character, origin);
 
       meshes.push(mesh);
-      meshes.push(...extrude(mesh, polygon, 2000));
+      meshes.push(...extrude(mesh, polygon, options.extrusion));
     }
 
     return meshUtils.merge(meshes);
