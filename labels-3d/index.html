@@ -58,8 +58,9 @@
       "esri/layers/MediaLayer",
       "esri/layers/support/ImageElement",
       "esri/geometry/support/MeshMaterial",
-      "esri/widgets/Daylight"
-    ], function (WebScene, SceneView, Graphic, Point, Extent, Mesh, font, fontmesh, ExtentAndRotationGeoreference, GraphicsLayer, MediaLayer, ImageElement, MeshMaterial, Daylight) {
+      "esri/widgets/Daylight",
+      "esri/core/reactiveUtils"
+    ], function (WebScene, SceneView, Graphic, Point, Extent, Mesh, font, fontmesh, ExtentAndRotationGeoreference, GraphicsLayer, MediaLayer, ImageElement, MeshMaterial, Daylight, reactiveUtils) {
 
       const position = [-46.8877, -72.0890];
       const origin = new Point({
@@ -142,6 +143,13 @@
           ]
         }
       }));
+
+      reactiveUtils.when(() => view.zoom,
+        (value) => {
+          if (value) {
+            floatingLayer.opacity = Math.min(1, Math.max((12.5 - value) / 2, 0));
+          }
+        });
 
       /***************************
        * Draped labels - the image
