@@ -208,16 +208,16 @@ require([
     });
     const coordinateColors = [];
     const topColor = [30, 30, 30, 255];
-    const baseColor = [255, 255, 255, 50];
+    const baseColor = [30, 30, 30, 50];
 
     const vertexNo = geometry.vertexAttributes.position.length / 3;
 
-    for (let i = 0; i < vertexNo / 2; i++) {
-      coordinateColors.push(topColor);
-    }
-
-    for (let i = vertexNo / 2; i < vertexNo; i++) {
-      coordinateColors.push(baseColor);
+    for (let i = 0; i < vertexNo; i++) {
+      if (i < vertexNo / 2) {
+        coordinateColors.push(topColor);
+      } else {
+        coordinateColors.push(baseColor);
+      }
     }
 
     const colorVertices = Uint8Array.from(coordinateColors.flat());
