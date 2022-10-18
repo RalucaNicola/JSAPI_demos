@@ -1,0 +1,51 @@
+<!-- https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=cb61bb9e44b944f2a7d1fa121cc874a3 -->
+
+<!-- https://data.stadt-zuerich.ch/dataset/ted_taz_verkehrszaehlungen_werte_fussgaenger_velo -->
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>
+    Zurich pedestrian counts
+  </title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/dark/main.css" />
+  <link rel="stylesheet" href="./style.css" />
+  <script src="./papaparse.min.js"></script>
+  <script src="https://js.arcgis.com/4.24/"></script>
+  <script src="./main.js"></script>
+
+</head>
+
+<body>
+  <div id="viewDiv">
+  </div>
+  <div id="menu">
+    <header>
+      Zurich spring festival - pedestrian counts
+    </header>
+    <div id="description">
+      <p>During Zurich spring festival thousands of people parade through the Old Town and at 6pm they set a <button
+          id="snowman">snowman</button>
+        on fire to mark the end of winter. You can read more about
+        this tradition <a href="https://www.zuerich.com/en/visit/sechselaeuten" target="_blank">here</a>.
+      </p>
+      <p> The bars on the map display the pedestrian counts at various locations in Zurich on the 8th of April 2019,
+        during the spring festival. Each counter shows the number of pedestrians every 15 minutes, from 1 person <span
+          class="barLeft"></span> to 400 persons <span class="barRight"></span>.
+      </p>
+    </div>
+    <div id="currentTime"></div>
+    <div id="timeSliderDiv"></div>
+  </div>
+  <div id="tooltip" class="overlay invisible">
+    <div class="container">
+      <p>Zurich Spring Festival parade passes this point.</p>
+    </div>
+    <div class="callout"></div>
+  </div>
+</body>
+
+</html>

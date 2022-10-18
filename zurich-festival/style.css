@@ -1,0 +1,158 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: white;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #d1d1d1;
+}
+
+body {
+  overflow: hidden;
+}
+
+#menu {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  width: 375px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 80%);
+  z-index: 1;
+}
+
+#menu header {
+  color: white;
+  font-weight: bold;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  border-radius: 10px 10px 0 0;
+  letter-spacing: 2px;
+}
+
+.barRight {
+  width: 15px;
+  height: 25px;
+  display: inline-block;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.7), rgba(255, 94, 0, 1));
+}
+
+.barLeft {
+  height: 10px;
+  width: 15px;
+  display: inline-block;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.7), rgb(0, 255, 176));
+}
+
+#description {
+  margin: 20px;
+}
+
+#description {
+  line-height: 1.2rem;
+  font-size: 0.9rem;
+}
+
+a,
+#description button {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  color: #d1d1d1;
+  text-decoration: none;
+  border-bottom: 1px #d1d1d1 solid;
+  cursor: pointer;
+  transition: color 500ms;
+}
+
+a:hover,
+#description button:hover {
+  color: rgba(252, 186, 3, 1);
+  border-color: rgba(252, 186, 3, 1);
+}
+
+.invisible {
+  opacity: 0;
+}
+
+#tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  width: 200px;
+  transition: opacity 500ms;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+}
+
+#tooltip .container {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  border-right: 1px solid white;
+  padding: 10px 15px;
+}
+
+#tooltip header {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 5px 0;
+  text-transform: uppercase;
+}
+
+#tooltip p {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+#tooltip span {
+  font-size: 1.4rem;
+}
+
+.callout {
+  width: 50px;
+  height: 0;
+  border-bottom: 1px solid white;
+  margin: 0 auto;
+}
+
+.esri-time-slider__row:first-of-type {
+  display: none;
+}
+
+.esri-time-slider__max,
+.esri-time-slider__min {
+  visibility: hidden;
+}
+
+#timeSliderDiv {
+  margin-bottom: 20px;
+}
+
+#timeSliderDiv.esri-widget,
+#timeSliderDiv .esri-time-slider__slider,
+.esri-time-slider__slider .esri-slider,
+#timeSliderDiv button {
+  background-color: transparent;
+}
+
+#timeSliderDiv button:hover {
+  color: rgba(252, 186, 3, 1);
+}
+
+.esri-time-slider {
+  box-shadow: none;
+}
+
+#currentTime {
+  text-align: center;
+  font-size: xxx-large;
+}
