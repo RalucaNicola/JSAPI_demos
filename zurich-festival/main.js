@@ -208,7 +208,7 @@ require([
     });
     const coordinateColors = [];
     const topColor = [30, 30, 30, 255];
-    const baseColor = [30, 30, 30, 50];
+    const baseColor = [255, 255, 255, 50];
 
     const vertexNo = geometry.vertexAttributes.position.length / 3;
 
