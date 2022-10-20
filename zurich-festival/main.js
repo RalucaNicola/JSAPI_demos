@@ -38,6 +38,7 @@ require([
     end: new Date("Mon Apr 08 2019 18:30:00:00 GMT+0200 (Central European Summer Time)"),
   };
   let initialTime = new Date("Mon Apr 08 2019 12:00:00 GMT+0200 (Central European Summer Time)");
+  const currentTimeContainer = document.getElementById("currentTime");
 
   const graphicsLayer = new GraphicsLayer({
     elevationInfo: {
@@ -49,7 +50,6 @@ require([
       mode: "relative-to-scene",
     },
   });
-
   const routeLayer = new GeoJSONLayer({
     url: "parade-route.json",
     elevationInfo: {
@@ -75,7 +75,7 @@ require([
     elevationInfo: {
       mode: "relative-to-ground",
     },
-    copyright: `Snowman 3D model by <a href="https://sketchfab.com/3d-models/snowman-46c230958135402693822222dde11ed4">Leiona Chung</a>.`,
+    copyright: `Snowman 3D model by <a href=https://sketchfab.com/3d-models/snowman-46c230958135402693822222dde11ed4>Leiona Chung</a>.`,
   });
   const snowman = new Graphic({
     geometry: new Point({
@@ -94,21 +94,30 @@ require([
       ],
     },
   });
-
   snowmanLayer.add(snowman);
+
+  const timeAdded = timedate => {
+    for (let index in dates) {
+      const date = dates[index];
+      if (date.getTime() === timedate.getTime()) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   Papa.parse("./2019_04_08_zurich.csv", {
     download: true,
     complete: function (results) {
       for (let i = 1; i < results.data.length; i++) {
         const data = results.data[i];
-        const timedate = data[2];
+        const timedate = new Date(`${data[2]} GMT+0200`);
         const id = data[1];
-        if (dates.indexOf(timedate) === -1) {
+        if (!timeAdded(timedate)) {
           dates.push(timedate);
         }
         const property = {
-          date: new Date(timedate),
+          date: timedate,
           pedestrian: parseInt(data[5]) + parseInt(data[6]),
           bike: parseInt(data[3]) + parseInt(data[4]),
         };
@@ -118,7 +127,6 @@ require([
           properties[id].push(property);
         }
       }
-
       fetch("./locations.json")
         .then(response => {
           return response.json();
@@ -154,7 +162,7 @@ require([
           });
           graphicsLayer.graphics = graphics;
           createMap();
-          createTimeline(dates.map(date => new Date(date)));
+          createTimeline(dates);
         });
     },
   });
@@ -182,11 +190,11 @@ require([
     view.map.addMany([graphicsLayer, labelsLayer, routeLayer, snowmanLayer]);
     window.view = view;
 
-    currentTimeContainer.innerHTML = `${format(initialTime.getHours())}:${format(initialTime.getMinutes())}`;
+    currentTimeContainer.innerHTML = dateToString(initialTime);
     reactiveUtils
       .whenOnce(() => !view.updating)
       .then(() => {
-        startAnimation(initialTime, new Date(dates[0]));
+        startAnimation(initialTime, dates[0]);
       });
 
     document.getElementById("snowman").addEventListener("click", () => {
@@ -347,12 +355,13 @@ require([
     animationFrameTask = null;
   }
 
-  const currentTimeContainer = document.getElementById("currentTime");
-  const format = number => {
-    if (number < 10) {
-      return `0${number}`;
-    }
-    return number;
+  const dateToString = date => {
+    return new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      timeZone: "Europe/Vienna",
+      hour12: false,
+    }).format(date);
   };
 
   function createTimeline(dates) {
@@ -372,6 +381,26 @@ require([
       },
       stops: {dates},
       playRate: duration + 200,
+      tickConfigs: [
+        {
+          mode: "count",
+          values: dates.length,
+        },
+        {
+          mode: "position",
+          values: [
+            dates[0],
+            dates[dates.length / 4],
+            dates[dates.length / 2],
+            dates[(dates.length * 3) / 4],
+            dates[dates.length - 1],
+          ],
+          labelsVisible: true,
+          labelFormatFunction: value => {
+            return dateToString(value);
+          },
+        },
+      ],
     });
     timeSlider.watch("timeExtent", value => {
       const newTime = value.start;
@@ -390,7 +419,7 @@ require([
       }
       startAnimation(newTime, oldTime);
       view.environment.lighting.date = newTime;
-      currentTimeContainer.innerHTML = `${format(newTime.getHours())}:${format(newTime.getMinutes())}`;
+      currentTimeContainer.innerHTML = dateToString(newTime);
       oldTime = newTime;
     });
   }
