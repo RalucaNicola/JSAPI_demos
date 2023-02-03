@@ -58,7 +58,7 @@ require([
           setScene(city.id);
           setId(city.id);
           if (city.attribution) {
-            document.getElementById("attribution").innerHTML = city.attribution + '. Made with <a href="" target="_blank">ArcGIS API for JavaScript</a>';
+            document.getElementById("attribution").innerHTML = city.attribution + '. Made with <a href="" target="_blank">ArcGIS Maps SDK for JavaScript</a>';
           }
         }.bind(city));
         cityContainer.appendChild(button);
@@ -137,7 +137,7 @@ require([
   function setScene(id) {
 
     document.getElementById("slides").innerHTML = "";
-    document.getElementById("attribution").innerHTML = 'Made with <a href="" target="_blank">ArcGIS API for JavaScript</a>.';
+    document.getElementById("attribution").innerHTML = 'Made with <a href="" target="_blank">ArcGIS Maps SDK for JavaScript</a>.';
 
     if (!intro.classList.contains("hide")) {
       intro.classList.add("hide");

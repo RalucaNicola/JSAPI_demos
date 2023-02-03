@@ -5,8 +5,8 @@
     <meta name="viewport" content="initial-scale=1" />
     <title>Berlin Palace</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
-    <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css" />
-    <script src="https://js.arcgis.com/4.24/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.26/"></script>
 
     <style>
       html,
@@ -126,7 +126,7 @@
     </style>
 
     <script>
-      require(["esri/WebScene", "esri/views/SceneView", "dojo/domReady!"], function (WebScene, SceneView) {
+      require(["esri/WebScene", "esri/views/SceneView"], function (WebScene, SceneView) {
         let palaceLayer;
 
         const webscene = new WebScene({
@@ -285,7 +285,7 @@
       <a href="http://www.stadtentwicklung.berlin.de/geoinformation/download/nutzIII.pdf" target="_blank"
         >See data license</a
       >
-      | Map created with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JS</a>.
+      | Map created with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS Maps SDK for JavaScript</a>.
     </footer>
   </body>
 </html>

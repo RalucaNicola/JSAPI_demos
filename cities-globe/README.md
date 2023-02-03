@@ -6,7 +6,7 @@ The app in this folder shows the most populated cities in the world on a globe:
 
 You can also view it live [here](https://ralucanicola.github.io/JSAPI_demos/cities-globe/).
 
-This is a step by step tutorial on how to build this app using [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/):
+This is a step by step tutorial on how to build this app using [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/):
 
 - [Step 1: the one with the initial setup](#step-1)
 - [Step 2: the one where we create the globe 🌐 (as a JS module 😎)](#step-2)
@@ -20,7 +20,7 @@ This is a step by step tutorial on how to build this app using [ArcGIS API for J
 
 ### - the one with the initial setup -
 
-As usual with web things, it all starts with an `index.html` file where we import the ArcGIS API for JavaScript and we create the structure of the app:
+As usual with web things, it all starts with an `index.html` file where we import the ArcGIS Maps SDK for JavaScript and we create the structure of the app:
 
 ```html
 <!DOCTYPE html>
@@ -29,9 +29,9 @@ As usual with web things, it all starts with an `index.html` file where we impor
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1">
   <title>World's biggest cities</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/css/main.css">
   <link rel="stylesheet" href="custom.css">
-  <script src="https://js.arcgis.com/4.8/"></script>
+  <script src="https://js.arcgis.com/4.26/"></script>
 </head>
 
 <body>
@@ -115,7 +115,7 @@ In this step we'll add the web scene with the globe visualization. We could crea
   };
 </script>
 <!-- dojoConfig should be defined before loading the API -->
-<script src="https://js.arcgis.com/4.8/"></script>
+<script src="https://js.arcgis.com/4.26/"></script>
 ```
 
 >Side note:
@@ -167,8 +167,7 @@ One more thing: our module isn't loaded yet. We also need to import the module i
 <script>
   // this loads the main module and runs the init method
   require([
-    "app/main",
-    "dojo/domReady!"
+    "app/main"
   ], function(app) {
       app.init();
     });
@@ -294,9 +293,11 @@ const populationLayer = new FeatureLayer({
 // don't forget to add it to the web scene
 webscene.addMany([countryBoundaries, populationLayer]);
 ```
+
 To style the layer we still use a [SimpleRenderer](https://developers.arcgis.com/javascript/latest/api-reference/esri-renderers-SimpleRenderer.html) (all my points will look the same), but we're going to 3D-ify it a little by [lifting the points up vertically](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-PointSymbol3D.html#verticalOffset) and connecting them to the original location using [callouts](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-callouts-LineCallout3D.html).
 
 The code looks like this:
+
 ```js
 populationLayer.renderer: {
   type: "simple",
@@ -323,7 +324,9 @@ populationLayer.renderer: {
   }
 };
 ```
+
 We also add labels using the font that we imported in the css file.
+
 ```js
 populationLayer.labelingInfo = [
   new LabelClass({
@@ -357,6 +360,7 @@ const graticule = new FeatureLayer({
 });
 webscene.addMany([graticule, countryBoundaries, populationLayer]);
 ```
+
 By now our map should look like this:
 
 ![img/step4.png](img/step4.png)
@@ -383,6 +387,7 @@ camera: {
 ```
 
 The day time also needs some adjustment, so we'll specify the date in the `environment.lighting`:
+
 ```js
 lighting: {
   date: "Sun Jul 15 2018 15:30:00 GMT+0900 (W. Europe Daylight Time)"

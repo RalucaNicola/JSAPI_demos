@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1" />
     <title>Christmas around the world</title>
     <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash|Roboto+Slab" rel="stylesheet" />
-    <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/css/main.css" />
     <link rel="stylesheet" href="custom.css" />
     <script>
       window.dojoConfig = {
@@ -26,7 +26,7 @@
         },
       };
     </script>
-    <script src="https://js.arcgis.com/4.24/"></script>
+    <script src="https://js.arcgis.com/4.26/"></script>
     <script>
       require([
         "app/mediaUtils",
@@ -34,7 +34,6 @@
         "app/storeConfig",
         "app/scene",
         "app/tour",
-        "dojo/domReady!",
       ], function (mediaUtils, dataUtils, storeConfig, scene, tour) {
         dataUtils
           .loadData("data/traditions.json")
@@ -72,7 +71,7 @@
       >
       published under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a> | Text data
       from <a href="https://www.whychristmas.com/cultures/" target="_blank">www.whychristmas.com</a> | Map created by
-      Raluca with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JS</a> and a lot of
+      Raluca with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS Maps SDK for JavaScript</a> and a lot of
       🎁.
     </footer>
   </body>

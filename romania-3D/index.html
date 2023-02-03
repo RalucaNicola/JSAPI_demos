@@ -5,8 +5,8 @@
     <meta name="viewport" content="initial-scale=1" />
     <title>Romania in 3D</title>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css" />
-    <script src="https://js.arcgis.com/4.24/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.26/"></script>
 
     <style>
       html,
@@ -51,8 +51,7 @@
         "esri/Basemap",
         "esri/views/SceneView",
         "esri/layers/VectorTileLayer",
-        "esri/widgets/Search",
-        "dojo/domReady!",
+        "esri/widgets/Search"
       ], function (WebScene, Basemap, SceneView, VectorTileLayer, Search) {
         const webscene = new WebScene({
           portalItem: {

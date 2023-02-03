@@ -5,8 +5,8 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <title>Malta in contour lines</title>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css" />
-    <script src="https://js.arcgis.com/4.24/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.26/"></script>
 
     <style>
       html,
@@ -32,8 +32,6 @@
         "esri/WebScene",
         "esri/views/SceneView",
         "esri/layers/FeatureLayer",
-        "dojo/dom",
-        "dojo/on",
         "esri/layers/GraphicsLayer",
 
         "esri/Graphic",
@@ -47,15 +45,11 @@
         "esri/symbols/TextSymbol3DLayer",
 
         "esri/widgets/Daylight",
-
-        "dojo/domReady!",
       ], function (
         esriConfig,
         WebScene,
         SceneView,
         FeatureLayer,
-        dom,
-        on,
         GraphicsLayer,
         Graphic,
         Point,
@@ -259,7 +253,7 @@
             elevationInfo: {
               mode: "relative-to-scene",
             },
-            copyright: `Application made with <a href="https://developers.arcgis.com/javascript/latest/">ArcGIS API for JavaScript</a>`,
+            copyright: `Application made with <a href="https://developers.arcgis.com/javascript/latest/">ArcGIS Maps SDK for JavaScript</a>`,
             fields: [
               {
                 name: "ObjectID",

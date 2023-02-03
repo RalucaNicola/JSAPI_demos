@@ -19,7 +19,6 @@ require([
   "esri/symbols/TextSymbol3DLayer",
 
   "esri/widgets/Search",
-  "dojo/domReady!"
 ], function (WebScene, SceneView,
   FeatureLayer, VectorTileLayer, SceneLayer, ElevationLayer,
   ClassBreaksRenderer, SimpleRenderer,

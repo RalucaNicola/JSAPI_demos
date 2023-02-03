@@ -1,8 +1,7 @@
 require([
   "esri/layers/FeatureLayer",
   "esri/WebScene",
-  "esri/views/SceneView",
-  "dojo/domReady!"
+  "esri/views/SceneView"
 ], function (
   FeatureLayer,
   WebScene, SceneView,

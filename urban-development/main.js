@@ -2,8 +2,7 @@ require([
   "esri/WebScene",
   "esri/layers/SceneLayer",
   "esri/views/SceneView",
-  "esri/core/has",
-  "dojo/domReady!"
+  "esri/core/has"
 ], function (
   WebScene,
   SceneLayer,

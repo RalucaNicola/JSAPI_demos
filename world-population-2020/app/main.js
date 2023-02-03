@@ -6,8 +6,7 @@ require([
   "esri/symbols/PointSymbol3D",
   "esri/symbols/ObjectSymbol3DLayer",
   "utils",
-  "esri/smartMapping/statistics/summaryStatistics",
-  "dojo/domReady!"
+  "esri/smartMapping/statistics/summaryStatistics"
 ], function (
   FeatureLayer,
   Map, SceneView,

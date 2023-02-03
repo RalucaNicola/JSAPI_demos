@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1">
   <title>Population USA</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/css/main.css">
   <link rel="stylesheet" href="style.css">
   <script>
       var dojoConfig = {
@@ -15,17 +15,14 @@
         async: true
       };
     </script>
-  <script src="https://js.arcgis.com/4.24/"></script>
+  <script src="https://js.arcgis.com/4.26/"></script>
 </head>
 
 <body>
   <div id="mapDiv"></div>
   <div id="sceneDiv"></div>
   <script>
-  require([
-      "app/main",
-      "dojo/domReady!"
-    ]);
+  require(["app/main"]);
   </script>
 </body>
 </html>
