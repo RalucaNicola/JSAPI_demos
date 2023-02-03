@@ -1,7 +1,7 @@
 {
   "name": "jsapi-demos",
   "version": "1.0.0",
-  "description": "Simple demos for ArcGIS API for JavaScript",
+  "description": "Simple demos for ArcGIS Maps SDK for JavaScript",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RalucaNicola/JSAPI_demos.git"
@@ -12,7 +12,7 @@
     "demo"
   ],
   "author": "Raluca Nicola",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/RalucaNicola/JSAPI_demos/issues"
   },
