@@ -2,7 +2,7 @@ require([
   "esri/Map",
   "esri/views/SceneView",
   "esri/request",
-  "esri/tasks/QueryTask",
+  "esri/rest/query",
   "esri/Graphic",
   "esri/geometry/Polygon",
   "esri/geometry/Mesh",
@@ -15,7 +15,7 @@ require([
   Map,
   SceneView,
   esriRequest,
-  QueryTask,
+  queryTask,
   Graphic,
   Polygon,
   Mesh,
@@ -79,12 +79,9 @@ require([
   window.view = view;
 
   const generalizedWorldUrl = "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/generalizedworldequalearth/FeatureServer/0";
-  const queryTask = new QueryTask({
-    url: generalizedWorldUrl
-  });
 
   promiseUtils.eachAlways([
-    queryTask.execute({where: "1=1", returnGeometry: true}),
+    queryTask.executeQueryJSON(generalizedWorldUrl, {where: "1=1", returnGeometry: true}),
     esriRequest("./data/randompointequalearth.json", {responseType: "json"})
   ])
   .then(function(results) {
