@@ -104,6 +104,11 @@
           ui: {
             components: ["attribution"],
           },
+          constraints: {
+            altitude: {
+              min: 4 * Math.pow(10, 6)
+            }
+          }
         });
 
         view.when(() => {
