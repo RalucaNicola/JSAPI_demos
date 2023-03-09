@@ -196,16 +196,17 @@ require([
 
       // add these layers to the empty webscene
       webscene.addMany(sceneLayers);
-
-      // go to initial viewpoint in the scene
-      view.goTo(origWebscene.initialViewProperties.viewpoint)
-        .then(function () {
-          loading.classList.add("hide");
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-
+      // when the view is ready
+      view.when(() => {
+        // go to initial viewpoint in the scene
+        view.goTo(origWebscene.initialViewProperties.viewpoint)
+          .then(function () {
+            loading.classList.add("hide");
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+      })
       // generate the presentation
       webscene.presentation = origWebscene.presentation.clone();
       createPresentation(webscene.presentation.slides);
