@@ -5,8 +5,6 @@ require([
 
   "esri/Graphic",
   "esri/geometry/Point",
-
-  "dojo/domReady!"
 ],
 function (
   WebScene, SceneView, FeatureLayer,

@@ -5,8 +5,8 @@
     <meta name="viewport" content="initial-scale=1" />
     <title>Old globe</title>
     <link href="https://fonts.googleapis.com/css?family=Special+Elite" rel="stylesheet" />
-    <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css" />
-    <script src="https://js.arcgis.com/4.24/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/css/main.css" />
+    <script src="https://js.arcgis.com/4.26/"></script>
     <style>
       html,
       body,
@@ -61,8 +61,6 @@
         "esri/WebScene",
         "esri/views/SceneView",
         "esri/layers/FeatureLayer",
-        "dojo/dom",
-        "dojo/on",
         "esri/layers/GraphicsLayer",
 
         "esri/Graphic",
@@ -72,15 +70,11 @@
 
         "esri/symbols/PointSymbol3D",
         "esri/symbols/ObjectSymbol3DLayer",
-
-        "dojo/domReady!",
       ], function (
         esriConfig,
         WebScene,
         SceneView,
         FeatureLayer,
-        dom,
-        on,
         GraphicsLayer,
         Graphic,
         Point,

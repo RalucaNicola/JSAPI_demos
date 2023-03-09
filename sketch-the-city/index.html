@@ -6,7 +6,7 @@
     <title>Sketch the city</title>
     <link href="https://fonts.googleapis.com/css?family=Reenie+Beanie" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
-    <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/css/main.css" />
     <link rel="stylesheet" href="styles/main.css" />
     <link id="customCSS" rel="stylesheet" href="styles/light.css" />
     <script>
@@ -20,7 +20,7 @@
         async: true,
       };
     </script>
-    <script src="https://js.arcgis.com/4.24/"></script>
+    <script src="https://js.arcgis.com/4.26/"></script>
   </head>
 
   <body>
@@ -38,7 +38,7 @@
         to see how to visualize it as a drawing.
       </p>
       <p>
-        Made with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS API for JavaScript</a> :)
+        Made with <a href="https://developers.arcgis.com/javascript/" target="_blank">ArcGIS Maps SDK for JavaScript</a> :)
       </p>
     </div>
     <div id="menu">
@@ -50,7 +50,7 @@
     <div id="error" class="hide">I'm sorry, I can't display this :(</div>
     <div id="attribution"></div>
     <script>
-      require(["app/main", "dojo/domReady!"]);
+      require(["app/main"]);
     </script>
   </body>
 </html>

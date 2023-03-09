@@ -4,7 +4,7 @@ Displays different cities as a hand drawn 3D sketch. There are 2 styles availabl
 
 ![screenshot](./images/screenshot.png)
 
-**Inspiration**: [John Nelson](https://twitter.com/John_M_Nelson) showed me this [awesome project](https://www.sketchnthecity.com/) and we were wondering whether we could create a similar effect using the [sketch edges](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-edges-SketchEdges3D.html) feature of the ArcGIS API for JavaScript. This project is what came out.
+**Inspiration**: [John Nelson](https://twitter.com/John_M_Nelson) showed me this [awesome project](https://www.sketchnthecity.com/) and we were wondering whether we could create a similar effect using the [sketch edges](https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-edges-SketchEdges3D.html) feature of the ArcGIS Maps SDK for JavaScript. This project is what came out.
 
 **How it works**: The API loads a [WebScene](https://developers.arcgis.com/javascript/latest/api-reference/esri-WebScene.html) of a city created in the [SceneViewer](https://www.arcgis.com/home/webscene/viewer.html).
 In this app a new WebScene is created where all the other layers are droped except the SceneLayers with the buildings. The SceneLayers have a renderer that shows the edges with a sketch line and the faces are semi-transparent. The [SceneView](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html) that displays the WebScene has a transparent [background](https://developers.arcgis.com/javascript/latest/api-reference/esri-webscene-background-ColorBackground.html), so that an image of an old canvas or a blackboard can be seen behind it.

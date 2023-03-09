@@ -7,7 +7,6 @@ require([
   "esri/symbols/ObjectSymbol3DLayer",
   "esri/widgets/Legend",
   "esri/core/watchUtils",
-  "dojo/domReady!"
 ], function (
   FeatureLayer,
   Map, SceneView,
