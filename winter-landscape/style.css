@@ -1,0 +1,108 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Open Sans Condensed', sans-serif;
+}
+
+button {
+  cursor: pointer;
+  box-shadow: 2px 4px 4px hsl(220deg 60% 50% / 0.2),
+  4px 8px 8px hsl(220deg 60% 50% / 0.2),
+  8px 16px 16px hsl(220deg 60% 50% / 0.2);
+}
+
+.slideShow {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  padding: 1em;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.slideShow > button {
+  border-radius: 50%;
+  border: 5px solid white;
+  margin-bottom: 20px;
+  width: 75px;
+  height: 75px;
+
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.imgHover img {
+  transition: transform 500ms ease;
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+}
+
+.imgHover:hover img {
+  transform: scale(1.3);
+}
+
+.controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.controls > button {
+  background-color: white;
+  background-size: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  border: none;
+  transition: background-color 500ms;
+}
+
+#sound.on {
+  background-image: url("./assets/img/sound-24.svg");
+}
+#sound.off {
+  background-image: url("./assets/img/sound-off-24.svg");
+}
+
+.controls > button:hover {
+  background-color: #d5e2f2;
+}
+
+#snow.on {
+  background-image: url("./assets/img/snow-24.svg");
+}
+
+#snow.off {
+  background-image: url("./assets/img/brightness-24.svg");
+}
+
+#snow::after {
+    content: url('./assets/img/brightness-24.svg');
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+
+#sound::after {
+  content: url('./assets/img/sound-off-24.svg');
+  height: 0;
+  position: absolute;
+  width: 0;
+}

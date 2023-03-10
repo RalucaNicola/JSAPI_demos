@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
+    <title>Winter landscape</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.26/esri/css/main.css"
+    />
+    <script src="https://js.arcgis.com/4.26/"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+    <div class="slideShow">
+      <button class="imgHover" id="slide1">
+        <img src="./assets/img/thumbnail-1.png">
+      </button>
+      <button  class="imgHover" id="slide2">
+        <img src="./assets/img/thumbnail-2.png">
+      </button>
+      <button  class="imgHover" id="slide3">
+        <img src="./assets/img/thumbnail-3.png">
+      </button>
+    </div>
+    <div class="controls">
+      <button id="sound" class="on"></button>
+      <button id="snow" class="on"></button>
+    </div>
+    <audio id="music" autoplay=false loop=true>
+      <source src="./assets/music.mp3" type="audio/mpeg">
+    </audio>
+    <script src="main.js"></script>
+  </body>
+</html>
