@@ -38,10 +38,11 @@ button {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  z-index: 1;
 }
 
 .imgHover img {
-  will-change: transform;
+  z-index: 0;
   transition: transform 500ms ease;
   width: 140%;
   height: 140%;
