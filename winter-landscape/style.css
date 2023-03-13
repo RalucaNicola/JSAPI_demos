@@ -27,7 +27,6 @@ button {
 }
 
 .slideShow > button {
-  border-radius: 50%;
   border: 5px solid white;
   margin-bottom: 20px;
   width: 75px;
@@ -43,8 +42,8 @@ button {
 .imgHover img {
   will-change: transform;
   transition: transform 500ms ease;
-  width: 120%;
-  height: 120%;
+  width: 140%;
+  height: 140%;
   object-fit: cover;
 }
 
