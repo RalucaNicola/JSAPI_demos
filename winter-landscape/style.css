@@ -5,14 +5,13 @@ body,
   margin: 0;
   height: 100%;
   width: 100%;
-  font-family: 'Open Sans Condensed', sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
 }
 
 button {
   cursor: pointer;
-  box-shadow: 2px 4px 4px hsl(220deg 60% 50% / 0.2),
-  4px 8px 8px hsl(220deg 60% 50% / 0.2),
-  8px 16px 16px hsl(220deg 60% 50% / 0.2);
+  box-shadow: 2px 4px 4px hsl(220deg 60% 50% / 0.2), 4px 8px 8px hsl(220deg 60% 50% / 0.2),
+    8px 16px 16px hsl(220deg 60% 50% / 0.2);
 }
 
 .slideShow {
@@ -42,6 +41,7 @@ button {
 }
 
 .imgHover img {
+  will-change: transform;
   transition: transform 500ms ease;
   width: 120%;
   height: 120%;
@@ -94,14 +94,14 @@ button {
 }
 
 #snow::after {
-    content: url('./assets/img/brightness-24.svg');
-    height: 0;
-    position: absolute;
-    width: 0;
+  content: url("./assets/img/brightness-24.svg");
+  height: 0;
+  position: absolute;
+  width: 0;
 }
 
 #sound::after {
-  content: url('./assets/img/sound-off-24.svg');
+  content: url("./assets/img/sound-off-24.svg");
   height: 0;
   position: absolute;
   width: 0;
