@@ -156,8 +156,8 @@ require([
                 },
                 font: {
                   size:  10,
-                  weight: "normal",
-                  family: '"Open Sans", sans-serif'
+                  weight: "bold",
+                  family: '"Avenir Next", "Avenir", sans-serif'
                 }
               }],
               verticalOffset: {
