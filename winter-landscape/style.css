@@ -27,6 +27,7 @@ button {
 }
 
 .slideShow > button {
+  border-radius: 50%;
   border: 5px solid white;
   margin-bottom: 20px;
   width: 75px;
