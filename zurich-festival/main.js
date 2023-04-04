@@ -111,7 +111,7 @@ require([
     complete: function (results) {
       for (let i = 1; i < results.data.length; i++) {
         const data = results.data[i];
-        const timedate = new Date(`${data[2]} GMT+0200`);
+        const timedate = new Date(`${data[2]}+0200`);
         const id = data[1];
         if (!timeAdded(timedate)) {
           dates.push(timedate);
