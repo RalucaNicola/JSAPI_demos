@@ -1,0 +1,92 @@
+<!-- https://zurich.maps.arcgis.com/home/webscene/viewer.html?webscene=cb61bb9e44b944f2a7d1fa121cc874a3 -->
+
+<!-- https://data.stadt-zuerich.ch/dataset/ted_taz_verkehrszaehlungen_werte_fussgaenger_velo -->
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Zurich pedestrian counts</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.26/esri/themes/dark/main.css"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://js.arcgis.com/4.26/"></script>
+    <script src="./main.js"></script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+    <div id="menu">
+      <header>Global Carbon Monoxide January 1st, 2020</header>
+      <div id="description">
+        <p>
+          Carbon monoxide (CO) is released into the atmosphere primarily as a
+          result of incomplete combustion of fossil fuels, biomass and other
+          organic matter. CO is not considered a significant greenhouse gas.
+        </p>
+        <p>
+          Natural sources like <b>forest fires</b> or <b> volcanoes</b> can
+          release large amounts of CO in the atmosphere.
+        </p>
+        <p>
+          <span class="symbolDescription">1</span>
+          Emissions from the Australian bushfires in the summer of 2020.
+          <a
+            href="https://en.wikipedia.org/wiki/2019%E2%80%9320_Australian_bushfire_season"
+            target="_blank"
+            >Read more.</a
+          >
+        </p>
+        <p>
+          <span class="symbolDescription">2</span>
+          Widespread agricultural fires are a common occurrence in Central
+          Africa.
+          <a
+            href="https://www.nesdis.noaa.gov/news/noaa-20-spots-fires-burning-central-africa"
+            target="_blank"
+            >Read more.</a
+          >
+        </p>
+        <p>
+          <b>Vehicles</b> produce carbon monoxide as a byproduct of burning
+          gasoline or diesel fuel. <b>Industrial CO emissions</b> can come from
+          manufacturing, mining, oil and gas production.
+        </p>
+        <p>
+          <span class="symbolDescription">3</span> China's emissions of carbon
+          monoxide are mostly given by urban and industrial pollution generated
+          in and around industrialized areas like Beijing.
+          <a
+            href="https://earthobservatory.nasa.gov/global-maps/MOP_CO_M/MOD14A1_M_FIRE"
+            target="_blank"
+            >Read more.</a
+          >
+        </p>
+        <p>
+          <span class="symbolDescription">4</span> India has a mixed pattern,
+          pollution spikes because of vehicle and industrial emissions, but crop
+          burning and agricultural fires contribute to the smog in New Delhi.
+          <a
+            href="https://www.copernicus.eu/en/media/image-day-gallery/nitrogen-dioxide-and-carbon-monoxide-levels-over-india"
+            target="_blank"
+            >Read more.</a
+          >
+        </p>
+        <p>
+          In this visualization carbon monoxide emissions are displayed for
+          January 1st, 2020. Filter out smaller values by changing the slider
+          below:
+        </p>
+        <div id="sliderDiv"></div>
+        <div id="legend"></div>
+        <p>Values above 100ppbv are considered high values.</p>
+      </div>
+    </div>
+  </body>
+</html>
