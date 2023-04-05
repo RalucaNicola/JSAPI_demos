@@ -31,9 +31,10 @@ require([
     window.view = view;
     view.map.ground.navigationConstraint = { type: "stay-above" };
     const voxelLayer = view.map.findLayerById("18750f45f4a-layer-85");
-    reactiveUtils.once(
-      () => voxelLayer.loaded)
-      .then(() => {
+    reactiveUtils.watch(
+      () => voxelLayer.loaded,
+      () => {
+        console.log("voxel layer loaded");
         const style = voxelLayer.getVariableStyle(0);
         let { stretchRange, colorStops } = style.transferFunction;
         const min = stretchRange[0];
@@ -59,7 +60,7 @@ require([
         document.getElementById("coToggle").addEventListener("click", (event) => {
           voxelLayer.visible = event.target.checked;
         })
-      })
+      }, { once: true, initial: true })
   })
 
   const createGradient = (colorStops) => {
@@ -85,16 +86,14 @@ require([
   const symbols = [];
 
   function updateOverlay() {
-    if (view.ready) {
-      symbols.forEach(symbol => {
-        const screenPoint = view.toScreen(symbol.mapPoint);
-        if (screenPoint) {
-          symbol.classList.remove("hidden");
-          symbol.style.top = `${screenPoint.y - symbol.clientHeight / 2}px`;
-          symbol.style.left = `${screenPoint.x - symbol.clientWidth}px`;
-        }
-      })
-    }
+    symbols.forEach(symbol => {
+      const screenPoint = view.toScreen(symbol.mapPoint);
+      if (screenPoint) {
+        symbol.classList.remove("hidden");
+        symbol.style.top = `${screenPoint.y - symbol.clientHeight / 2}px`;
+        symbol.style.left = `${screenPoint.x - symbol.clientWidth}px`;
+      }
+    })
     requestAnimationFrame(updateOverlay);
   }
   reactiveUtils.watch(
@@ -103,8 +102,7 @@ require([
       if (ready) {
         updateOverlay();
       }
-    },
-    { initial: true }
+    }
   )
 
   fetch("./locations.json")
@@ -114,7 +112,7 @@ require([
     .then(locations => {
       locations.features.forEach(feature => {
         const symbol = document.createElement("div");
-        symbol.classList.add("symbol");
+        symbol.classList.add("symbol", "hidden");
         symbol.innerHTML = feature.id;
         const [longitude, latitude] = feature.geometry.coordinates;
         symbol.mapPoint = new Point({
@@ -135,7 +133,5 @@ require([
         })
         symbols.push(symbol);
       })
-
-      updateOverlay(symbols);
     });
 });
