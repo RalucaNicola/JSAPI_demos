@@ -6,17 +6,25 @@
       content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
     <title>Global Carbon Monoxide Concentration</title>
-
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/1.0.7/calcite.esm.js"
+    ></script>
+    <!-- <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://js.arcgis.com/calcite-components/1.0.7/calcite.css"
+      /> -->
+    <link rel="stylesheet" href="./style.css" />
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/4.26/esri/themes/dark/main.css"
     />
-    <link rel="stylesheet" href="./style.css" />
     <script src="https://js.arcgis.com/4.26/"></script>
     <script src="./main.js"></script>
   </head>
 
-  <body>
+  <body class="calcite-mode-dark">
     <div id="viewDiv"></div>
     <div id="menu">
       <header>Global Carbon Monoxide January 1st, 2020</header>
@@ -30,7 +38,7 @@
           Natural sources like <b>forest fires</b> or <b> volcanoes</b> can
           release large amounts of CO in the atmosphere.
         </p>
-        <p>
+        <p id="symbol-1">
           <span class="symbolDescription">1</span>
           Emissions from the Australian bushfires in the summer of 2020.
           <a
@@ -39,7 +47,7 @@
             >Read more.</a
           >
         </p>
-        <p>
+        <p id="symbol-2">
           <span class="symbolDescription">2</span>
           Widespread agricultural fires are a common occurrence in Central
           Africa.
@@ -54,7 +62,7 @@
           gasoline or diesel fuel. <b>Industrial CO emissions</b> can come from
           manufacturing, mining, oil and gas production.
         </p>
-        <p>
+        <p id="symbol-3">
           <span class="symbolDescription">3</span> China's emissions of carbon
           monoxide are mostly given by urban and industrial pollution generated
           in and around industrialized areas like Beijing.
@@ -64,7 +72,7 @@
             >Read more.</a
           >
         </p>
-        <p>
+        <p id="symbol-4">
           <span class="symbolDescription">4</span> India has a mixed pattern,
           pollution spikes because of vehicle and industrial emissions, but crop
           burning and agricultural fires contribute to the smog in New Delhi.
@@ -82,6 +90,14 @@
         <div id="sliderDiv"></div>
         <div id="legend"></div>
         <p>Values above 100ppbv are considered high values.</p>
+        <calcite-label layout="inline-space-between" scale="l"
+          >Carbon monoxide
+          <calcite-switch
+            label="Carbon monoxide"
+            checked
+            id="coToggle"
+          ></calcite-switch
+        ></calcite-label>
       </div>
     </div>
   </body>

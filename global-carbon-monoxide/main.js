@@ -44,8 +44,9 @@ require([
   });
 
   view.when(async () => {
+    window.view = view;
     view.map.ground.navigationConstraint = { type: "stay-above" };
-    const voxelLayer = view.map.findLayerById("187481f2f98-layer-86");
+    const voxelLayer = view.map.findLayerById("18750f45f4a-layer-85");
     const style = voxelLayer.getVariableStyle(0);
     let { stretchRange, colorStops } = style.transferFunction;
     const min = stretchRange[0];
@@ -69,6 +70,10 @@ require([
     });
 
     renderLegend({ min, max, colorStops });
+
+    document.getElementById("coToggle").addEventListener("click", (event) => {
+      voxelLayer.visible = event.target.checked;
+    })
   })
 
   const createGradient = (colorStops) => {
@@ -92,7 +97,6 @@ require([
   }
 
   const symbols = [];
-  let viewIsUpdating = true;
 
   function updateOverlay() {
     if (view.ready) {
@@ -105,9 +109,6 @@ require([
       })
     }
     requestAnimationFrame(updateOverlay);
-    // if (!viewIsUpdating) {
-    //   requestAnimationFrame(updateOverlay);
-    // }
   }
   reactiveUtils.watch(
     () => view.ready,
@@ -136,8 +137,16 @@ require([
           spatialReference: {
             wkid: 4326
           }
-        })
+        });
+        const descriptionContainer = document.getElementById(`symbol-${feature.id}`);
         document.body.appendChild(symbol);
+        symbol.addEventListener("click", () => {
+          descriptionContainer.scrollIntoView({ behavior: "smooth" });
+          descriptionContainer.classList.add("highlight");
+          setTimeout(() => {
+            descriptionContainer.classList.remove("highlight");
+          }, 1000);
+        })
         symbols.push(symbol);
       })
 

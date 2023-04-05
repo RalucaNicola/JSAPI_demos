@@ -38,8 +38,17 @@ body {
   letter-spacing: 2px;
 }
 
+#description > p {
+  transition: background-color 1s;
+}
+
+.highlight {
+  background-color: rgba(209, 39, 206, 0.7);
+}
+
 #sliderDiv {
   margin-top: 30px;
+  padding: 0 30px;
 }
 
 .labels {
@@ -57,7 +66,7 @@ body {
 }
 
 b {
-  background-color: rgb(209, 39, 206, 0.7);
+  background-color: rgba(209, 39, 206, 0.7);
   padding: 2px 5px;
   border-radius: 3px;
 }
@@ -97,9 +106,6 @@ b {
 
 #description {
   margin: 20px;
-}
-
-#description {
   line-height: 1.6rem;
 }
 
@@ -117,8 +123,8 @@ a,
 
 a:hover,
 #description button:hover {
-  color: rgb(209, 39, 206, 0.7);
-  border-color: rgb(209, 39, 206, 0.7);
+  color: rgba(209, 39, 206, 0.7);
+  border-color: rgba(209, 39, 206, 0.7);
 }
 
 ::-webkit-scrollbar {
@@ -137,4 +143,14 @@ a:hover,
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255 255 255 / 0.8);
+}
+
+@media (max-width: 600px) {
+  #menu {
+    top: revert;
+    bottom: 20px;
+    right: 20px;
+    width: revert;
+    max-height: 200px;
+  }
 }
