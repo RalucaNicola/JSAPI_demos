@@ -31,10 +31,16 @@ require([
     window.view = view;
     view.map.ground.navigationConstraint = { type: "stay-above" };
     const voxelLayer = view.map.findLayerById("18750f45f4a-layer-85");
+    const fireLayer = view.map.findLayerById("1875197e292-layer-86");
+    document.getElementById("coToggle").addEventListener("click", (event) => {
+      voxelLayer.visible = event.target.checked;
+    });
+    document.getElementById("fireToggle").addEventListener("click", (event) => {
+      fireLayer.visible = event.target.checked;
+    });
     reactiveUtils.watch(
       () => voxelLayer.loaded,
       () => {
-        console.log("voxel layer loaded");
         const style = voxelLayer.getVariableStyle(0);
         let { stretchRange, colorStops } = style.transferFunction;
         const min = stretchRange[0];
@@ -57,9 +63,7 @@ require([
 
         renderLegend({ min, max, colorStops });
 
-        document.getElementById("coToggle").addEventListener("click", (event) => {
-          voxelLayer.visible = event.target.checked;
-        })
+
       }, { once: true, initial: true })
   })
 
