@@ -15,7 +15,7 @@ body {
 }
 
 #menu {
-  position: absolute;
+  position: fixed;
   left: 20px;
   top: 20px;
   background-color: rgba(0, 0, 0, 0.8);
