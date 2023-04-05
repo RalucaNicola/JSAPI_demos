@@ -1,29 +1,13 @@
 require([
   "esri/WebScene",
   "esri/views/SceneView",
-  "esri/layers/GraphicsLayer",
-  "esri/layers/GeoJSONLayer",
-  "esri/Graphic",
-  "esri/core/scheduling",
-  "esri/Color",
-  "esri/widgets/TimeSlider",
   "esri/geometry/Point",
-  "esri/geometry/Mesh",
-  "esri/geometry/support/MeshMaterialMetallicRoughness",
   "esri/core/reactiveUtils",
   "esri/widgets/Slider"
 ], (
   WebScene,
   SceneView,
-  GraphicsLayer,
-  GeoJSONLayer,
-  Graphic,
-  scheduling,
-  Color,
-  TimeSlider,
   Point,
-  Mesh,
-  MeshMaterialMetallicRoughness,
   reactiveUtils,
   Slider
 ) => {
@@ -47,33 +31,35 @@ require([
     window.view = view;
     view.map.ground.navigationConstraint = { type: "stay-above" };
     const voxelLayer = view.map.findLayerById("18750f45f4a-layer-85");
-    const style = voxelLayer.getVariableStyle(0);
-    let { stretchRange, colorStops } = style.transferFunction;
-    const min = stretchRange[0];
-    const max = stretchRange[1];
+    reactiveUtils.once(
+      () => voxelLayer.loaded)
+      .then(() => {
+        const style = voxelLayer.getVariableStyle(0);
+        let { stretchRange, colorStops } = style.transferFunction;
+        const min = stretchRange[0];
+        const max = stretchRange[1];
 
-    const slider = new Slider({
-      min, max, values: [min], container: "sliderDiv", visibleElements: {
-        labels: true
-      }, steps: 1
-    });
-    slider.on(["thumb-change", "thumb-drag"], (event) => {
-      const { index, state, value } = event;
-      // if (state === "stop") {
-      const { stretchRange } = voxelLayer.getVariableStyle(0).transferFunction;
-      const newRange = [
-        index === 0 ? value : stretchRange[0],
-        index === 1 ? value : stretchRange[1]
-      ];
-      voxelLayer.getVariableStyle(0).transferFunction.stretchRange = newRange;
-      //}
-    });
+        const slider = new Slider({
+          min, max, values: [min], container: "sliderDiv", visibleElements: {
+            labels: true
+          }, steps: 1
+        });
+        slider.on(["thumb-change", "thumb-drag"], (event) => {
+          const { index, value } = event;
+          const { stretchRange } = voxelLayer.getVariableStyle(0).transferFunction;
+          const newRange = [
+            index === 0 ? value : stretchRange[0],
+            index === 1 ? value : stretchRange[1]
+          ];
+          voxelLayer.getVariableStyle(0).transferFunction.stretchRange = newRange;
+        });
 
-    renderLegend({ min, max, colorStops });
+        renderLegend({ min, max, colorStops });
 
-    document.getElementById("coToggle").addEventListener("click", (event) => {
-      voxelLayer.visible = event.target.checked;
-    })
+        document.getElementById("coToggle").addEventListener("click", (event) => {
+          voxelLayer.visible = event.target.checked;
+        })
+      })
   })
 
   const createGradient = (colorStops) => {
@@ -103,6 +89,7 @@ require([
       symbols.forEach(symbol => {
         const screenPoint = view.toScreen(symbol.mapPoint);
         if (screenPoint) {
+          symbol.classList.remove("hidden");
           symbol.style.top = `${screenPoint.y - symbol.clientHeight / 2}px`;
           symbol.style.left = `${screenPoint.x - symbol.clientWidth}px`;
         }
@@ -112,8 +99,8 @@ require([
   }
   reactiveUtils.watch(
     () => view.ready,
-    (updating) => {
-      if (updating) {
+    (ready) => {
+      if (ready) {
         updateOverlay();
       }
     },
@@ -129,7 +116,6 @@ require([
         const symbol = document.createElement("div");
         symbol.classList.add("symbol");
         symbol.innerHTML = feature.id;
-        console.log(feature);
         const [longitude, latitude] = feature.geometry.coordinates;
         symbol.mapPoint = new Point({
           longitude,

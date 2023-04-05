@@ -42,6 +42,10 @@ body {
   transition: background-color 1s;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .highlight {
   background-color: rgba(209, 39, 206, 0.7);
 }
