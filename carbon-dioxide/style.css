@@ -1,0 +1,181 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: rgb(33, 38, 40);
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #d1d1d1;
+}
+
+body {
+  overflow: hidden;
+}
+
+#menu {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  width: 375px;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 80%);
+  z-index: 1;
+  max-height: calc(100% - 40px);
+  overflow: auto;
+}
+
+#menu header {
+  color: white;
+  font-weight: bold;
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  border-radius: 10px 10px 0 0;
+  letter-spacing: 2px;
+}
+
+#description > p {
+  transition: background-color 1s;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.highlight {
+  background-color: rgba(209, 39, 206, 0.7);
+}
+
+#sliderDiv {
+  margin-top: 30px;
+  padding: 0 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  padding: 0 15px;
+}
+
+.gradientContainer {
+  margin: 0 30px;
+  padding-bottom: 15px;
+  border-right: 1px solid #d1d1d1;
+  border-left: 1px solid #d1d1d1;
+  position: relative;
+}
+
+.legendColor {
+  height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.transparent {
+  background: url(transparency_pattern.svg) repeat-x;
+  height: 20px;
+}
+
+b {
+  background-color: rgba(209, 39, 206, 0.7);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.symbol {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.8));
+  width: 30px;
+  height: 30px;
+}
+
+.symbolDescription {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+}
+
+.symbol,
+.symbolDescription {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  color: white;
+}
+.symbol:hover {
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
+#description {
+  margin: 20px;
+  line-height: 1.6rem;
+}
+
+a,
+#description button {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  color: #d1d1d1;
+  text-decoration: none;
+  border-bottom: 1px #d1d1d1 solid;
+  cursor: pointer;
+  transition: color 500ms;
+}
+
+a:hover,
+#description button:hover {
+  color: rgba(209, 39, 206, 0.7);
+  border-color: rgba(209, 39, 206, 0.7);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255 255 255 / 0.1);
+  border: none;
+  border-radius: var(--border-radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255 255 255 / 0.8);
+}
+footer {
+  font-size: 0.8rem;
+  padding: 0 20px;
+  line-height: 1.2rem;
+}
+
+@media (max-width: 600px) {
+  #menu {
+    top: revert;
+    bottom: 20px;
+    right: 20px;
+    width: revert;
+    max-height: 200px;
+  }
+}

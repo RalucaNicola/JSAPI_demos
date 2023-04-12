@@ -63,7 +63,7 @@ require([
         symbolLayers: [
           {
             type: "line",
-            material: {color: [252, 186, 3, 0.7]},
+            material: { color: [252, 186, 3, 0.7] },
             size: 5,
           },
         ],
@@ -87,7 +87,7 @@ require([
       symbolLayers: [
         {
           type: "object",
-          resource: {href: "./snowman.glb"},
+          resource: { href: "./snowman.glb" },
           height: 20,
           heading: 200,
         },
@@ -111,6 +111,7 @@ require([
     complete: function (results) {
       for (let i = 1; i < results.data.length; i++) {
         const data = results.data[i];
+        console.log(data[2]);
         const timedate = new Date(`${data[2]}+0200`);
         const id = data[1];
         if (!timeAdded(timedate)) {
@@ -152,7 +153,7 @@ require([
                     symbolLayers: [
                       {
                         type: "fill",
-                        material: {color: [255, 255, 255, 1]},
+                        material: { color: [255, 255, 255, 1] },
                       },
                     ],
                   },
@@ -208,7 +209,7 @@ require([
 
   const getGeometry = (origin, size, color) => {
     const geometry = Mesh.createCylinder(origin, {
-      size: {height: size, width: 15, depth: 15},
+      size: { height: size, width: 15, depth: 15 },
       densificationFactor: 2,
     });
     geometry.components[0].material = new MeshMaterialMetallicRoughness({
@@ -235,8 +236,8 @@ require([
 
   const getSizeFromValue = value => {
     const stops = [
-      {value: 0, size: 150},
-      {value: 600, size: 400},
+      { value: 0, size: 150 },
+      { value: 600, size: 400 },
     ];
     for (let i = 0; i < stops.length; i++) {
       const stop = stops[i];
@@ -254,8 +255,8 @@ require([
 
   const getColorFromValue = value => {
     const stops = [
-      {value: 0, color: new Color([0, 255, 176])},
-      {value: 400, color: new Color([255, 94, 0])},
+      { value: 0, color: new Color([0, 255, 176]) },
+      { value: 400, color: new Color([255, 94, 0]) },
     ];
     for (let i = 0; i < stops.length; i++) {
       const stop = stops[i];
@@ -311,7 +312,7 @@ require([
                 symbolLayers: [
                   {
                     type: "text",
-                    material: {color: [255, 255, 255]},
+                    material: { color: [255, 255, 255] },
                     background: {
                       color: currentColor,
                     },
@@ -379,7 +380,7 @@ require([
         start: initialTime,
         end: initialTime,
       },
-      stops: {dates},
+      stops: { dates },
       playRate: duration + 200,
       tickConfigs: [
         {

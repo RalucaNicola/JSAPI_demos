@@ -1,0 +1,24 @@
+{
+  "features": [
+    {
+      "geometry": { "coordinates": [-111.23, 41.15], "type": "Point" },
+      "id": "1"
+    },
+    {
+      "geometry": { "coordinates": [13.38, 50.18], "type": "Point" },
+      "id": "1"
+    },
+    {
+      "geometry": { "coordinates": [102.58, 32.25], "type": "Point" },
+      "id": "1"
+    },
+    {
+      "geometry": { "coordinates": [-61.91, -5.98], "type": "Point" },
+      "id": "2"
+    },
+    {
+      "geometry": { "coordinates": [15.67, 5.19], "type": "Point" },
+      "id": "3"
+    }
+  ]
+}
