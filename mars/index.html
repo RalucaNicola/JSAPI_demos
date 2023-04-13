@@ -1,0 +1,1163 @@
+<html lang="en">
+  <head>
+    <title>The Murray Lab - Global CTX Mosaic of Mars (powered by Esri)</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link rel="icon" href="../../../img/murray-lab-icon.jpg" />
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.26/esri/themes/dark/main.css"
+    />
+
+    <style>
+      #logoDiv {
+        width: 120px;
+        background-color: rgba(0, 0, 0, 0);
+        box-shadow: none;
+      }
+      #disclaimerDiv {
+        font-weight: 400;
+        font-style: normal;
+        font-size: 1.2019rem;
+        padding: 600px;
+      }
+
+      #bookmarkDiv {
+        position: absolute;
+        top: 2%;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 560px;
+        text-align: center;
+        display: none;
+        border-top: solid 1px rgba(173, 173, 173, 0.3) !important;
+        border-radius: 5px !important;
+        z-index: 100;
+        cursor: pointer;
+      }
+      .btn-bookmark {
+        color: #8c9eff !important;
+        border: 2px solid #8c9eff !important;
+        background-color: transparent !important;
+      }
+      .btn-bookmark:hover,
+      .btn-bookmark:active,
+      .btn-bookmark:focus {
+        color: white !important;
+        background-color: #8c9eff !important;
+      }
+
+      .esri-coordinate-conversion__conversions-view {
+        margin: 0;
+      }
+
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      #optionsDiv {
+        position: absolute;
+        bottom: 30px;
+        left: 15px;
+        right: 15px;
+        padding: 0;
+        z-index: 1;
+        text-align: center;
+      }
+
+      .minimizeDiv {
+        display: none;
+        width: 100%;
+      }
+
+      .rotated {
+        transform: rotate(180deg);
+      }
+
+      #minimize > img {
+        transition: all 500ms;
+      }
+
+      .minimizeDiv img {
+        width: 25px;
+      }
+
+      .buttonsContainer {
+        max-width: 800px;
+        margin: 0 auto;
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        transition: all 500ms;
+      }
+
+      button {
+        background: #242424;
+        padding: 6px 4px;
+        border: none;
+        font-size: 1rem;
+        font-family: "Lato";
+        margin: 3px;
+        color: #d1d1d1;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      button:hover {
+        color: white;
+        cursor: pointer;
+      }
+
+      /* scrollbar styles */
+
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        display: none;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      @media (max-width: 544px) {
+        .minimizeDiv {
+          display: revert;
+        }
+        #optionsDiv {
+          background: #242424;
+        }
+        .buttonsContainer > button {
+          display: block;
+          width: 100%;
+          margin: 0;
+        }
+
+        .buttonsContainer > button::after {
+          content: "";
+          display: block;
+          height: 1px;
+          background: linear-gradient(
+            to left,
+            rgba(255, 255, 255, 0) 25%,
+            rgba(255, 255, 255, 1) 50%,
+            rgba(255, 255, 255, 0) 75%
+          );
+          margin-top: 10px;
+        }
+      }
+    </style>
+
+    <script src="https://js.arcgis.com/4.26/"></script>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/Camera",
+        "esri/views/SceneView",
+        "esri/layers/ElevationLayer",
+        "esri/layers/TileLayer",
+        "esri/widgets/CoordinateConversion",
+        "esri/layers/FeatureLayer",
+        "esri/layers/GeoJSONLayer",
+        "esri/widgets/LayerList",
+        "esri/widgets/AreaMeasurement3D",
+        "esri/widgets/Bookmarks",
+        "esri/widgets/Fullscreen",
+        "esri/widgets/ElevationProfile",
+        "esri/widgets/Editor",
+        "esri/widgets/Expand",
+        "esri/layers/GroupLayer",
+      ], (
+        Map,
+        Camera,
+        SceneView,
+        ElevationLayer,
+        TileLayer,
+        CoordinateConversion,
+        FeatureLayer,
+        GeoJSONLayer,
+        LayerList,
+        AreaMeasurement3D,
+        Bookmarks,
+        Fullscreen,
+        ElevationProfile,
+        Editor,
+        Expand,
+        GroupLayer
+      ) => {
+        const marsElevation = new ElevationLayer({
+          url: "https://astro.arcgis.com/arcgis/rest/services/OnMars/MDEM200M/ImageServer",
+          copyright: "Topography: NASA GSFC, DLR, USGS Astrogeology, JPL, Esri",
+        });
+
+        // const marsImagery = new TileLayer({
+        //   url:
+        //     "https://astro.arcgis.com/arcgis/rest/services/OnMars/MDIM/MapServer",
+        //     title: "Imagery",
+        //   copyright: "USGS Astrogeology Science Center, NASA, JPL, MSSS, Caltech/Murray Lab, Esri"
+        // });
+
+        const map = new Map({
+          ground: {
+            layers: [marsElevation],
+          },
+          layers: [],
+        });
+
+        const view = new SceneView({
+          map: map,
+          container: "viewDiv",
+          qualityProfile: "high",
+          // setting the spatial reference for Mars_2000 coordinate system
+          spatialReference: {
+            wkid: 104971,
+          },
+          breakpoints: {
+            xsmall: 300,
+            small: 768,
+            medium: 992,
+            large: 1200,
+          },
+          camera: {
+            position: {
+              x: -75,
+              y: -24,
+              z: 1281525.766,
+              spatialReference: 104971,
+            },
+            heading: 0,
+            tilt: 33,
+          },
+        });
+
+        const ctxLayer = new TileLayer({
+          url: "https://astro.arcgis.com/arcgis/rest/services/OnMars/CTX1/MapServer",
+          copyright: "Imagery: NASA, JPL, MSSS, Caltech/Murray Lab, Esri",
+          title: "Mars MRO CTX Mosaic (NASA/JPL/MSSS/Caltech)",
+          visible: true,
+        });
+
+        map.add(ctxLayer);
+
+        const cratersLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/Mars_Nomenclature_Mountains/FeatureServer",
+          definitionExpression: "type = 'Crater, craters'",
+          title: "Impact Craters",
+          visible: false,
+          renderer: {
+            type: "simple",
+            symbol: {
+              type: "polygon-3d",
+              symbolLayers: [
+                {
+                  type: "fill",
+                  material: {
+                    color: [255, 255, 255, 0.1],
+                  },
+                  outline: {
+                    color: [0, 0, 0, 0.4],
+                    size: 5,
+                  },
+                },
+              ],
+            },
+          },
+          labelingInfo: [
+            {
+              labelPlacement: "above-center",
+              labelExpressionInfo: {
+                expression: "$feature.NAME",
+              },
+              symbol: {
+                type: "label-3d",
+                symbolLayers: [
+                  {
+                    type: "text",
+                    material: {
+                      color: [0, 0, 0, 0.9],
+                    },
+                    halo: {
+                      size: 1,
+                      color: [255, 255, 255, 0.7],
+                    },
+                    font: {
+                      size: 10,
+                    },
+                  },
+                ],
+                verticalOffset: {
+                  screenLength: 40,
+                  maxWorldLength: 500000,
+                  minWorldLength: 0,
+                },
+                callout: {
+                  type: "line",
+                  size: 0.5,
+                  color: [255, 255, 255, 0.9],
+                  border: {
+                    color: [0, 0, 0, 0.3],
+                  },
+                },
+              },
+            },
+          ],
+        });
+
+        map.add(cratersLayer);
+
+        const quadtemplate = {
+          // NAME and COUNTY are fields in the service containing the Census Tract (NAME) and county of the feature
+          title: "{Quad}",
+          content: [
+            {
+              type: "fields",
+              fieldInfos: [
+                {
+                  fieldName: "Quad",
+                  label: "Quad",
+                },
+                {
+                  fieldName: "Data",
+                  label: "Link To Data",
+                },
+              ],
+            },
+          ],
+        };
+
+        const quadLayer = new GeoJSONLayer({
+          url: "./MurrayLab_CTX_V01_Quad-Map.geojson",
+          title: "Global Mosaic Tile Map (Link to data)",
+          visible: false,
+          renderer: {
+            type: "simple",
+            symbol: {
+              type: "polygon-3d",
+              symbolLayers: [
+                {
+                  type: "fill",
+                  material: {
+                    color: [255, 255, 255, 0.1],
+                  },
+                  outline: {
+                    color: [0, 0, 0, 0.4],
+                    size: 5,
+                  },
+                },
+              ],
+            },
+          },
+          labelingInfo: [
+            {
+              labelPlacement: "above-center",
+              labelExpressionInfo: {
+                expression: "$feature.Quad",
+              },
+              symbol: {
+                type: "label-3d",
+                symbolLayers: [
+                  {
+                    type: "text",
+                    material: {
+                      color: [0, 0, 0, 0.9],
+                    },
+                    halo: {
+                      size: 1,
+                      color: [255, 255, 255, 0.7],
+                    },
+                    font: {
+                      size: 10,
+                    },
+                  },
+                ],
+                verticalOffset: {
+                  screenLength: 10,
+                  maxWorldLength: 500000,
+                  minWorldLength: 0,
+                },
+                callout: {
+                  type: "line",
+                  size: 0.1,
+                  color: [255, 255, 255, 0.9],
+                  border: {
+                    color: [0, 0, 0, 0.3],
+                  },
+                },
+              },
+            },
+          ],
+        });
+
+        quadLayer.popupTemplate = quadtemplate;
+
+        map.add(quadLayer);
+
+        //        const hiriseLayer = new GeoJSONLayer({
+        //          url: "https://murray-lab.caltech.edu/CTX/V01/SceneView/Features/hirise_red.geojson",
+        //          title: "HiRISE Footprints",
+        //	  visible: false,
+        //          renderer: {
+        //            type: "simple",
+        //            symbol: {
+        //              type: "polygon-3d",
+        //              symbolLayers: [
+        //                {
+        //                  type: "fill",
+        //                  material: { color: [255, 255, 255, 0.1] },
+        //                  outline: {
+        //                   color: [0, 0, 0, 0.4],
+        //                   size: 5
+        //                }
+        //            }
+        //        ]
+        //    }
+        //},
+        //});
+
+        //	map.add(hiriseLayer);
+
+        const rover_renderer = {
+          type: "simple",
+          symbol: {
+            type: "simple-marker",
+            color: "white",
+            size: 5,
+          },
+        };
+
+        const msltemplate = {
+          // NAME and COUNTY are fields in the service containing the Census Tract (NAME) and county of the feature
+          title: "{sol}",
+          content: [
+            {
+              type: "fields",
+              fieldInfos: [
+                {
+                  fieldName: "Sol",
+                  label: "Mars Science Laboratory (Curiosity) Sol",
+                },
+              ],
+            },
+          ],
+        };
+
+        const msllayer = new GeoJSONLayer({
+          url: "./MSL_3420.geojson",
+          //url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
+          renderer: rover_renderer,
+          copyright: "NASA/JPL/MSL",
+          title: "MSL Traverse (Through Sol 3420)",
+          visible: true,
+        });
+
+        msllayer.popupTemplate = msltemplate;
+
+        map.add(msllayer);
+        //adds the layer to the map
+
+        const m2020template = {
+          // NAME and COUNTY are fields in the service containing the Census Tract (NAME) and county of the feature
+          title: "{sol}",
+          content: [
+            {
+              type: "fields",
+              fieldInfos: [
+                {
+                  fieldName: "Sol",
+                  label: "Mars 2020 (Perseverance) Sol",
+                },
+              ],
+            },
+          ],
+        };
+
+        const m2020layer = new GeoJSONLayer({
+          url: "./Mars2020_0678.geojson",
+          //url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
+          copyright: "NASA/JPL/M2020",
+          renderer: rover_renderer,
+          title: "Mars 2020 Traverse (Through Sol 678)",
+          visible: true,
+        });
+
+        m2020layer.popupTemplate = m2020template;
+
+        map.add(m2020layer);
+        // adds the layer to the map
+
+        const RoverTraverses = new GroupLayer({
+          title: "Rover Traverse Maps",
+          layers: [m2020layer, msllayer],
+        });
+
+        map.add(RoverTraverses);
+
+        const nomenclaturetemplate = {
+          // NAME and COUNTY are fields in the service containing the Census Tract (NAME) and county of the feature
+          title: "{sol}",
+          content: [
+            {
+              type: "fields",
+              fieldInfos: [
+                {
+                  fieldName: "name",
+                  label: "Name",
+                },
+                {
+                  fieldName: "clean_name",
+                  label: "Clean Name",
+                },
+                {
+                  fieldName: "approvaldt",
+                  label: "Approval Date",
+                },
+                {
+                  fieldName: "origin",
+                  label: "Origin",
+                },
+                {
+                  fieldName: "diameter",
+                  label: "Diameter",
+                },
+                {
+                  fieldName: "center_lon",
+                  label: "Center Longitude",
+                },
+                {
+                  fieldName: "center_lat",
+                  label: "Center Latitude",
+                },
+                {
+                  fieldName: "type",
+                  label: "Type",
+                },
+                {
+                  fieldName: "code",
+                  label: "Code",
+                },
+                {
+                  fieldName: "approval",
+                  label: "Approval",
+                },
+                {
+                  fieldName: "min_lon",
+                  label: "Minimum Longitude",
+                },
+                {
+                  fieldName: "max_lon",
+                  label: "Maximum Longitude",
+                },
+                {
+                  fieldName: "min_lat",
+                  label: "Minimum Latitude",
+                },
+                {
+                  fieldName: "max_lat",
+                  label: "Maximum Latitude",
+                },
+                {
+                  fieldName: "ethnicity",
+                  label: "Ethnicity",
+                },
+                {
+                  fieldName: "continent",
+                  label: "Continent",
+                },
+                {
+                  fieldName: "quad_name",
+                  label: "Quad Name",
+                },
+                {
+                  fieldName: "quad_code",
+                  label: "Quad Code",
+                },
+                {
+                  fieldName: "link",
+                  label: "Link",
+                },
+              ],
+            },
+          ],
+        };
+
+        const nomenclaturerenderer = {
+          type: "simple",
+          symbol: {
+            type: "simple-marker",
+            color: "white",
+            size: 8,
+          },
+        };
+
+        const nomenclaturelayer = new GeoJSONLayer({
+          url: "./mars-nomenclature.geojson",
+          //url: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
+          renderer: nomenclaturerenderer,
+          copyright: "IAU WGPSN",
+          title: "Feature Names (IAU)",
+          visible: false,
+
+          labelingInfo: [
+            {
+              labelPlacement: "above-center",
+              labelExpressionInfo: {
+                expression: "$feature.name",
+              },
+              symbol: {
+                type: "label-3d",
+                symbolLayers: [
+                  {
+                    type: "text",
+                    material: {
+                      color: [0, 0, 0, 0.9],
+                    },
+                    halo: {
+                      size: 1,
+                      color: [255, 255, 255, 0.7],
+                    },
+                    font: {
+                      size: 10,
+                    },
+                  },
+                ],
+                verticalOffset: {
+                  screenLength: 40,
+                  maxWorldLength: 500000,
+                  minWorldLength: 0,
+                },
+                callout: {
+                  type: "line",
+                  size: 0.5,
+                  color: [255, 255, 255, 0.9],
+                  border: {
+                    color: [0, 0, 0, 0.3],
+                  },
+                },
+              },
+            },
+          ],
+        });
+
+        nomenclaturelayer.popupTemplate = nomenclaturetemplate;
+
+        map.add(nomenclaturelayer);
+        // adds the layer to the map
+
+        const shadedReliefLayer = new TileLayer({
+          url: "https://astro.arcgis.com/arcgis/rest/services/OnMars/MColorDEM/MapServer",
+          copyright:
+            "USGS Astrogeology Science Center, NASA, JPL, ESA, DLR, Esri",
+          title: "MOLA Topography (NASA/JPL/GSFC)",
+          visible: false,
+        });
+
+        map.add(shadedReliefLayer);
+
+        view.ui.add("logoDiv", "top-right", 0);
+        view.ui.move(["zoom", "compass"], "top-right", 1);
+        view.ui.empty("top-left");
+
+        const ccWidget = new CoordinateConversion({
+          view,
+        });
+
+        const xyFormat = ccWidget.formats.find(
+          (format) => format.name === "xy"
+        );
+        xyFormat.currentPattern = "Lat: Y°N, Long: X°E";
+
+        const bkExpandCoord = new Expand({
+          view,
+          content: ccWidget,
+          expanded: window.innerHeight > 544 ? true : false,
+        });
+
+        view.ui.add(bkExpandCoord, "top-left", 0);
+
+        const layerList = new LayerList({
+          view,
+        });
+
+        const bkExpandLayer = new Expand({
+          view: view,
+          content: layerList,
+          expanded: false,
+          group: "top-left",
+        });
+
+        view.ui.add([
+          {
+            component: bkExpandLayer,
+            position: "top-left",
+            index: 3,
+          },
+        ]);
+
+        const measurementWidget = new AreaMeasurement3D({
+          view,
+        });
+
+        //view.ui.add(measurementWidget, "top-right");
+
+        const fullscreen = new Fullscreen({
+          view,
+        });
+        //view.ui.add(fullscreen, "top-right");
+
+        const bookmarks = new Bookmarks({
+          view: view,
+          // allows bookmarks to be added, edited, or deleted
+          editingEnabled: true,
+        });
+
+        const bkExpand = new Expand({
+          view: view,
+          content: bookmarks,
+          expanded: false,
+          group: "top-left",
+        });
+
+        view.ui.add(bkExpand, "top-left", 4);
+
+        const bkExpandMeas = new Expand({
+          view: view,
+          content: measurementWidget,
+          expanded: false,
+          group: "top-left",
+        });
+
+        view.ui.add(bkExpandMeas, "top-left", 1);
+
+        const elevationProfile = new ElevationProfile({
+          view: view,
+        });
+
+        // adds the ElevationProfile to the top right corner of the view
+        //view.ui.add(elevationProfile, "top-right");
+
+        const bkExpandProfile = new Expand({
+          view: view,
+          content: elevationProfile,
+          expanded: false,
+          group: "top-left",
+        });
+
+        view.ui.add(bkExpandProfile, "top-left", 2);
+
+        const olympusmons = new Camera({
+          position: {
+            x: -148.81,
+            y: 26.04,
+            z: 287236,
+            spatialReference: 104971,
+          },
+          heading: 115.63,
+          tilt: 66.3,
+        });
+
+        const gale = new Camera({
+          position: {
+            x: 137.06741,
+            y: -4.37168,
+            z: 7063,
+            spatialReference: 104971,
+          },
+          heading: 145.54,
+          tilt: 73.37,
+        });
+
+        const capri = new Camera({
+          position: {
+            x: -44.8278,
+            y: -7.39171,
+            z: 22722.708,
+            spatialReference: 104971,
+          },
+          heading: 169.82,
+          tilt: 66.52,
+        });
+
+        const jezero = new Camera({
+          position: {
+            x: 77.49,
+            y: 18.25,
+            z: 3000,
+            spatialReference: 104971,
+          },
+          heading: 335,
+          tilt: 70,
+        });
+
+        const coloe = new Camera({
+          position: {
+            x: 55.13,
+            y: 42.18,
+            z: 18892,
+            spatialReference: 104971,
+          },
+          heading: 196.43,
+          tilt: 69.53,
+        });
+
+        const shalbatana = new Camera({
+          position: {
+            x: -42.75,
+            y: 5.95,
+            z: 61368,
+            spatialReference: 104971,
+          },
+          heading: 25.49,
+          tilt: 65.45,
+        });
+
+        const medusaefossae = new Camera({
+          position: {
+            x: 175.94178,
+            y: -0.77655,
+            z: 22617.429,
+            spatialReference: 104971,
+          },
+          heading: 334.18,
+          tilt: 49.7,
+        });
+
+        const nicholson = new Camera({
+          position: {
+            x: -164.61068,
+            y: -0.44171,
+            z: 721.061,
+            spatialReference: 104971,
+          },
+          heading: 10.99,
+          tilt: 79.58,
+        });
+
+        const zunil = new Camera({
+          position: {
+            x: 166.47449,
+            y: 7.4256,
+            z: 7366.069,
+            spatialReference: 104971,
+          },
+          heading: 312.69,
+          tilt: 69.38,
+        });
+
+        const milankovic = new Camera({
+          position: {
+            x: -147.69002,
+            y: 54.33878,
+            z: 191.86,
+            spatialReference: 104971,
+          },
+          heading: 223.29,
+          tilt: 75.31,
+        });
+
+        const terrasirenum = new Camera({
+          position: {
+            x: -157.35661,
+            y: -39.46969,
+            z: 1905.486,
+            spatialReference: 104971,
+          },
+          heading: 343.47,
+          tilt: 61.06,
+        });
+
+        const eberswalde = new Camera({
+          position: {
+            x: -33.30974,
+            y: -23.69724,
+            z: 4353.219,
+            spatialReference: 104971,
+          },
+          heading: 244.68,
+          tilt: 71.8,
+        });
+
+        const meridiani = new Camera({
+          position: {
+            x: -5.37351,
+            y: -2.78455,
+            z: 17323.085,
+            spatialReference: 104971,
+          },
+          heading: 0.27,
+          tilt: 57.98,
+        });
+
+        const gusev = new Camera({
+          position: {
+            x: 175.666,
+            y: -15.13246,
+            z: 20012.988,
+            spatialReference: 104971,
+          },
+          heading: 347.37,
+          tilt: 56.97,
+        });
+
+        const vallesmarineris = new Camera({
+          position: {
+            x: -50.95293,
+            y: -15.12476,
+            z: 36793.926,
+            spatialReference: 104971,
+          },
+          heading: 282.33,
+          tilt: 71.08,
+        });
+
+        const caviangusti = new Camera({
+          position: {
+            x: -79.03621,
+            y: -77.0068,
+            z: 3352.311,
+            spatialReference: 104971,
+          },
+          heading: 55.75,
+          tilt: 79.06,
+        });
+
+        function shiftCamera(deg) {
+          const camera = view.camera.clone();
+          camera.position.longitude += deg;
+          return camera;
+        }
+
+        function catchAbortError(error) {
+          if (error.name != "AbortError") {
+            console.error(error);
+          }
+        }
+
+        document.getElementById("olympusmons").addEventListener("click", () => {
+          view
+            .goTo(olympusmons, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document.getElementById("gale").addEventListener("click", () => {
+          view
+            .goTo(gale, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document.getElementById("capri").addEventListener("click", () => {
+          view
+            .goTo(capri, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document.getElementById("jezero").addEventListener("click", () => {
+          view
+            .goTo(jezero, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document.getElementById("coloe").addEventListener("click", () => {
+          view
+            .goTo(coloe, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document.getElementById("shalbatana").addEventListener("click", () => {
+          view
+            .goTo(shalbatana, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document
+          .getElementById("medusaefossae")
+          .addEventListener("click", () => {
+            view
+              .goTo(medusaefossae, {
+                speedFactor: 0.3,
+                //easing: customEasing
+              })
+              .catch(catchAbortError);
+          });
+
+        document.getElementById("nicholson").addEventListener("click", () => {
+          view
+            .goTo(nicholson, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document.getElementById("zunil").addEventListener("click", () => {
+          view
+            .goTo(zunil, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document.getElementById("milankovic").addEventListener("click", () => {
+          view
+            .goTo(milankovic, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document
+          .getElementById("terrasirenum")
+          .addEventListener("click", () => {
+            view
+              .goTo(terrasirenum, {
+                speedFactor: 0.3,
+                //easing: customEasing
+              })
+              .catch(catchAbortError);
+          });
+
+        document.getElementById("eberswalde").addEventListener("click", () => {
+          view
+            .goTo(eberswalde, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document.getElementById("meridiani").addEventListener("click", () => {
+          view
+            .goTo(meridiani, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document.getElementById("gusev").addEventListener("click", () => {
+          view
+            .goTo(gusev, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        document
+          .getElementById("vallesmarineris")
+          .addEventListener("click", () => {
+            view
+              .goTo(vallesmarineris, {
+                speedFactor: 0.3,
+                //easing: customEasing
+              })
+              .catch(catchAbortError);
+          });
+
+        document.getElementById("caviangusti").addEventListener("click", () => {
+          view
+            .goTo(caviangusti, {
+              speedFactor: 0.3,
+              //easing: customEasing
+            })
+            .catch(catchAbortError);
+        });
+
+        let collapsed = false;
+
+        document.getElementById("minimize").addEventListener("click", () => {
+          collapsed = !collapsed;
+          updateOptionsDiv();
+        });
+
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 544 && collapsed) {
+            collapsed = false;
+            updateOptionsDiv();
+          }
+        });
+
+        function updateOptionsDiv() {
+          if (collapsed) {
+            document.querySelector("#minimize>img").classList.add("rotated");
+          } else {
+            document.querySelector("#minimize>img").classList.remove("rotated");
+          }
+
+          document.querySelector(".buttonsContainer").style.maxHeight =
+            collapsed ? "0px" : "200px";
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <div id="optionsDiv">
+      <div class="buttonsContainer">
+        <button id="jezero">Jezero (Perseverance)</button>
+        <button id="gale">Gale (Curiosity)</button>
+        <button id="gusev">Gusev (Spirit)</button>
+        <button id="meridiani">Meridiani (Opportunity)</button>
+        <button id="olympusmons">Olympus Mons</button>
+        <button id="capri">Capri Chasma</button>
+        <button id="coloe">Coloe</button>
+        <button id="shalbatana">Shalbatana</button>
+        <button id="vallesmarineris">Valles Marineris</button>
+        <button id="caviangusti">Cavi Angusti</button>
+        <button id="medusaefossae">Medusae Fossae</button>
+        <button id="nicholson">Nicholson</button>
+        <button id="zunil">Zunil</button>
+        <button id="milankovic">Milankovič</button>
+        <button id="terrasirenum">Terra Sirenum</button>
+        <button id="eberswalde">Eberswalde</button>
+      </div>
+      <div class="minimizeDiv">
+        <button id="minimize"><img src="chevrons-down-32.svg" /></button>
+      </div>
+    </div>
+    <div>
+      <img
+        id="logoDiv"
+        class="esri-widget"
+        src="img/caltech-ml-esri_logos_uppercase.png"
+      />
+    </div>
+  </body>
+</html>
