@@ -47,11 +47,11 @@ require([
         if (loaded) {
           const style = voxelLayer.getVariableStyle(0);
           let { stretchRange, colorStops } = style.transferFunction;
-          console.log(style.transferFunction);
           const min = 360;
           const value = stretchRange[0];
           const max = stretchRange[1];
-
+          voxelLayer.getVariableStyle(0).transferFunction.rangeFilter = { enabled: true, range: [value, max] };
+          voxelLayer.getVariableStyle(0).transferFunction.stretchRange = [min, max];
           const slider = new Slider({
             min, max, values: [value], container: "sliderDiv", visibleElements: {
               labels: true
@@ -60,19 +60,21 @@ require([
 
           slider.on(["thumb-change", "thumb-drag"], (event) => {
             const { index, value } = event;
-            renderLegend({ min, max, colorStops, value });
-            const { stretchRange } = voxelLayer.getVariableStyle(0).transferFunction;
+            //renderLegend({ min, max, colorStops, value });
+            const { rangeFilter } = voxelLayer.getVariableStyle(0).transferFunction;
             const newRange = [
-              index === 0 ? value : stretchRange[0],
-              index === 1 ? value : stretchRange[1]
+              index === 0 ? value : rangeFilter.range[0],
+              index === 1 ? value : rangeFilter.range[1]
             ];
-            voxelLayer.getVariableStyle(0).transferFunction.stretchRange = newRange;
+            voxelLayer.getVariableStyle(0).transferFunction.rangeFilter = { enabled: true, range: newRange };
           });
 
-          const resizeObserver = new ResizeObserver(() => {
-            renderLegend({ min, max, colorStops, value: slider.values[0] });
-          });
-          resizeObserver.observe(sliderContainer);
+          renderLegend({ min, max, colorStops, value });
+
+          // const resizeObserver = new ResizeObserver(() => {
+          //   renderLegend({ min, max, colorStops, value: slider.values[0] });
+          // });
+          // resizeObserver.observe(sliderContainer);
         }
 
       }, { once: true, initial: true })
@@ -90,11 +92,11 @@ require([
   };
 
   const renderLegend = ({ min, max, value, colorStops }) => {
-    const thumbPosition = (sliderContainer.clientWidth - 60) * (value - min) / (max - min);
+    //const thumbPosition = (sliderContainer.clientWidth - 60) * (value - min) / (max - min);
     legendContainer.innerHTML = `
       <div class="gradientContainer">
         <div class="transparent"></div>
-        <div style="background: ${createGradient(colorStops)}; left: ${thumbPosition}px" class="legendColor"></div>
+        <div style="background: ${createGradient(colorStops)}; left: 0px" class="legendColor"></div>
       </div>
       <div class="labels">
         <div>&gt;${parseInt(min)} ppmv</div>
