@@ -51,7 +51,6 @@ body {
 }
 
 #sliderDiv {
-  margin-top: 30px;
   padding: 0 30px;
   position: relative;
   z-index: 1;
@@ -78,6 +77,14 @@ body {
   top: 0;
   left: 0;
   right: 0;
+}
+
+#histogram {
+  margin: 0 30px;
+}
+
+.esri-histogram {
+  background: transparent;
 }
 
 .transparent {

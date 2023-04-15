@@ -3,18 +3,29 @@ require([
   "esri/views/SceneView",
   "esri/geometry/Point",
   "esri/core/reactiveUtils",
-  "esri/widgets/Slider"
+  "esri/widgets/Slider",
+  "esri/widgets/Histogram"
 ], (
   WebScene,
   SceneView,
   Point,
   reactiveUtils,
-  Slider
+  Slider,
+  Histogram
 ) => {
 
   const legendContainer = document.getElementById("legend");
-  const sliderContainer = document.getElementById("sliderDiv");
+  const histograms = [];
 
+  const displayHistogram = (year) => {
+    for (histogram of histograms) {
+      if (histogram.year === parseInt(year)) {
+        histogram.container.style.display = 'revert';
+      } else {
+        histogram.container.style.display = 'none';
+      }
+    }
+  }
 
 
   const view = new SceneView({
@@ -40,6 +51,7 @@ require([
         start: new Date(`${year}-01-01 00:00:00+0000`),
         end: new Date(`${year}-01-01 12:00:00+0000`)
       }
+      displayHistogram(year);
     });
     reactiveUtils.watch(
       () => voxelLayer.loaded,
@@ -49,7 +61,7 @@ require([
           let { stretchRange, colorStops } = style.transferFunction;
           const min = 360;
           const value = stretchRange[0];
-          const max = stretchRange[1];
+          const max = 450;
           voxelLayer.getVariableStyle(0).transferFunction.rangeFilter = { enabled: true, range: [value, max] };
           voxelLayer.getVariableStyle(0).transferFunction.stretchRange = [min, max];
           const slider = new Slider({
@@ -157,4 +169,33 @@ require([
         symbols.push(symbol);
       })
     });
+
+  fetch("./statistics.json")
+    .then(response => response.json())
+    .then(statistics => {
+      for (statistic of statistics) {
+        const bins = [];
+        console.log(statistic);
+        const { year, values, counts } = statistic;
+        for (let i = 0; i < values.length - 1; i++) {
+          bins.push({
+            minValue: values[i],
+            maxValue: values[i + 1],
+            count: counts[i]
+          })
+        }
+        const container = document.createElement("div");
+        document.getElementById("histogram").appendChild(container);
+        const histogram = new Histogram({
+          container,
+          bins,
+          min: values[0],
+          max: values[values.length - 1]
+        });
+
+        container.style.display = year === 2005 ? 'inherit' : 'none';
+
+        histograms.push({ year, container })
+      }
+    })
 });
