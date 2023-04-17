@@ -47,13 +47,17 @@ body {
 }
 
 .highlight {
-  background-color: rgba(209, 39, 206, 0.7);
+  background-color: #009af2;
 }
 
-#sliderDiv {
-  padding: 0 30px;
-  position: relative;
+.esri-histogram-range-slider {
   z-index: 1;
+}
+
+sub {
+  vertical-align: baseline;
+  position: relative;
+  top: 0.4rem;
 }
 
 .labels {
@@ -83,19 +87,21 @@ body {
   margin: 0 30px;
 }
 
-.esri-histogram {
+.esri-widget {
   background: transparent;
+}
+
+.esri-histogram-range-slider__slider-container {
+  margin-bottom: 0;
+}
+
+.esri-slider__label {
+  outline: none !important;
 }
 
 .transparent {
   background: url(transparency_pattern.svg) repeat-x;
   height: 20px;
-}
-
-b {
-  background-color: rgba(209, 39, 206, 0.7);
-  padding: 2px 5px;
-  border-radius: 3px;
 }
 
 .symbol {
@@ -112,11 +118,11 @@ b {
 }
 
 .symbolDescription {
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   display: inline-block;
   text-align: center;
-  line-height: 20px;
+  line-height: 25px;
 }
 
 .symbol,
@@ -150,8 +156,8 @@ a,
 
 a:hover,
 #description button:hover {
-  color: rgba(209, 39, 206, 0.7);
-  border-color: rgba(209, 39, 206, 0.7);
+  color: #009af2;
+  border-color: #009af2;
 }
 
 ::-webkit-scrollbar {

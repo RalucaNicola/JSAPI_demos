@@ -10,12 +10,6 @@
       type="module"
       src="https://js.arcgis.com/calcite-components/1.0.7/calcite.esm.js"
     ></script>
-    <!-- <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://js.arcgis.com/calcite-components/1.0.7/calcite.css"
-      /> -->
-
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/4.26/esri/themes/dark/main.css"
@@ -31,56 +25,28 @@
       <header>Global Carbon Dioxide</header>
       <div id="description">
         <p>
-          Carbon dioxide (CO2) is the most important greenhouse gas released to
-          the atmosphere through human activities.
+          Carbon dioxide (CO<sub>2</sub>) is the most important greenhouse gas
+          released to the atmosphere through human activities.
         </p>
 
-        <p id="symbol-1">
-          <span class="symbolDescription">1</span> In the northern hemisphere
-          emissions mostly come from byproducts of burning gasoline or diesel
-          fuel for <b>vehicles</b> or from <b>industry</b> like manufacturing,
-          mining, oil and gas production.
-          <a
-            href="https://www.epa.gov/ghgemissions/sources-greenhouse-gas-emissions"
-            target="_blank"
-            >Read more.</a
-          >
-        </p>
         <p>
-          <b>Forest fires</b> can also release large amounts of CO2 in the
-          atmosphere.
+          On the map we visualize CO<sub>2</sub>
+          concentrations as a regular 3D grid with the resolution of 480 x 241 x
+          41. A single cell in this grid is called a voxel.
         </p>
-        <p id="symbol-2">
-          <span class="symbolDescription">2</span> Wildfires in the Amazon,
-          caused by deforestation.
-          <a
-            href="https://www.reuters.com/world/americas/causes-consequences-amazon-fires-deforestation-2022-08-10/"
-            target="_blank"
-            >Read more.</a
-          >
-        </p>
-        <p id="symbol-3">
-          <span class="symbolDescription">3</span>
-          Widespread agricultural fires are a common occurrence in Central
-          Africa.
-          <a
-            href="https://climate.esa.int/en/news-events/african-burned-area-and-emissions-much-larger-than-thought/"
-            target="_blank"
-            >Read more.</a
-          >
-        </p>
+        <img src="./voxel-graphic.svg" />
         <p>
-          This visualization provides a high-resolution, three-dimensional view
-          of global atmospheric carbon dioxide concentrations for the month of
-          January of each year. Values above 400 ppmv are considered to be high.
-          By changing the slider, you will change the minimum value that is
-          displayed on the map. As carbon dioxide increases over time, this will
-          allow you to explore the areas of high concentration. The height is
-          exaggerated 400 times.
+          Voxels are colored based on the CO<sub>2</sub> value: 360 ppm means
+          360 molecules of CO<sub>2</sub> per million molecules of dry air. The
+          values represent average measurements for the month of January. Drag
+          the slider under the histogram to filter voxels based on their values.
         </p>
         <div id="histogram"></div>
-        <div id="sliderDiv"></div>
         <div id="legend"></div>
+        <p>
+          Change the year to see how the CO<sub>2</sub> concentration changed in
+          the last 20 years.
+        </p>
         <calcite-segmented-control
           appearance="outline"
           layout="horizontal"
@@ -101,10 +67,45 @@
             >2020</calcite-segmented-control-item
           >
         </calcite-segmented-control>
+        <p id="symbol-1">
+          <span class="symbolDescription">1</span> In the northern hemisphere
+          CO<sub>2</sub> emissions can come from byproducts of burning gasoline
+          or diesel fuel for <b>vehicles</b> or from <b>industry</b> like
+          manufacturing, mining, oil and gas production.
+          <a
+            href="https://www.epa.gov/ghgemissions/sources-greenhouse-gas-emissions"
+            target="_blank"
+            >Read more.</a
+          >
+        </p>
+        <p>
+          <b>Forest fires</b> can also release large amounts of CO<sub>2</sub>
+          in the atmosphere.
+        </p>
+        <p id="symbol-2">
+          <span class="symbolDescription">2</span> Wildfires in the Amazon,
+          caused by deforestation.
+          <a
+            href="https://www.reuters.com/world/americas/causes-consequences-amazon-fires-deforestation-2022-08-10/"
+            target="_blank"
+            >Read more.</a
+          >
+        </p>
+        <p id="symbol-3">
+          <span class="symbolDescription">3</span>
+          Widespread agricultural fires are a common occurrence in Central
+          Africa.
+          <a
+            href="https://climate.esa.int/en/news-events/african-burned-area-and-emissions-much-larger-than-thought/"
+            target="_blank"
+            >Read more.</a
+          >
+        </p>
       </div>
       <footer>
         <p>
-          Carbon dioxide data from
+          CO<sub>2</sub> data for the months of January 2005, 2010, 2015 and
+          2020 from
           <a
             href="https://ads.atmosphere.copernicus.eu/cdsapp#!/dataset/cams-global-ghg-reanalysis-egg4-monthly?tab=overview"
             target="_blank"
@@ -116,13 +117,20 @@
             href="https://pro.arcgis.com/en/pro-app/latest/get-started/get-started.htm"
             target="_blank"
             >ArcGIS Pro</a
-          >,
+          >
+          and
           <a href="https://docs.xarray.dev/en/stable/" target="_blank"
             >xarray</a
           >
           • Visualized with
           <a href="https://developers.arcgis.com/javascript/" target="_blank"
             >ArcGIS Maps SDK for JavaScript</a
+          >
+          • This project is on
+          <a
+            href="https://github.com/RalucaNicola/JSAPI_demos/tree/main/carbon-dioxide"
+            target="_blank"
+            >GitHub</a
           >
         </p>
       </footer>

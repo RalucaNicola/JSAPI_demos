@@ -3,30 +3,24 @@ require([
   "esri/views/SceneView",
   "esri/geometry/Point",
   "esri/core/reactiveUtils",
+  "esri/core/promiseUtils",
   "esri/widgets/Slider",
-  "esri/widgets/Histogram"
+  "esri/widgets/HistogramRangeSlider"
 ], (
   WebScene,
   SceneView,
   Point,
   reactiveUtils,
+  promiseUtils,
   Slider,
-  Histogram
+  HistogramRangeSlider
 ) => {
 
   const legendContainer = document.getElementById("legend");
   const histograms = [];
-
-  const displayHistogram = (year) => {
-    for (histogram of histograms) {
-      if (histogram.year === parseInt(year)) {
-        histogram.container.style.display = 'revert';
-      } else {
-        histogram.container.style.display = 'none';
-      }
-    }
-  }
-
+  const min = 363;
+  const max = 424;
+  const range = [390, max];
 
   const view = new SceneView({
     container: "viewDiv",
@@ -41,82 +35,123 @@ require([
     }
   });
 
-  view.when(async () => {
-    window.view = view;
-    view.map.ground.navigationConstraint = { type: "stay-above" };
-    const voxelLayer = view.map.findLayerById("1877517417e-layer-0");
-    document.getElementById("yearToggle").addEventListener("calciteSegmentedControlChange", (event) => {
-      const year = event.target.value;
-      view.timeExtent = {
-        start: new Date(`${year}-01-01 00:00:00+0000`),
-        end: new Date(`${year}-01-01 12:00:00+0000`)
-      }
-      displayHistogram(year);
-    });
-    reactiveUtils.watch(
-      () => voxelLayer.loaded,
-      (loaded) => {
-        if (loaded) {
-          const style = voxelLayer.getVariableStyle(0);
-          let { stretchRange, colorStops } = style.transferFunction;
-          const min = 360;
-          const value = stretchRange[0];
-          const max = 450;
-          voxelLayer.getVariableStyle(0).transferFunction.rangeFilter = { enabled: true, range: [value, max] };
-          voxelLayer.getVariableStyle(0).transferFunction.stretchRange = [min, max];
-          const slider = new Slider({
-            min, max, values: [value], container: "sliderDiv", visibleElements: {
-              labels: true
-            }, steps: 1
-          });
-
-          slider.on(["thumb-change", "thumb-drag"], (event) => {
-            const { index, value } = event;
-            //renderLegend({ min, max, colorStops, value });
-            const { rangeFilter } = voxelLayer.getVariableStyle(0).transferFunction;
-            const newRange = [
-              index === 0 ? value : rangeFilter.range[0],
-              index === 1 ? value : rangeFilter.range[1]
-            ];
-            voxelLayer.getVariableStyle(0).transferFunction.rangeFilter = { enabled: true, range: newRange };
-          });
-
-          renderLegend({ min, max, colorStops, value });
-
-          // const resizeObserver = new ResizeObserver(() => {
-          //   renderLegend({ min, max, colorStops, value: slider.values[0] });
-          // });
-          // resizeObserver.observe(sliderContainer);
-        }
-
-      }, { once: true, initial: true })
-  });
-
   const createGradient = (colorStops) => {
     const gradientColors = colorStops.map((c, i) => {
-      let { r, g, b, a } = c.color;
-      if (i === 0) {
-        a = 0.3;
-      }
-      return `rgba(${r} ${g} ${b} / ${a * 100}%) ${c.position * 100}%`;
+      let { r, g, b } = c.color;
+      return `rgba(${r} ${g} ${b} / 60%) ${c.position * 100}%`;
     });
     return `linear-gradient(90deg, ${gradientColors.join(', ')})`;
   };
 
-  const renderLegend = ({ min, max, value, colorStops }) => {
-    //const thumbPosition = (sliderContainer.clientWidth - 60) * (value - min) / (max - min);
+  const renderLegend = (colorStops) => {
     legendContainer.innerHTML = `
       <div class="gradientContainer">
         <div class="transparent"></div>
         <div style="background: ${createGradient(colorStops)}; left: 0px" class="legendColor"></div>
       </div>
       <div class="labels">
-        <div>&gt;${parseInt(min)} ppmv</div>
-        <div>&lt;${parseInt(max)} ppmv</div>
+        <div>${parseInt(min)} ppm</div>
+        <div>${parseInt(max)} ppm</div>
       </div>
       
     `;
   }
+
+  const displayHistogram = (year) => {
+    for (histogram of histograms) {
+      if (histogram.year === parseInt(year)) {
+        histogram.container.style.display = 'revert';
+      } else {
+        histogram.container.style.display = 'none';
+      }
+    }
+  }
+
+  const fetchStatistics = fetch("./statistics.json")
+    .then(response => response.json());
+
+  promiseUtils.eachAlways([fetchStatistics, view.when()])
+    .then((response) => {
+      window.view = view;
+      view.map.ground.navigationConstraint = { type: "stay-above" };
+
+      const voxelLayer = view.map.findLayerById("1877517417e-layer-0");
+
+      document.getElementById("yearToggle").addEventListener("calciteSegmentedControlChange", (event) => {
+        const year = event.target.value;
+        view.timeExtent = {
+          start: new Date(`${year}-01-01 00:00:00+0000`),
+          end: new Date(`${year}-01-01 12:00:00+0000`)
+        }
+        displayHistogram(year);
+      });
+
+      const statistics = response[0].value;
+
+      reactiveUtils.watch(
+        () => voxelLayer.loaded,
+        (loaded) => {
+          if (loaded) {
+            const style = voxelLayer.getVariableStyle(0);
+            let { colorStops } = style.transferFunction;
+            style.transferFunction.rangeFilter = { enabled: true, range };
+            style.transferFunction.stretchRange = [min, max];
+
+            for (statistic of statistics) {
+              const bins = [];
+              const { year, values, counts, mean, std } = statistic;
+              for (let i = 0; i < values.length - 1; i++) {
+                bins.push({
+                  minValue: values[i],
+                  maxValue: values[i + 1],
+                  count: counts[i]
+                })
+              }
+              const container = document.createElement("div");
+              document.getElementById("histogram").appendChild(container);
+              const histogram = new HistogramRangeSlider({
+                container,
+                bins,
+                min,
+                max,
+                values: range,
+                average: mean,
+                precision: 2,
+                labelFormatFunction: (value, type) => {
+                  if (type !== 'min' && type !== 'max') {
+                    return value;
+                  }
+                },
+                rangeType: "between",
+                includedBarColor: "#ddd",
+                excludedBarColor: "#888"
+              });
+
+              histograms.push({ year, container, graphic: histogram });
+            }
+            displayHistogram(2005);
+
+            histograms.forEach(histogram => {
+              histogram.graphic.on(["thumb-change", "thumb-drag"], (event) => {
+                const { index, value } = event;
+                const { rangeFilter } = voxelLayer.getVariableStyle(0).transferFunction;
+                const newRange = [
+                  index === 0 ? value : rangeFilter.range[0],
+                  index === 1 ? value : rangeFilter.range[1]
+                ];
+                voxelLayer.getVariableStyle(0).transferFunction.rangeFilter = { enabled: true, range: newRange };
+                histograms.forEach(histogram => {
+                  histogram.graphic.values = newRange;
+                })
+              });
+            })
+
+            renderLegend(colorStops);
+          }
+        }, { once: true, initial: true })
+    })
+    .catch(console.error);
+
 
   const symbols = [];
 
@@ -170,32 +205,5 @@ require([
       })
     });
 
-  fetch("./statistics.json")
-    .then(response => response.json())
-    .then(statistics => {
-      for (statistic of statistics) {
-        const bins = [];
-        console.log(statistic);
-        const { year, values, counts } = statistic;
-        for (let i = 0; i < values.length - 1; i++) {
-          bins.push({
-            minValue: values[i],
-            maxValue: values[i + 1],
-            count: counts[i]
-          })
-        }
-        const container = document.createElement("div");
-        document.getElementById("histogram").appendChild(container);
-        const histogram = new Histogram({
-          container,
-          bins,
-          min: values[0],
-          max: values[values.length - 1]
-        });
 
-        container.style.display = year === 2005 ? 'inherit' : 'none';
-
-        histograms.push({ year, container })
-      }
-    })
 });
