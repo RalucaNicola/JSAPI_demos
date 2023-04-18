@@ -6,6 +6,7 @@ require([
   "esri/core/reactiveUtils",
   "esri/core/promiseUtils",
   "esri/Graphic",
+  "esri/Color",
   "esri/widgets/HistogramRangeSlider"
 ], (
   WebScene,
@@ -15,6 +16,7 @@ require([
   reactiveUtils,
   promiseUtils,
   Graphic,
+  Color,
   HistogramRangeSlider
 ) => {
 
@@ -22,7 +24,6 @@ require([
   const histograms = [];
   const min = 363;
   const max = 424;
-  const exaggeration = 300;
 
   const view = new SceneView({
     container: "viewDiv",
@@ -60,6 +61,32 @@ require([
     `;
   }
 
+  // const getColorFromValue = ({ value, colorStops }) => {
+
+  //   const stops = colorStops.toArray().map(({ color, position }) => {
+  //     return {
+  //       value: min + position * (max - min),
+  //       color: new Color(color)
+  //     }
+  //   })
+  //   for (let i = 0; i < stops.length; i++) {
+  //     const stop = stops[i];
+
+  //     if (value < stop.value) {
+  //       if (i === 0) {
+  //         return stop.color;
+  //       }
+
+  //       const prev = stops[i - 1];
+
+  //       const weight = (value - prev.value) / (stop.value - prev.value);
+  //       return Color.blendColors(prev.color, stop.color, weight);
+  //     }
+  //   }
+
+  //   return stops[stops.length - 1].color;
+  // }
+
 
   const fetchStatistics = fetch("./statistics.json")
     .then(response => response.json());
@@ -68,10 +95,7 @@ require([
     .then((response) => {
       window.view = view;
       view.map.ground.navigationConstraint = { type: "stay-above" };
-
       const voxelLayer = view.map.findLayerById("1877517417e-layer-0");
-
-
       const statistics = response[0].value;
 
       reactiveUtils.watch(
@@ -81,6 +105,7 @@ require([
             const style = voxelLayer.getVariableStyle(0);
             let { colorStops } = style.transferFunction;
             style.transferFunction.stretchRange = [min, max];
+            console.log(colorStops);
 
             const displayHistogram = (year) => {
               for (histogram of histograms) {
@@ -128,8 +153,18 @@ require([
                   }
                 },
                 rangeType: "between",
-                includedBarColor: "#ddd",
-                excludedBarColor: "#888"
+                excludedBarColor: new Color([10, 10, 10]),
+                includedBarColor: "#009af2",
+                dataLineCreatedFunction: (label, line) => {
+                  line.classList.add("dataLine");
+                },
+                // barCreatedFunction: (index, element) => {
+                //   const bin = bins[index];
+                //   const midValue =
+                //     (bin.maxValue - bin.minValue) / 2 + bin.minValue;
+                //   const color = getColorFromValue({ value: midValue, colorStops });
+                //   element.setAttribute("fill", color.toHex());
+                // }
               });
 
               histogram.on(["thumb-change", "thumb-drag"], (event) => {
@@ -154,7 +189,6 @@ require([
 
 
   const symbols = [];
-
   function updateOverlay() {
     symbols.forEach(symbol => {
       const screenPoint = view.toScreen(symbol.mapPoint);

@@ -142,6 +142,20 @@ sub {
   line-height: 1.6rem;
 }
 
+.esri-histogram__label {
+  fill: #d1d1d1;
+}
+
+.esri-histogram__bar {
+  stroke-width: 1px;
+  stroke: #007ec7;
+}
+
+.dataLine {
+  stroke: #d1d1d1;
+  stroke-width: 2px;
+}
+
 a,
 #description button {
   background-color: transparent;
