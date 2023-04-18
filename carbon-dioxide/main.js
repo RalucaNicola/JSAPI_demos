@@ -57,7 +57,6 @@ require([
         <div>${parseInt(min)} ppm</div>
         <div>${parseInt(max)} ppm</div>
       </div>
-      
     `;
   }
 
@@ -105,8 +104,6 @@ require([
             const style = voxelLayer.getVariableStyle(0);
             let { colorStops } = style.transferFunction;
             style.transferFunction.stretchRange = [min, max];
-            console.log(colorStops);
-
             const displayHistogram = (year) => {
               for (histogram of histograms) {
                 if (histogram.year === parseInt(year)) {
