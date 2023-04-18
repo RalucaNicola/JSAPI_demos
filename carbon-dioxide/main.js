@@ -2,17 +2,19 @@ require([
   "esri/WebScene",
   "esri/views/SceneView",
   "esri/geometry/Point",
+  "esri/geometry/Polyline",
   "esri/core/reactiveUtils",
   "esri/core/promiseUtils",
-  "esri/widgets/Slider",
+  "esri/Graphic",
   "esri/widgets/HistogramRangeSlider"
 ], (
   WebScene,
   SceneView,
   Point,
+  Polyline,
   reactiveUtils,
   promiseUtils,
-  Slider,
+  Graphic,
   HistogramRangeSlider
 ) => {
 
@@ -20,7 +22,7 @@ require([
   const histograms = [];
   const min = 363;
   const max = 424;
-  const range = [390, max];
+  const exaggeration = 300;
 
   const view = new SceneView({
     container: "viewDiv",
@@ -34,6 +36,7 @@ require([
       components: []
     }
   });
+
 
   const createGradient = (colorStops) => {
     const gradientColors = colorStops.map((c, i) => {
@@ -57,15 +60,6 @@ require([
     `;
   }
 
-  const displayHistogram = (year) => {
-    for (histogram of histograms) {
-      if (histogram.year === parseInt(year)) {
-        histogram.container.style.display = 'revert';
-      } else {
-        histogram.container.style.display = 'none';
-      }
-    }
-  }
 
   const fetchStatistics = fetch("./statistics.json")
     .then(response => response.json());
@@ -77,14 +71,6 @@ require([
 
       const voxelLayer = view.map.findLayerById("1877517417e-layer-0");
 
-      document.getElementById("yearToggle").addEventListener("calciteSegmentedControlChange", (event) => {
-        const year = event.target.value;
-        view.timeExtent = {
-          start: new Date(`${year}-01-01 00:00:00+0000`),
-          end: new Date(`${year}-01-01 12:00:00+0000`)
-        }
-        displayHistogram(year);
-      });
 
       const statistics = response[0].value;
 
@@ -94,8 +80,27 @@ require([
           if (loaded) {
             const style = voxelLayer.getVariableStyle(0);
             let { colorStops } = style.transferFunction;
-            style.transferFunction.rangeFilter = { enabled: true, range };
             style.transferFunction.stretchRange = [min, max];
+
+            const displayHistogram = (year) => {
+              for (histogram of histograms) {
+                if (histogram.year === parseInt(year)) {
+                  histogram.container.style.display = 'revert';
+                  voxelLayer.getVariableStyle(0).transferFunction.rangeFilter = { enabled: true, range: histogram.graphic.values };
+                } else {
+                  histogram.container.style.display = 'none';
+                }
+              }
+            }
+
+            document.getElementById("yearToggle").addEventListener("calciteSegmentedControlChange", (event) => {
+              const year = event.target.value;
+              view.timeExtent = {
+                start: new Date(`${year}-01-01 00:00:00+0000`),
+                end: new Date(`${year}-01-01 12:00:00+0000`)
+              }
+              displayHistogram(year);
+            });
 
             for (statistic of statistics) {
               const bins = [];
@@ -114,7 +119,7 @@ require([
                 bins,
                 min,
                 max,
-                values: range,
+                values: [mean + 2 * std, max],
                 average: mean,
                 precision: 2,
                 labelFormatFunction: (value, type) => {
@@ -127,12 +132,7 @@ require([
                 excludedBarColor: "#888"
               });
 
-              histograms.push({ year, container, graphic: histogram });
-            }
-            displayHistogram(2005);
-
-            histograms.forEach(histogram => {
-              histogram.graphic.on(["thumb-change", "thumb-drag"], (event) => {
+              histogram.on(["thumb-change", "thumb-drag"], (event) => {
                 const { index, value } = event;
                 const { rangeFilter } = voxelLayer.getVariableStyle(0).transferFunction;
                 const newRange = [
@@ -140,11 +140,11 @@ require([
                   index === 1 ? value : rangeFilter.range[1]
                 ];
                 voxelLayer.getVariableStyle(0).transferFunction.rangeFilter = { enabled: true, range: newRange };
-                histograms.forEach(histogram => {
-                  histogram.graphic.values = newRange;
-                })
               });
-            })
+
+              histograms.push({ year, container, graphic: histogram });
+            }
+            displayHistogram(2005);
 
             renderLegend(colorStops);
           }
@@ -205,5 +205,118 @@ require([
       })
     });
 
+
+  // add graphic for showing where the troposphere starts and ends
+  const opacity = 0.4;
+  const indicatorSymbol = {
+    type: 'line-3d',
+    symbolLayers: [
+      {
+        type: 'line',
+        material: { color: [255, 255, 255, opacity] },
+        size: 0.75,
+        marker: {
+          type: 'style',
+          style: 'arrow',
+          placement: 'end',
+          color: [255, 255, 255, opacity]
+        }
+      }
+    ]
+  };
+
+  const getLabelGraphic = (height) => {
+    const pointGeometry = new Point({
+      x: 0,
+      y: -90,
+      z: height / 2
+    });
+    return new Graphic({
+      geometry: pointGeometry,
+      symbol: {
+        type: 'point-3d',
+        symbolLayers: [
+          {
+            type: 'text',
+            text: 'Troposphere (20km)',
+            material: { color: [255, 255, 255, opacity] },
+            verticalAlignment: 'middle',
+            font: {
+              size: 9,
+              family: `"Avenir Next", Avenir, "Helvetica Neue", sans-serif`,
+              weight: 'bold'
+            }
+          }
+        ]
+      }
+    });
+  };
+
+  const getIndicatorDown = (height, margin) => {
+    const lineGeometry = new Polyline({
+      paths: [
+        [0, -90, height / 2 - margin],
+        [0, -90, 0]
+      ]
+    });
+    return new Graphic({
+      geometry: lineGeometry,
+      symbol: indicatorSymbol
+    });
+  };
+
+  const getIndicatorUp = (height, margin) => {
+    const lineGeometry = new Polyline({
+      paths: [
+        [0, -90, height / 2 + margin],
+        [0, -90, height]
+      ]
+    });
+    return new Graphic({
+      geometry: lineGeometry,
+      symbol: indicatorSymbol
+    });
+  };
+
+  const getBoundingBox = (height) => {
+    const lineGeometry = new Polyline({
+      paths: [
+        [-180, 90, height],
+        [180, 90, height],
+        [180, -90, height],
+        [-180, -90, height],
+        [-180, 90, height]
+      ]
+    });
+    return new Graphic({
+      geometry: lineGeometry,
+      symbol: {
+        type: 'line-3d',
+        symbolLayers: [
+          {
+            type: 'line',
+            material: { color: [255, 255, 255, opacity] },
+            size: 0.75,
+            pattern: {
+              type: 'style',
+              style: 'dash'
+            }
+          }
+        ]
+      }
+    });
+  };
+  const addVerticalScale = () => {
+    const exaggeration = 200;
+    const height = 20000 * exaggeration;
+    const margin = 2000 * exaggeration;
+    const labelGraphic = getLabelGraphic(height);
+    const boundingBox = getBoundingBox(height);
+    const indicatorDown = getIndicatorDown(height, margin);
+    const indicatorUp = getIndicatorUp(height, margin);
+    view.graphics.addMany([labelGraphic, boundingBox, indicatorDown, indicatorUp]);
+  }
+
+  addVerticalScale();
 
 });
