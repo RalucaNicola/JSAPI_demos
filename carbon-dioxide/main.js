@@ -38,6 +38,8 @@ require([
     }
   });
 
+  view.ui.add(["zoom", "navigation-toggle", "compass"], "top-right")
+
 
   const createGradient = (colorStops) => {
     const gradientColors = colorStops.map((c, i) => {
