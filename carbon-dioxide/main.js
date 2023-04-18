@@ -269,7 +269,7 @@ require([
         symbolLayers: [
           {
             type: 'text',
-            text: 'Troposphere (20km)',
+            text: '20km altitude',
             material: { color: [255, 255, 255, opacity] },
             verticalAlignment: 'middle',
             font: {
