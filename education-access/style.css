@@ -304,6 +304,7 @@ a {
 
 text {
   font-family: "Roboto Mono", monospace;
+  font-size: 0.8rem;
 }
 
 @media (max-width: 600px) {

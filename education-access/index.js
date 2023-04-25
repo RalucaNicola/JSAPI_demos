@@ -11,7 +11,8 @@ require(["esri/WebScene", "esri/views/SceneView", "esri/Color", "esri/widgets/Ho
     // Create container
     const width = 500;
     const height = 300;
-    const marginLeft = marginRight = marginBottom = marginTop = 30;
+    const marginLeft = marginRight = marginTop = 30;
+    const marginBottom = 40;
     const svg = container.append("svg");
     svg.attr("width", width)
       .attr("height", height)
@@ -57,8 +58,8 @@ require(["esri/WebScene", "esri/views/SceneView", "esri/Color", "esri/widgets/Ho
       .attr("transform", `translate(0,${height - marginBottom})`)
       .call(xAxis)
       .call(g => g.append("text")
-        .attr("x", width - marginRight)
-        .attr("y", 27)
+        .attr("x", width)
+        .attr("y", 35)
         .attr("fill", "currentColor")
         .attr("text-anchor", "end")
         .text(xLabel));
@@ -324,7 +325,7 @@ require(["esri/WebScene", "esri/views/SceneView", "esri/Color", "esri/widgets/Ho
 
     return `<div class='years'><p>2021</p><p>1990</p></div>
     <div class='axis'></div><div class='dataContainer' style="width: ${legendWidth + 10
-      }px">${dataBars}</div><div class='numberContainer'><div class='numberPointers'></div><div class='numberText'><p>25 years</p><p>1 year</p></div></div>`;
+      }px">${dataBars}</div><div class='numberContainer'><div class='numberPointers'></div><div class='numberText'><p>23 years</p><p>2 years</p></div></div>`;
   }
 
   function closeTooltip() {
