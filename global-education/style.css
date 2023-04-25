@@ -1,0 +1,319 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+
+:root {
+  --main-color: rgb(190 124 200 / 100%);
+  --main-color-80: rgba(190 124 200 / 80%);
+  --main-color-50: rgba(190 124 200 / 50%);
+  --main-color-30: rgba(190 124 200 / 30%);
+  --main-color-10: rgba(190 124 200 / 10%);
+  --main-color-dark: rgb(130, 72, 138);
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  font-family: "Roboto Mono", monospace;
+}
+
+#container {
+  width: min(80%, 1200px);
+  margin: 40px auto 0;
+  line-height: 1.6;
+}
+
+h1,
+.subtitle {
+  text-align: center;
+}
+
+.subtitle {
+  font-style: italic;
+  margin-bottom: 50px;
+}
+
+a {
+  text-decoration: none;
+  color: var(--main-color);
+  font-weight: bold;
+}
+
+#viewDiv {
+  position: relative;
+  margin: 40px;
+  height: 80%;
+}
+
+#tooltipDiv {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: white;
+  display: none;
+  max-width: 40%;
+}
+
+.tooltipHeader {
+  padding: 20px 10px 10px 10px;
+}
+
+.tooltipTitle {
+  margin: 0;
+  /* color: #ff668a; */
+  color: var(--main-color);
+}
+
+.tooltipSubtitle {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0;
+}
+
+#legend,
+.dynamicLegend {
+  display: flex;
+  font-size: 0.9rem;
+  max-height: 50vh;
+  overflow: auto;
+}
+
+#legend {
+  justify-content: flex-end;
+  margin-right: 20px;
+}
+
+.dynamicLegend {
+  padding: 10px;
+}
+
+.years {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+.years > p {
+  margin: 0;
+}
+
+.axis {
+  width: 10px;
+  border: 1px solid #666;
+  border-left: none;
+  margin: 20px 5px;
+}
+
+.dataContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.dynamicLegend > .dataContainer {
+  margin: 0;
+  display: block;
+}
+
+.bar {
+  height: 3px;
+  margin: 0.5px auto;
+}
+
+.year {
+  color: #666;
+}
+
+.dynamicLegend .bar {
+  font-size: 0.7rem;
+  height: auto;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.numberContainer {
+  display: flex;
+}
+
+.numberPointers {
+  width: 20px;
+  border-top: 1px solid #aaa;
+  margin: 22px 0;
+  border-bottom: 1px solid #aaa;
+  margin-left: -10px;
+  z-index: -1;
+}
+
+.numberText {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  line-height: 1rem;
+}
+
+.explanation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.footer {
+  font-size: var(--calcite-font-size--2);
+  padding: 0 10px;
+  pointer-events: all;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin: 0 40px;
+}
+
+.esriLogo {
+  height: 30px;
+  width: 100px;
+}
+
+.esriLogo a {
+  border-bottom: none;
+}
+.esriLogo a:hover {
+  border-bottom: none;
+}
+
+.esriLogo:hover img {
+  border-bottom: none;
+  height: 30px;
+}
+
+.esriLogo img {
+  height: 25px;
+  transition: height 300ms;
+}
+
+.attribution {
+  margin-left: 5px;
+}
+
+.mainQuestion {
+  margin-left: 20px;
+  border-left: 10px solid var(--main-color-50);
+  padding: 20px;
+  background-color: var(--main-color-10);
+}
+
+.legendExplanation {
+  max-width: 300px;
+}
+
+.data-country {
+  background-color: rgba(190, 217, 186, 0.7);
+  padding: 1px 4px;
+}
+
+.no-data-country {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0) 10px,
+    rgba(0, 0, 0, 0.2) 10px,
+    rgba(0, 0, 0, 0.2) 13px
+  );
+  padding: 1px 4px;
+}
+
+.close {
+  background: none;
+  height: 20px;
+  cursor: pointer;
+  border: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0.7;
+  padding: 5px;
+}
+
+.close:hover {
+  opacity: 1;
+}
+.close > img {
+  height: 100%;
+}
+
+#warning {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  right: 0;
+  background-color: rgba(255 255 255 / 0.7);
+  text-align: center;
+  transition: opacity 500ms;
+  font-size: 1.1rem;
+  padding: 20px;
+}
+.show {
+  opacity: 1;
+}
+
+.hide {
+  opacity: 0;
+}
+
+.zoomTo {
+  border: 1px solid black;
+  background: var(--main-color-50);
+  box-shadow: 2px 2px var(--main-color-dark);
+  cursor: pointer;
+  color: black;
+  font-family: "Roboto Mono", monospace;
+  font-size: 1rem;
+}
+
+#select1990,
+#select2020 {
+  border: 1px solid black;
+  background: var(--main-color-30);
+  box-shadow: 2px 2px var(--main-color-dark);
+  cursor: pointer;
+  color: white;
+  font-family: "Roboto Mono", monospace;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+#select1990.selected,
+#select2020.selected {
+  background: var(--main-color);
+}
+
+#select1990:hover,
+#select2020:hover {
+  background: var(--main-color);
+}
+
+#histogram {
+  margin: 0 auto;
+  display: block;
+  max-width: 500px;
+}
+
+text {
+  font-family: "Roboto Mono", monospace;
+}
+
+@media (max-width: 600px) {
+  .explanation {
+    display: block;
+  }
+  #legend {
+    justify-content: center;
+  }
+  .legendExplanation {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,92 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>
+    Better access to education
+  </title>
+  <link rel="icon" media="(prefers-color-scheme:dark)" type="image/png" sizes="32x32"
+    href="..s/assets/esri-favicon-dark-32.png" />
+  <link rel="icon" media="(prefers-color-scheme:light)" type="image/png" sizes="32x32"
+    href="../assets/esri-favicon-light-32.png" />
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://js.arcgis.com/4.24/"></script>
+  <script src="./index.js"> </script>
+</head>
+
+<body>
+  <div id="container">
+    <h1>Better access to education</h1>
+    <p class="subtitle"> - Children stay longer in school compared to 30 years ago - </p>
+    <p>Education is a basic right nowadays and most countries have managed to increase the access to education in
+      the
+      last 30 years. One way to measure this is <a href="https://ourworldindata.org/grapher/expected-years-of-schooling"
+        target='_blank'>the number of expected
+        years of schooling</a>:</p>
+    <p class='mainQuestion'>How many
+      years
+      of schooling would a child of school entrance age receive if the current age-specific enrollment rates persist
+      throughout the child's years of schooling?
+    </p>
+    <p>In the histogram below the height of a bar represents the number of countries that fall within each range of expected 
+      school years. Switch 
+      between <button id="select1990">1990</button> histogram and <button id="select2020" class="selected">2020</button> 
+      histogram to see the differences. We can see that more countries have a higher number of expected school years in 2020, compared to 2019. </p>
+    <div id="histogram"></div>
+    <p>In the map below <span class="data-country">most countries</span> have a chart that shows the evolution of the
+      expected school years from 1990 to
+      2021. <span class="no-data-country">Some countries</span> don't have data. We encoded the number of school
+      years
+      in both the color and the length of the bars, to make it easier to
+      read:
+    </p>
+    <div class="explanation">
+      <div id="legend"></div>
+      <p class="legendExplanation">
+        Wide and blue bars mean more expected school years and shorter and
+        light orange mean fewer expected school years.
+      </p>
+    </div>
+    <p>In 1990, the country with the lowest number of expected schooling years is <button class="zoomTo"
+        data-code="NER">Niger</button> with approximately 2 schooling years.
+      By 2021, the number of expected
+      schooling years grew to 7. In developed countries like <button class="zoomTo" data-code="AUS">Australia</button>
+      the indicator varies from 17 years in 1990 to 21 in 2021. In most countries
+      the
+      number of expected schooling years grew from 4 to 8 years. The
+      exceptions are countries with wars or conflicts. For example, in <button class="zoomTo"
+        data-code="SYR">Syria</button> we can see a drop in 2013, after the Syrian
+      Civil War started. </p>
+  </div>
+  <div id="viewDiv">
+    <div id="tooltipDiv">
+    </div>
+    <div id="warning" class="hide"></div>
+  </div>
+  <footer class='footer'>
+    <p class='esriLogo'>
+      <a href='https://www.esri.com/en-us/home' target='_blank'>
+        <img src='../assets/esri_science_of_where.png'></img>
+      </a>
+    </p>
+    <p class="attribution">
+      Dataset:
+      <a href='https://hdr.undp.org/content/human-development-report-2021-22' target='_blank'>
+        UNDP, HDR</a>
+      | Idea:
+      <a href='https://ourworldindata.org/grapher/expected-years-of-schooling' target='_blank'>
+        Our world in data </a>
+      | Basemap: Dylan Moriarty's <a href="https://www.projectlinework.org/" target='_blank'>hand-drawn countries</a>
+      and John
+      Nelson's <a href="https://arcgis.com/home/item.html?id=6d95153b210b44f3a76de7039754b71d" target='_blank'>
+        grid
+        lines</a>
+    </p>
+  </footer>
+</body>
+
+
+</html>
