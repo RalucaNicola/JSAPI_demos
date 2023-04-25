@@ -17,6 +17,7 @@ body {
   width: 100%;
   overflow: auto;
   font-family: "Roboto Mono", monospace;
+  color: rgba(50, 50, 50, 0.8);
 }
 
 #container {
