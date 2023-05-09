@@ -35,25 +35,36 @@
         </p>
 
         <p>
-          On this map we visualize CO<sub>2</sub>
+          On this map we visualize a
+          <a href="https://www.youtube.com/watch?v=FAGobvUGl24" target="_blank"
+            >reanalysis</a
+          >
+          of CO<sub>2</sub>
           concentrations as a regular 3D grid with the resolution of 480 x 241 x
           41. A single cell in this grid is called a voxel.
         </p>
         <img src="./voxel-graphic.svg" />
         <p>
-          Voxels are colored based on the CO<sub>2</sub> value: 360 ppm means
-          360 molecules of CO<sub>2</sub> per million molecules of dry air. The
-          values represent average measurements for the month of January.
+          Voxels are colored based on the CO<sub>2</sub> value: blue means lower
+          values, while pink means high values (above 400ppm - 400 molecules of
+          CO<sub>2</sub> per million molecules of dry air). The values represent
+          average measurements for the month of January of each year.
         </p>
         <p>
-          Drag the slider under the histogram to filter voxels based on their
-          CO<sub>2</sub> values.
+          The bar height in the histogram below represents how many voxels fall
+          within the CO<sub>2</sub>
+          value range corresponding to that bar. As you drag the slider under
+          the histogram, the voxels are filtered on the map.Displaying all the
+          values will fill up the space all the way up to 20km altitude. The
+          elevation is exaggerated 300 times.
         </p>
         <div id="histogram"></div>
         <div id="legend"></div>
         <p>
-          Change the year to see how the CO<sub>2</sub> concentration changed in
-          the last years.
+          When you change the year, you can notice how the histogram shifts to
+          the right, towards higher values. This means that voxels have now
+          higher CO<sub>2</sub> values. On the map we display the voxels with
+          the highest values, use the slider to also show lower values.
         </p>
         <calcite-segmented-control
           appearance="outline"
@@ -120,6 +131,13 @@
           >
             CAMS global greenhouse gas reanalysis - Copernicus
           </a>
+          • Reanalysis method article -
+          <a
+            href="https://acp.copernicus.org/articles/23/3829/2023/"
+            target="_blank"
+            >Technical note: The CAMS greenhouse gas reanalysis from 2003 to
+            2020</a
+          >
           • Data processed with
           <a
             href="https://pro.arcgis.com/en/pro-app/latest/get-started/get-started.htm"

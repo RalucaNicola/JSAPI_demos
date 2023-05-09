@@ -121,7 +121,7 @@ require([
               const year = event.target.value;
               view.timeExtent = {
                 start: new Date(`${year}-01-01 00:00:00+0000`),
-                end: new Date(`${year}-01-01 12:00:00+0000`)
+                end: new Date(`${year}-01-01 24:00:00+0000`)
               }
               displayHistogram(year);
             });
