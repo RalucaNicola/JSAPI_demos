@@ -29,7 +29,7 @@ require([
     container: "viewDiv",
     map: new WebScene({
       portalItem: {
-        id: "80f81c5728664c078011c328bd4735a4",
+        id: "4010440a096e444ab9cb894511b13ad7",
       },
     }),
     qualityProfile: "high",
@@ -62,41 +62,21 @@ require([
     `;
   }
 
-  // const getColorFromValue = ({ value, colorStops }) => {
-
-  //   const stops = colorStops.toArray().map(({ color, position }) => {
-  //     return {
-  //       value: min + position * (max - min),
-  //       color: new Color(color)
-  //     }
-  //   })
-  //   for (let i = 0; i < stops.length; i++) {
-  //     const stop = stops[i];
-
-  //     if (value < stop.value) {
-  //       if (i === 0) {
-  //         return stop.color;
-  //       }
-
-  //       const prev = stops[i - 1];
-
-  //       const weight = (value - prev.value) / (stop.value - prev.value);
-  //       return Color.blendColors(prev.color, stop.color, weight);
-  //     }
-  //   }
-
-  //   return stops[stops.length - 1].color;
-  // }
-
-
   const fetchStatistics = fetch("./statistics.json")
     .then(response => response.json());
+
+  const setViewTimeExtent = (year) => {
+    view.timeExtent = {
+      start: new Date(`${year}-01-01 00:00:00+0000`),
+      end: new Date(`${year}-01-01 24:00:00+0000`)
+    }
+  }
 
   promiseUtils.eachAlways([fetchStatistics, view.when()])
     .then((response) => {
       window.view = view;
       view.map.ground.navigationConstraint = { type: "stay-above" };
-      const voxelLayer = view.map.findLayerById("1877517417e-layer-0");
+      const voxelLayer = view.map.findLayerById("1881fdcb77e-layer-64");
       const statistics = response[0].value;
 
       reactiveUtils.watch(
@@ -119,10 +99,7 @@ require([
 
             document.getElementById("yearToggle").addEventListener("calciteSegmentedControlChange", (event) => {
               const year = event.target.value;
-              view.timeExtent = {
-                start: new Date(`${year}-01-01 00:00:00+0000`),
-                end: new Date(`${year}-01-01 24:00:00+0000`)
-              }
+              setViewTimeExtent(year);
               displayHistogram(year);
             });
 
@@ -156,14 +133,7 @@ require([
                 includedBarColor: "#009af2",
                 dataLineCreatedFunction: (label, line) => {
                   line.classList.add("dataLine");
-                },
-                // barCreatedFunction: (index, element) => {
-                //   const bin = bins[index];
-                //   const midValue =
-                //     (bin.maxValue - bin.minValue) / 2 + bin.minValue;
-                //   const color = getColorFromValue({ value: midValue, colorStops });
-                //   element.setAttribute("fill", color.toHex());
-                // }
+                }
               });
 
               histogram.on(["thumb-change", "thumb-drag"], (event) => {
@@ -178,7 +148,8 @@ require([
 
               histograms.push({ year, container, graphic: histogram });
             }
-            displayHistogram(2005);
+            displayHistogram(2020);
+            setViewTimeExtent(2020);
 
             renderLegend(colorStops);
           }
