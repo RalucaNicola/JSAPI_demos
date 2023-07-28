@@ -1,0 +1,31 @@
+html,
+body,
+#viewDiv {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: radial-gradient(#fff, #f2e5b3);
+  font-family: "Avenir Next W00","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+canvas {
+  filter: drop-shadow(10px 10px 10px rgba(201, 189, 127, 0.7));
+}
+
+footer {
+  color: #323232;
+  background-color: rgba(255,255,255, 0.65);
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  font-size:12px;
+  padding: 5px;
+}
+
+footer a {
+  color: rgb(226, 111, 9);
+  font-weight: bold;
+  text-decoration: none;
+}
