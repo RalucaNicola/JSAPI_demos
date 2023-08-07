@@ -12,8 +12,11 @@ require([
   "esri/geometry/support/MeshComponent",
   "esri/core/promiseUtils",
   "esri/layers/GraphicsLayer",
+  "esri/layers/SceneLayer",
+  "esri/layers/TileLayer",
   "lib/poly2tri",
-  "esri/Color"
+  "esri/Color",
+  "esri/widgets/Editor"
 ], function (
   Map,
   SceneView,
@@ -28,14 +31,17 @@ require([
   MeshComponent,
   promiseUtils,
   GraphicsLayer,
+  SceneLayer,
+  TileLayer,
   poly2tri,
-  Color
+  Color,
+  Editor
 ) {
 
   const random = new Math.seedrandom("lowpoly");
   const R = 6378137;
   const meshOceanLayer = new GraphicsLayer({
-    opacity: 0.8
+    opacity: 0.6
   });
   const meshLandLayer = new GraphicsLayer({
     elevationInfo: {
@@ -60,7 +66,7 @@ require([
         symbolLayers: [{
           type: "fill",
           material: {
-            color: [72, 247, 218]
+            color: [31, 255, 240]
           }
         }]
       }
@@ -68,11 +74,19 @@ require([
     meshOceanLayer.add(globe);
   });
 
+  const landmarksLayer = new SceneLayer({
+    url: "https://services9.arcgis.com/FF3qnCUixr5w9JQi/arcgis/rest/services/lowPolyLandmarks/SceneServer"
+  });
+
+  const shore = new TileLayer({
+    url: "https://tiles.arcgis.com/tiles/FF3qnCUixr5w9JQi/arcgis/rest/services/Ocean_shore_buffer/MapServer"
+  })
+
   const map = new Map({
-    layers: [meshOceanLayer, meshLandLayer],
+    layers: [meshOceanLayer, meshLandLayer, landmarksLayer, shore],
     ground: {
       opacity: 1,
-      surfaceColor: [60, 56, 171]
+      surfaceColor: [33, 69, 128]
     },
   });
 
@@ -87,7 +101,8 @@ require([
         color: [0, 0, 0, 0]
       },
       lighting: {
-        directShadowsEnabled: true
+        directShadowsEnabled: true,
+        type: "virtual"
       },
       starsEnabled: false,
       atmosphereEnabled: false
@@ -200,7 +215,7 @@ require([
       { value: -Math.pow(10, 7), color: new Color([255, 255, 255]) },
       { value: -5 * Math.pow(10, 6), color: new Color([186, 214, 75]) },
       { value: 0, color: new Color([248, 250, 182]) },
-      { value: 5 * Math.pow(10, 6), color: new Color([186, 214, 75]) },
+      { value: 6 * Math.pow(10, 6), color: new Color([186, 214, 75]) },
       { value: Math.pow(10, 7), color: new Color([255, 255, 255]) }
     ];
     for (let i = 0; i < stops.length; i++) {
@@ -236,7 +251,7 @@ require([
       const vIdx4 = length + ((i + 1) % vertices.length);
 
       const bottomVertex = [].concat.apply([], vertices[vIdx1]);
-      bottomVertex[2] = 0;
+      bottomVertex[2] = 100000;
       //colors.push([113, 52, 235, 255]);
       vertices.push(bottomVertex);
       if (i !== length - 1) {
@@ -255,7 +270,7 @@ require([
         {
           faces: faces,
           material: {
-            color: [117, 48, 255, 255],
+            color: [255, 255, 255],
             metallic: 0.8,
             doubleSided: true
           }
@@ -281,7 +296,7 @@ require([
           y: coords[1],
           // coords[2] stores the real height value of the point
           //z: 100000 + coords[2] * exaggeration * random(),
-          z: 250000 + 150000 * random(),
+          z: 250000 + 100000 * random(),
           vertexId
         }
 
