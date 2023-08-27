@@ -1,0 +1,235 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Explode view</title>
+    <link
+      rel="stylesheet"
+      href="https://jsdev.arcgis.com/4.27/esri/themes/light/main.css"
+    />
+    <script src="./anime.min.js"></script>
+    <script src="https://jsdev.arcgis.com/4.27/"></script>
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/1.6.1/calcite.esm.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://js.arcgis.com/calcite-components/1.6.1/calcite.css"
+    />
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      #exploded {
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1em;
+      }
+
+      #credits {
+        font-size: 0.7em;
+        line-height: 1.1em;
+      }
+    </style>
+    <script>
+      require([
+        "esri/views/SceneView",
+        "esri/WebScene",
+        "esri/Map",
+        "esri/layers/GraphicsLayer",
+        "esri/widgets/Sketch/SketchViewModel",
+        "esri/widgets/Daylight",
+        "esri/geometry/Mesh",
+        "esri/geometry/Point",
+        "esri/Graphic",
+      ], (
+        SceneView,
+        WebScene,
+        Map,
+        GraphicsLayer,
+        SketchViewModel,
+        Daylight,
+        Mesh,
+        Point,
+        Graphic
+      ) => {
+        const factor = 8;
+        const distances = Array(17).fill(2 * factor);
+        distances[11] = distances[14] = 4 * factor;
+        distances[12] = distances[15] = 6 * factor;
+        distances[13] = distances[16] = 8 * factor;
+
+        const webScene = new WebScene({
+          portalItem: {
+            id: "24944cd1720144728f2690325f55e7cb",
+          },
+        });
+        const view = new SceneView({
+          container: "viewDiv",
+          map: webScene,
+          viewingMode: "local",
+        });
+
+        view.ui.add(exploded, "top-right");
+
+        (async () => {
+          try {
+            const mesh = await Mesh.createFromGLTF(
+              new Point({
+                x: 251406.6578459154,
+                y: 6245196.732150318,
+                z: 0,
+                spatialReference: { wkid: 3857 },
+              }),
+              "./house-components.glb"
+            );
+            mesh.scale(5);
+            mesh.rotate(0, 0, 40);
+            const { x, y, z } = mesh.extent.center;
+
+            mesh.components.forEach((component, index) => {
+              const newMesh = mesh.clone();
+              const newComponent = component.clone();
+              const { position } = mesh.vertexAttributes;
+              const newPosition = [];
+              const newFaces = [];
+              newComponent.faces.forEach((vertexIndex, index) => {
+                newPosition.push(position[vertexIndex * 3]);
+                newPosition.push(position[vertexIndex * 3 + 1]);
+                newPosition.push(position[vertexIndex * 3 + 2]);
+                newFaces.push(index);
+              });
+              newComponent.faces = newFaces;
+              newMesh.components = [newComponent];
+              newMesh.vertexAttributes = {
+                position: newPosition,
+              };
+
+              newMesh.vertexAttributesChanged();
+
+              const { x: nx, y: ny, z: nz } = newMesh.extent.center;
+
+              const length = Math.sqrt(
+                Math.pow(nx - x, 2) + Math.pow(ny - y, 2) + Math.pow(nz - z, 2)
+              );
+              const unitVector = [
+                (nx - x) / length,
+                (ny - y) / length,
+                (nz - z) / length,
+              ];
+              const offsetX = distances[index] * unitVector[0];
+              const offsetY = distances[index] * unitVector[1];
+              const offsetZ = distances[index] * unitVector[2];
+
+              const componentGraphic = new Graphic({
+                geometry: newMesh,
+                attributes: {
+                  offset: { x: offsetX, y: offsetY, z: offsetZ },
+                },
+                symbol: {
+                  type: "mesh-3d",
+                  symbolLayers: [
+                    {
+                      type: "fill",
+                    },
+                  ],
+                },
+              });
+
+              view.graphics.add(componentGraphic);
+            });
+
+            const explodeCheckbox = document.getElementById("explode-building");
+            explodeCheckbox.addEventListener("calciteSwitchChange", (evt) => {
+              view.graphics.forEach((graphic) => {
+                animateGraphic(graphic, { explode: evt.target.checked });
+              });
+            });
+
+            function animateGraphic(graphic, { explode }) {
+              const meshGraphic = graphic.geometry;
+              const targetOffset = {
+                x: 0,
+                y: 0,
+                z: 0,
+              };
+              const { offset } = graphic.attributes;
+              if (explode) {
+                anime({
+                  targets: targetOffset,
+                  x: offset.x,
+                  y: offset.y,
+                  z: offset.z,
+                  duration: 1000,
+                  easing: "spring",
+                  update: () => {
+                    const newMesh = meshGraphic.clone();
+                    newMesh.offset(
+                      targetOffset.x,
+                      targetOffset.y,
+                      targetOffset.z
+                    );
+                    graphic.geometry = newMesh;
+                  },
+                  begin: function (anim) {
+                    explodeCheckbox.disabled = true;
+                  },
+                  complete: function (anim) {
+                    explodeCheckbox.disabled = false;
+                  },
+                });
+              } else {
+                anime({
+                  targets: targetOffset,
+                  x: -offset.x,
+                  y: -offset.y,
+                  z: -offset.z,
+                  duration: 300,
+                  easing: "linear",
+                  update: () => {
+                    const newMesh = meshGraphic.clone();
+                    newMesh.offset(
+                      targetOffset.x,
+                      targetOffset.y,
+                      targetOffset.z
+                    );
+                    graphic.geometry = newMesh;
+                  },
+                  begin: function (anim) {
+                    explodeCheckbox.disabled = true;
+                  },
+                  complete: function (anim) {
+                    explodeCheckbox.disabled = false;
+                  },
+                });
+              }
+            }
+            window.view = view;
+          } catch (error) {
+            console.log(error);
+          }
+        })();
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv">
+      <calcite-label layout="inline" id="exploded">
+        <calcite-switch id="explode-building"></calcite-switch>
+        Exploded view
+      </calcite-label>
+    </div>
+  </body>
+</html>
