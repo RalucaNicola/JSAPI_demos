@@ -43,9 +43,9 @@ const state = {
   snow: false
 }
 
-const getExpression = ({overview}) => {
+const getExpression = ({ overview }) => {
   if (overview) {
-    return  "KURZTEXT IN ('Bern', 'Zürich',  'Lausanne', 'Genève', 'Luzern', 'Winterthur', 'Lugano')";
+    return "KURZTEXT IN ('Bern', 'Zürich',  'Lausanne', 'Genève', 'Luzern', 'Winterthur', 'Lugano')";
   } else {
     return "KURZTEXT IN ('Laax GR', 'Flims Dorf', 'Falera')"
   }
@@ -94,7 +94,7 @@ require([
         type: "point-3d",
         symbolLayers: [{
           type: "object",
-          resource: { href: "https://ralucanicola.github.io/3d-models/Norway_Spruce.glb" },
+          resource: { href: "./assets/Norway_Spruce.glb" },
           material: { color: [177, 222, 133] }
         }]
       },
@@ -129,7 +129,7 @@ require([
 
   const citiesLayer = new FeatureLayer({
     url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/swiss_cities/FeatureServer",
-    definitionExpression: getExpression({overview: false}),
+    definitionExpression: getExpression({ overview: false }),
     renderer: {
       type: "simple",
       symbol: {
@@ -142,40 +142,40 @@ require([
       }
     },
     labelingInfo: [
-          new LabelClass({
-            labelExpressionInfo: { expression: "$feature.KURZTEXT"},
-            symbol: {
-              type: "label-3d",
-              symbolLayers: [{
-                type: "text",
-                material: {
-                  color: [0, 48, 125]
-                },
-                halo: {
-                  size:  0
-                },
-                font: {
-                  size:  10,
-                  weight: "bold",
-                  family: '"Avenir Next", "Avenir", sans-serif'
-                }
-              }],
-              verticalOffset: {
-                screenLength: 20,
-                maxWorldLength: 10000,
-                minWorldLength: 0
-              },
-              callout: {
-                type: "line",
-                size: 0.75,
-                color: [0, 48, 125],
-                border: {
-                  color: [0, 0, 0, 0]
-                }
-              }
+      new LabelClass({
+        labelExpressionInfo: { expression: "$feature.KURZTEXT" },
+        symbol: {
+          type: "label-3d",
+          symbolLayers: [{
+            type: "text",
+            material: {
+              color: [0, 48, 125]
+            },
+            halo: {
+              size: 0
+            },
+            font: {
+              size: 10,
+              weight: "bold",
+              family: '"Avenir Next", "Avenir", sans-serif'
             }
-          })
-        
+          }],
+          verticalOffset: {
+            screenLength: 20,
+            maxWorldLength: 10000,
+            minWorldLength: 0
+          },
+          callout: {
+            type: "line",
+            size: 0.75,
+            color: [0, 48, 125],
+            border: {
+              color: [0, 0, 0, 0]
+            }
+          }
+        }
+      })
+
     ]
   });
 
@@ -278,7 +278,7 @@ require([
 
   soundButton.addEventListener("click", () => {
     state.music = !state.music;
-    if (state.music) { 
+    if (state.music) {
       audioElement.play();
       soundButton.classList.replace("on", "off");
     } else {
@@ -288,7 +288,7 @@ require([
   });
   snowButton.addEventListener("click", () => {
     state.snow = !state.snow;
-    if (state.snow) { 
+    if (state.snow) {
       snowButton.classList.replace("on", "off");
       view.environment.weather = {
         type: "snowy",
@@ -306,16 +306,16 @@ require([
 
   slide1.addEventListener("click", () => {
     view.goTo(camera1);
-    citiesLayer.definitionExpression = getExpression({overview: true});
+    citiesLayer.definitionExpression = getExpression({ overview: true });
   });
 
   slide2.addEventListener("click", () => {
     view.goTo(camera2);
-    citiesLayer.definitionExpression = getExpression({overview: false});
+    citiesLayer.definitionExpression = getExpression({ overview: false });
   });
 
   slide3.addEventListener("click", () => {
     view.goTo(camera3);
-    citiesLayer.definitionExpression = getExpression({overview: false});
+    citiesLayer.definitionExpression = getExpression({ overview: false });
   });
 });
