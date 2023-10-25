@@ -64,11 +64,12 @@
         Point,
         Graphic
       ) => {
-        const factor = 8;
-        const distances = Array(17).fill(2 * factor);
-        distances[11] = distances[14] = 4 * factor;
-        distances[12] = distances[15] = 6 * factor;
-        distances[13] = distances[16] = 8 * factor;
+        const distances = [1, 4, 8];
+        // const factor = 8;
+        // const distances = Array(3).fill(2 * factor);
+        // distances[11] = distances[14] = 4 * factor;
+        // distances[12] = distances[15] = 6 * factor;
+        // distances[13] = distances[16] = 8 * factor;
 
         const webScene = new WebScene({
           portalItem: {
@@ -79,76 +80,120 @@
           container: "viewDiv",
           map: webScene,
           viewingMode: "local",
+          spatialReference: { wkid: 3857 },
         });
 
         view.ui.add(exploded, "top-right");
 
+        const getGraphicFromModel = async (url, offset) => {
+          const mesh = await Mesh.createFromGLTF(
+            new Point({
+              x: 251395.90117048135,
+              y: 6245215.016575138,
+              z: 5,
+              spatialReference: { wkid: 3857 },
+            }),
+            url,
+            {
+              useTransform: true,
+              geographic: true,
+            }
+          );
+
+          const graphic = new Graphic({
+            geometry: mesh,
+            attributes: {
+              offset,
+            },
+            symbol: {
+              type: "mesh-3d",
+              symbolLayers: [
+                {
+                  type: "fill",
+                  // material: {
+                  //   color: [255, 247, 191],
+                  // },
+                },
+              ],
+            },
+          });
+          return graphic;
+        };
+
         (async () => {
           try {
-            const mesh = await Mesh.createFromGLTF(
-              new Point({
-                x: 251406.6578459154,
-                y: 6245196.732150318,
-                z: 0,
-                spatialReference: { wkid: 3857 },
-              }),
-              "./house-components.glb"
+            const roofTop = await getGraphicFromModel(
+              "./house-roof-top.glb",
+              50
             );
-            mesh.scale(5);
-            mesh.rotate(0, 0, 40);
-            const { x, y, z } = mesh.extent.center;
+            const firstFloor = await getGraphicFromModel(
+              "./house-first-floor.glb",
+              20
+            );
+            const groundFloor = await getGraphicFromModel(
+              "./house-ground-floor.glb",
+              0
+            );
+            const graphics = [groundFloor, firstFloor, roofTop];
+            view.graphics.addMany(graphics);
 
-            mesh.components.forEach((component, index) => {
-              const newMesh = mesh.clone();
-              const newComponent = component.clone();
-              const { position } = mesh.vertexAttributes;
-              const newPosition = [];
-              const newFaces = [];
-              newComponent.faces.forEach((vertexIndex, index) => {
-                newPosition.push(position[vertexIndex * 3]);
-                newPosition.push(position[vertexIndex * 3 + 1]);
-                newPosition.push(position[vertexIndex * 3 + 2]);
-                newFaces.push(index);
-              });
-              newComponent.faces = newFaces;
-              newMesh.components = [newComponent];
-              newMesh.vertexAttributes = {
-                position: newPosition,
-              };
-
-              newMesh.vertexAttributesChanged();
-
-              const { x: nx, y: ny, z: nz } = newMesh.extent.center;
-
-              const length = Math.sqrt(
-                Math.pow(nx - x, 2) + Math.pow(ny - y, 2) + Math.pow(nz - z, 2)
-              );
-              const unitVector = [
-                (nx - x) / length,
-                (ny - y) / length,
-                (nz - z) / length,
-              ];
-              const offsetX = distances[index] * unitVector[0];
-              const offsetY = distances[index] * unitVector[1];
-              const offsetZ = distances[index] * unitVector[2];
-
-              const componentGraphic = new Graphic({
-                geometry: newMesh,
-                attributes: {
-                  offset: { x: offsetX, y: offsetY, z: offsetZ },
-                },
-                symbol: {
-                  type: "mesh-3d",
-                  symbolLayers: [
-                    {
-                      type: "fill",
-                    },
-                  ],
-                },
-              });
-
-              view.graphics.add(componentGraphic);
+            // mesh.scale(5);
+            graphics.forEach((graphic) => {
+              graphic.geometry.rotate(0, 0, 45);
             });
+            // const { x, y, z } = mesh.extent.center;
+
+            // mesh.components.forEach((component, index) => {
+            //   const newMesh = mesh.clone();
+            //   const newComponent = component.clone();
+            //   const { position } = mesh.vertexAttributes;
+            //   const newPosition = [];
+            //   const newFaces = [];
+            //   newComponent.faces.forEach((vertexIndex, index) => {
+            //     newPosition.push(position[vertexIndex * 3]);
+            //     newPosition.push(position[vertexIndex * 3 + 1]);
+            //     newPosition.push(position[vertexIndex * 3 + 2]);
+            //     newFaces.push(index);
+            //   });
+            //   newComponent.faces = newFaces;
+            //   newMesh.components = [newComponent];
+            //   newMesh.vertexAttributes = {
+            //     position: newPosition,
+            //   };
+
+            //   newMesh.vertexAttributesChanged();
+
+            //   const { x: nx, y: ny, z: nz } = newMesh.extent.center;
+
+            //   const length = Math.sqrt(
+            //     Math.pow(nx - x, 2) + Math.pow(ny - y, 2) + Math.pow(nz - z, 2)
+            //   );
+            //   const unitVector = [
+            //     (nx - x) / length,
+            //     (ny - y) / length,
+            //     (nz - z) / length,
+            //   ];
+            //   const offsetX = distances[index] * unitVector[0];
+            //   const offsetY = distances[index] * unitVector[1];
+            //   const offsetZ = distances[index] * unitVector[2];
+
+            //   const componentGraphic = new Graphic({
+            //     geometry: newMesh,
+            //     attributes: {
+            //       offset: { x: offsetX, y: offsetY, z: offsetZ },
+            //     },
+            //     symbol: {
+            //       type: "mesh-3d",
+            //       symbolLayers: [
+            //         {
+            //           type: "fill",
+            //         },
+            //       ],
+            //     },
+            //   });
+
+            //   view.graphics.add(componentGraphic);
+            //});
 
             const explodeCheckbox = document.getElementById("explode-building");
             explodeCheckbox.addEventListener("calciteSwitchChange", (evt) => {
@@ -158,29 +203,22 @@
             });
 
             function animateGraphic(graphic, { explode }) {
-              const meshGraphic = graphic.geometry;
+              const mesh = graphic.geometry;
               const targetOffset = {
-                x: 0,
-                y: 0,
                 z: 0,
               };
               const { offset } = graphic.attributes;
               if (explode) {
                 anime({
                   targets: targetOffset,
-                  x: offset.x,
-                  y: offset.y,
-                  z: offset.z,
+                  z: offset,
                   duration: 1000,
                   easing: "spring",
                   update: () => {
-                    const newMesh = meshGraphic.clone();
-                    newMesh.offset(
-                      targetOffset.x,
-                      targetOffset.y,
-                      targetOffset.z
-                    );
-                    graphic.geometry = newMesh;
+                    mesh.transform.translation = [0, 0, targetOffset.z];
+                    graphic.notifyMeshTransformChanged({
+                      action: /* MeshTransformUpdateAction.EnableFastUpdates */ 0,
+                    });
                   },
                   begin: function (anim) {
                     explodeCheckbox.disabled = true;
@@ -190,21 +228,19 @@
                   },
                 });
               } else {
+                const targetOffset = {
+                  z: graphic.attributes.offset,
+                };
                 anime({
                   targets: targetOffset,
-                  x: -offset.x,
-                  y: -offset.y,
-                  z: -offset.z,
+                  z: 0,
                   duration: 300,
                   easing: "linear",
                   update: () => {
-                    const newMesh = meshGraphic.clone();
-                    newMesh.offset(
-                      targetOffset.x,
-                      targetOffset.y,
-                      targetOffset.z
-                    );
-                    graphic.geometry = newMesh;
+                    mesh.transform.translation = [0, 0, targetOffset.z];
+                    graphic.notifyMeshTransformChanged({
+                      action: /* MeshTransformUpdateAction.EnableFastUpdates */ 0,
+                    });
                   },
                   begin: function (anim) {
                     explodeCheckbox.disabled = true;
