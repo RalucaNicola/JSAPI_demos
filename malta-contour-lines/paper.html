@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Malta in contour lines</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.26/esri/css/main.css"
+    />
+    <script src="https://js.arcgis.com/4.26/"></script>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      #viewDiv canvas {
+        filter: saturate(2);
+      }
+
+      a,
+      esri-attribution__link esri-widget__anchor {
+        text-decoration: none;
+        font-weight: bold;
+        color: rgba(245, 105, 66) !important;
+      }
+    </style>
+
+    <script>
+      require([
+        "esri/config",
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/FeatureLayer",
+        "esri/layers/GraphicsLayer",
+
+        "esri/Graphic",
+        "esri/geometry/Point",
+        "esri/geometry/Polyline",
+        "esri/geometry/Polygon",
+        "esri/geometry/Mesh",
+
+        "esri/renderers/SimpleRenderer",
+        "esri/Color",
+
+        "esri/symbols/PointSymbol3D",
+        "esri/symbols/TextSymbol3DLayer",
+        "esri/geometry/support/MeshMaterialMetallicRoughness",
+        "esri/geometry/support/MeshTexture",
+
+        "esri/widgets/Daylight",
+        "esri/widgets/ShadowCast",
+      ], function (
+        esriConfig,
+        WebScene,
+        SceneView,
+        FeatureLayer,
+        GraphicsLayer,
+        Graphic,
+        Point,
+        Polyline,
+        Polygon,
+        Mesh,
+        SimpleRenderer,
+        Color,
+        PointSymbol3D,
+        TextSymbol3DLayer,
+        MeshMaterialMetallicRoughness,
+        MeshTexture,
+        Daylight,
+        ShadowCast
+      ) {
+        const webscene = new WebScene({
+          basemap: "topo-vector",
+          ground: {
+            opacity: 0,
+          },
+        });
+
+        const view = new SceneView({
+          container: "viewDiv",
+          map: webscene,
+          viewingMode: "global",
+          camera: {
+            position: [14.23626865, 35.86805744, 2779.39878],
+            heading: 99.49,
+            tilt: 78.96,
+          },
+          environment: {
+            atmosphere: {
+              quality: "low",
+            },
+            lighting: {
+              date: "Jun 17 2020 12:33:03 GMT+0100 (Central European Standard Time)",
+              directShadowsEnabled: true,
+              ambientOcclusionEnabled: true,
+              waterReflectionEnabled: true,
+            },
+          },
+          spatialReference: {
+            wkid: 102100,
+          },
+        });
+
+        const contoursLayer = new GraphicsLayer({
+          elevationInfo: {
+            mode: "relative-to-ground",
+            offset: 100,
+          },
+        });
+
+        view.map.add(contoursLayer);
+
+        function getColorFromHeight(value) {
+          // The color ramp used for interpolation.
+          // Colors are set based on the elevation values, for example
+          // the color white is used for 1900m and higher.
+          const stops = [
+            { value: 25, color: new Color("#F2E6C9") },
+            { value: 100, color: new Color("#d3a561") },
+            { value: 200, color: new Color([186, 121, 68]) },
+          ];
+          for (let i = 0; i < stops.length; i++) {
+            const stop = stops[i];
+
+            if (value < stop.value) {
+              if (i === 0) {
+                return stop.color;
+              }
+
+              const prev = stops[i - 1];
+
+              const weight = (value - prev.value) / (stop.value - prev.value);
+              return Color.blendColors(prev.color, stop.color, weight);
+            }
+          }
+
+          return stops[stops.length - 1].color;
+        }
+
+        const material = new MeshMaterialMetallicRoughness({
+          metallic: 0,
+          roughness: 1,
+          colorTexture: new MeshTexture({
+            url: "./assets/paper_contrast.jpg",
+            wrap: true,
+          }),
+        });
+
+        function getUVCoordinates(mesh, dx, dy) {
+          const uv = [];
+          const xmin = mesh.extent.xmin;
+          const xmax = mesh.extent.xmax;
+          const ymin = mesh.extent.ymin;
+          const ymax = mesh.extent.ymax;
+
+          const position = mesh.vertexAttributes.position;
+
+          for (let i = 0; i < position.length; i += 3) {
+            const x = position[i];
+            const y = position[i + 1];
+            const u = (x - xmin) / dx;
+            const v = (y - ymin) / dy;
+            uv.push(u);
+            uv.push(v);
+          }
+
+          return uv;
+        }
+
+        const contourLayer = new FeatureLayer({
+          url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/polygon_contour_malta/FeatureServer",
+        });
+        const query = contourLayer.createQuery();
+        query.returnGeometry = true;
+        query.outSpatialReference = { wkid: 102100 };
+        const contourOffsetFactor = 4;
+        contourLayer.queryFeatures(query).then((result) => {
+          result.features.forEach((feature) => {
+            const { extent } = feature.geometry;
+            const { xmin, xmax, ymin, ymax } = extent;
+            // don't render small polygons
+            if (xmax - xmin > 500 || ymax - ymin > 500) {
+              generateWall(
+                feature.geometry,
+                feature.attributes.elevation * contourOffsetFactor
+              );
+              const mesh = Mesh.createFromPolygon(feature.geometry, {
+                material,
+              });
+              const positions = mesh.vertexAttributes.position.map(
+                (position, index) => {
+                  if (index % 3 === 2) {
+                    return feature.attributes.elevation * contourOffsetFactor;
+                  }
+                  return position;
+                }
+              );
+              mesh.vertexAttributes.position = positions;
+              mesh.vertexAttributes.uv = getUVCoordinates(
+                mesh,
+                1500 * 4,
+                1493 * 4
+              );
+              const fillColor = getColorFromHeight(
+                feature.attributes.elevation
+              );
+              const outlineColor = Color.blendColors(
+                new Color("white"),
+                fillColor,
+                0.9
+              );
+              const graphic = new Graphic({
+                geometry: mesh,
+                symbol: {
+                  type: "mesh-3d",
+                  symbolLayers: [
+                    {
+                      type: "fill",
+                      material: {
+                        color: fillColor,
+                      },
+                      edges: {
+                        type: "solid",
+                        color: outlineColor,
+                        size: 3,
+                      },
+                    },
+                  ],
+                },
+              });
+              contoursLayer.add(graphic);
+            }
+          });
+        });
+
+        function generateWall(polygon, z) {
+          const vertices = polygon.rings[0].map(function (coords) {
+            return [...coords, z];
+          });
+
+          const colors = vertices.map(function (x) {
+            return [50, 50, 50, 255];
+          });
+          const faces = [];
+
+          const length = vertices.length;
+
+          for (let i = 0; i < length; i++) {
+            const vIdx1 = i;
+            const vIdx2 = (i + 1) % vertices.length;
+
+            const vIdx3 = length + i;
+            const vIdx4 = length + ((i + 1) % vertices.length);
+
+            const bottomVertex = [].concat.apply([], vertices[vIdx1]);
+            bottomVertex[2] = z - 40;
+            colors.push([50, 50, 50, 255]);
+            vertices.push(bottomVertex);
+            if (i !== length - 1) {
+              faces.push(vIdx2, vIdx3, vIdx1, vIdx4, vIdx3, vIdx2);
+            }
+          }
+
+          const mesh = new Mesh({
+            vertexAttributes: {
+              position: vertices.flat(),
+              color: colors.flat(),
+            },
+            components: [
+              {
+                faces: faces,
+              },
+            ],
+            spatialReference: { wkid: 102100 },
+            // specify a spatial reference if the position of the vertices is not in WGS84
+          });
+
+          const polyGraphic = new Graphic({
+            geometry: mesh,
+            symbol: {
+              type: "mesh-3d",
+              symbolLayers: [
+                {
+                  type: "fill",
+                  material: {
+                    color: "red",
+                  },
+                  castShadows: false,
+                },
+              ],
+            },
+          });
+          contoursLayer.add(polyGraphic);
+        }
+
+        const waterExtent = {
+          xmin: 1521098.8175,
+          xmax: 1701900.722,
+          ymin: 4214845.6469,
+          ymax: 4358527.1603,
+          spatialReference: 102100,
+        };
+
+        const polygon = new Polygon({
+          rings: [
+            [
+              [waterExtent.xmin, waterExtent.ymin, 800],
+              [waterExtent.xmax, waterExtent.ymin, 800],
+              [waterExtent.xmax, waterExtent.ymax, 800],
+              [waterExtent.xmin, waterExtent.ymax, 800],
+              [waterExtent.xmin, waterExtent.ymin, 800],
+            ],
+          ],
+          spatialReference: {
+            wkid: 102100,
+          },
+        });
+
+        const waterMaterial = new MeshMaterialMetallicRoughness({
+          metallic: 0,
+          roughness: 1,
+          colorTexture: new MeshTexture({
+            url: "./assets/paper.jpg",
+            wrap: true,
+          }),
+        });
+
+        const mesh = Mesh.createFromPolygon(polygon, {
+          material: waterMaterial,
+        });
+
+        mesh.vertexAttributes.uv = getUVCoordinates(mesh, 1500 * 8, 1493 * 8);
+        const waterGraphic = new Graphic({
+          geometry: mesh,
+          symbol: {
+            type: "mesh-3d",
+            symbolLayers: [
+              {
+                type: "fill",
+                material: { color: "#16abe0" },
+              },
+            ],
+          },
+        });
+
+        const waterLayer = new GraphicsLayer({
+          elevationInfo: {
+            mode: "absolute-height",
+          },
+        });
+
+        waterLayer.add(waterGraphic);
+        webscene.add(waterLayer);
+
+        createPalmTree([35.83107814703555, 14.419950872084213, 200]);
+        createPalmTree([35.81070010665252, 14.535001303083316, 200]);
+        createPalmTree([35.873950031364394, 14.350356971797067, 500]);
+
+        function createPalmTree(coordinates) {
+          const palmTreeGraphic = new Graphic({
+            geometry: new Point({
+              latitude: coordinates[0],
+              longitude: coordinates[1],
+              z: coordinates[2],
+            }),
+            symbol: {
+              type: "point-3d",
+              symbolLayers: [
+                {
+                  type: "object",
+                  resource: { href: "./assets/QueenPalmTree.gltf" },
+                  height: 600,
+                },
+              ],
+            },
+          });
+          view.graphics.add(palmTreeGraphic);
+        }
+
+        const daylight = new Daylight({ view: view });
+        view.ui.add(daylight, "top-right");
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
