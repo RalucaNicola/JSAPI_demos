@@ -28,7 +28,7 @@ body {
 }
 
 #menu {
-  width: 375px;
+  max-width: 400px;
   z-index: 1;
   height: 100%;
   overflow: auto;
@@ -67,39 +67,6 @@ sub {
   justify-content: space-between;
   font-size: 0.8rem;
   padding: 0 15px;
-}
-
-.symbol {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: transform 0.2s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.8));
-  width: 30px;
-  height: 30px;
-}
-
-.symbolDescription {
-  width: 25px;
-  height: 25px;
-  display: inline-block;
-  text-align: center;
-  line-height: 25px;
-}
-
-.symbol,
-.symbolDescription {
-  background-color: rgba(0, 0, 0, 0.4);
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  color: white;
-}
-.symbol:hover {
-  transform: scale(1.3);
-  cursor: pointer;
 }
 
 #description {
@@ -149,6 +116,7 @@ footer {
 .title {
   border: 1px solid #888;
   padding: 0 4px;
+  font-weight: bold;
 }
 
 @media (max-width: 600px) {
