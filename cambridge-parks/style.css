@@ -100,13 +100,13 @@ a:hover,
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255 255 255 / 0.1);
+  background: rgba(50 50 50 / 0.1);
   border: none;
   border-radius: var(--border-radius);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255 255 255 / 0.8);
+  background: rgba(50 50 50 / 0.8);
 }
 footer {
   font-size: 0.8rem;
@@ -116,6 +116,12 @@ footer {
 .title {
   border: 1px solid #888;
   padding: 0 4px;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  color: #888;
   font-weight: bold;
 }
 
