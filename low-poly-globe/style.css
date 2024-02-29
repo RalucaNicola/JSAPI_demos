@@ -5,12 +5,12 @@ body,
   margin: 0;
   height: 100%;
   width: 100%;
-  background: radial-gradient(
-    circle,
-    rgba(76, 142, 232, 1) 0%,
-    rgba(255, 255, 255, 1) 100%
-  );
+  background: radial-gradient(circle, #1048a4 0%, #102952 100%);
   font-family: "Avenir Next W00", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#viewDiv canvas {
+  filter: saturate(1.5) drop-shadow(0px 0px 60px #e3fffe);
 }
 
 footer {
@@ -25,7 +25,7 @@ footer {
 }
 
 footer a {
-  color: rgb(226, 111, 9);
+  color: rgb(103, 9, 226);
   font-weight: bold;
   text-decoration: none;
 }
