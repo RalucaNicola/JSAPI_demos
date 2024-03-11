@@ -32,46 +32,14 @@ body {
   z-index: 1;
   height: 100%;
   overflow: auto;
-}
-
-#menu header {
-  font-weight: bold;
-  font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-align: center;
-  padding: 1rem 1.5rem;
-  font-size: 1.2rem;
-  border-radius: 10px 10px 0 0;
-  letter-spacing: 2px;
-}
-
-#description > p {
-  transition: background-color 1s;
-}
-
-.hidden {
-  visibility: hidden;
-}
-
-.highlight {
-  background-color: #009af2;
-}
-
-sub {
-  vertical-align: baseline;
-  position: relative;
-  top: 0.4rem;
-}
-
-.labels {
   display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  padding: 0 15px;
+  flex-direction: column;
 }
 
 #description {
   margin: 20px;
   line-height: 1.6rem;
+  flex: 1;
 }
 
 a,
@@ -114,9 +82,10 @@ footer {
 }
 
 .title {
-  border: 1px solid #888;
   padding: 0 4px;
   font-weight: bold;
+  display: flex;
+  gap: 10px;
 }
 
 .subtitle {
