@@ -2,23 +2,18 @@
   "cities": [
     {
       "title": "San Francisco",
-      "id": "6d85297c9cf44f4381ea8daa6929722a",
+      "id": "2d81018fefeb456980c62a62213f69a7",
       "attribution": "City of San Francisco"
     },
     {
       "title": "New York",
-      "id": "5bb9bcc008a9464ca11ea35df13ee61e",
+      "id": "cf163d06225049c9a9cbeea58899f166",
       "attribution": "Open data building 3D model provided by <a href='https://www1.nyc.gov/site/doitt/initiatives/3d-building.page' target='_blank'>DoITT</a>"
     },
     {
       "title": "Paris",
-      "id": "0614ea1f9dd043e9ba157b9c20d3c538",
+      "id": "b6c889ff1f684cd7a65301984b80b93d",
       "attribution": "Paris Buildings Open Data provided by <a href='https://www.apur.org/en/about-us' target='_blank'>APUR</a>. WebScene created by <a href='https://www.esrifrance.fr/' target='_blank'>ESRI France</a>"
-    },
-    {
-      "title": "Washington D.C.",
-      "id": "3c647dba420a4f3da9091ae83772e78e",
-      "attribution": "Open data building 3D model provided by <a href='http://opendata.dc.gov/datasets?q=buildings%203Df' target='_blank'>DCGISopendata</a>"
     }
   ]
 }
