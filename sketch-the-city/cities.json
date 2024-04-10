@@ -14,6 +14,11 @@
       "title": "Paris",
       "id": "b6c889ff1f684cd7a65301984b80b93d",
       "attribution": "Paris Buildings Open Data provided by <a href='https://www.apur.org/en/about-us' target='_blank'>APUR</a>. WebScene created by <a href='https://www.esrifrance.fr/' target='_blank'>ESRI France</a>"
+    },
+    {
+      "title": "Cambridge",
+      "id": "1b2d95f551d6423e9aa408b8f86e9c3d",
+      "attribution": "3D buildings open data provided by <a href='https://www.cambridgema.gov/GIS/3D/3ddata' target='_blank'>Cambridge, Massachussetts</a>"
     }
   ]
 }
