@@ -28,7 +28,7 @@ body {
 }
 
 #menu {
-  max-width: 400px;
+  width: max(30%, 300px);
   z-index: 1;
   height: 100%;
   overflow: auto;
@@ -47,7 +47,7 @@ a,
   background-color: transparent;
   padding: 0;
   border: none;
-  color: #888;
+  color: #009af2;
   text-decoration: none;
   cursor: pointer;
   transition: color 300ms;
@@ -55,7 +55,7 @@ a,
 
 a:hover,
 #description button:hover {
-  color: #009af2;
+  color: #888;
   border-color: #009af2;
 }
 
