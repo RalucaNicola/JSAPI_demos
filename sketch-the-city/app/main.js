@@ -2,7 +2,7 @@ require([
   "esri/WebScene",
   "esri/views/SceneView",
   "esri/request"
-], function(WebScene, SceneView, esriRequest) {
+], function (WebScene, SceneView, esriRequest) {
 
   let mode = "light";
   let webscene;
@@ -11,12 +11,15 @@ require([
   const loading = document.getElementById("loading");
   const error = document.getElementById("error");
 
+  let goToController = null;
+  let currentSlideId = 0;
+
   // function to retrieve query parameters (in this case only id)
   function getIdParam() {
     const queryParams = document.location.search.substr(1);
     const result = {};
 
-    queryParams.split("&").forEach(function(part) {
+    queryParams.split("&").forEach(function (part) {
       var item = part.split("=");
       result[item[0]] = decodeURIComponent(item[1]);
     });
@@ -34,17 +37,17 @@ require([
   // if user loaded scene by setting an id in the url, load that scene
   if (id) {
     setScene(id);
-  // else display the intro text
+    // else display the intro text
   } else {
     intro.classList.remove("hide");
   }
 
   // load the cities from the json file
   esriRequest('./cities.json', {
-      responseType: "json"
-    })
+    responseType: "json"
+  })
     // when loaded successfully use the data to create the menu of cities at the top
-    .then(function(response) {
+    .then(function (response) {
 
       const cities = response.data.cities;
       const cityContainer = document.getElementById("cities");
@@ -54,7 +57,7 @@ require([
         const city = cities[i];
         const button = document.createElement("button");
         button.innerHTML = city.title;
-        button.addEventListener("click", function() {
+        button.addEventListener("click", function () {
           setScene(city.id);
           setId(city.id);
           if (city.attribution) {
@@ -65,7 +68,7 @@ require([
       }
     })
     // if something went wrong with the loading show an error in the console
-    .catch(function(err) {
+    .catch(function (err) {
       console.log(err);
     });
 
@@ -102,6 +105,17 @@ require([
 
   }
 
+  function abortGoToController() {
+    if (goToController && !goToController.signal.aborted) {
+      goToController.abort();
+    }
+  }
+
+  function resetGoToController() {
+    abortGoToController();
+    goToController = new AbortController();
+  }
+
   // when the webscene has slides, they are added in a list at the bottom
   function createPresentation(slides) {
 
@@ -109,10 +123,28 @@ require([
 
     if (slides.length) {
 
+      const startPauseButton = document.createElement("button");
+      startPauseButton.classList.add("startPauseButton");
+      startPauseButton.classList.add("pause");
+      slideContainer.appendChild(startPauseButton);
+
+      startPauseButton.addEventListener("click", function () {
+        if (view.animation && view.animation.state === "running") {
+          abortGoToController();
+          startPauseButton.classList.remove("pause");
+          startPauseButton.classList.add("play");
+        } else {
+          startPauseButton.classList.remove("play");
+          startPauseButton.classList.add("pause");
+          animateSlides(slides, view);
+        }
+      });
+      currentSlideId = 0;
+
       // create list using plain old vanilla JS
       const slideList = document.createElement("ul");
       slideContainer.appendChild(slideList);
-      slides.forEach(function(slide) {
+      slides.forEach(function (slide, index) {
 
         let slideElement = document.createElement("li");
         slideElement.id = slide.id;
@@ -121,11 +153,16 @@ require([
         title.innerHTML = slide.title.text;
         slideElement.appendChild(title);
 
-        slideElement.addEventListener("click", function() {
+
+        slideElement.addEventListener("click", function () {
+          resetGoToController();
           // the slide is only used to zoom to a viewpoint (more like a bookmark)
           // because we don't want to modify the view in any other way
           // this also means that layers won't change their visibility with the slide, so make all layers visible from the beginning
-          view.goTo(slide.viewpoint);
+          view.goTo(slide.viewpoint, { signal: goToController.signal });
+          currentSlideId = index;
+          startPauseButton.classList.remove("pause");
+          startPauseButton.classList.add("play");
         }.bind(slide));
 
         slideList.appendChild(slideElement);
@@ -190,8 +227,8 @@ require([
 
       // apply the sketch renderer and disable popup
       sceneLayers.forEach(function (layer) {
-          setSketchRenderer(layer);
-          layer.popupEnabled = false;
+        setSketchRenderer(layer);
+        layer.popupEnabled = false;
       });
 
       // add these layers to the empty webscene
@@ -202,6 +239,10 @@ require([
         view.goTo(origWebscene.initialViewProperties.viewpoint)
           .then(function () {
             loading.classList.add("hide");
+            // if slides exist, start animating them slowly
+            if (origWebscene.presentation.slides.length) {
+              animateSlides(origWebscene.presentation.slides, view);
+            }
           })
           .catch(function (err) {
             console.log(err);
@@ -211,16 +252,33 @@ require([
       webscene.presentation = origWebscene.presentation.clone();
       createPresentation(webscene.presentation.slides);
     })
-    .catch(function () {
-      loading.classList.add("hide");
-      error.classList.remove("hide");
-    });
+      .catch(function () {
+        loading.classList.add("hide");
+        error.classList.remove("hide");
+      });
 
     window.view = view;
   }
 
+  function animateSlides(slides, view) {
+    function goToNextSlide() {
+      if (!view.interacting) {
+        resetGoToController();
+
+        view.goTo(slides.getItemAt(currentSlideId).viewpoint, { speedFactor: 0.02, signal: goToController.signal }).then(() => {
+          currentSlideId = (currentSlideId + 1) % slides.length;
+          window.setTimeout(() => {
+            goToNextSlide();
+          }, 4000);
+        })
+          .catch(() => { });
+      }
+    }
+    goToNextSlide();
+  }
+
   // when changing the visualization mode swap the css files and change renderer
-  document.getElementById("mode").addEventListener("click", function(evt) {
+  document.getElementById("mode").addEventListener("click", function (evt) {
 
     if (mode === "light") {
       mode = "dark";
@@ -232,7 +290,7 @@ require([
       document.getElementById("customCSS").href = "./styles/light.css";
     }
     if (webscene) {
-      webscene.layers.forEach(function(layer) {
+      webscene.layers.forEach(function (layer) {
         setSketchRenderer(layer);
       });
     }

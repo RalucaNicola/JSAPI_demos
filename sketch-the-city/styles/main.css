@@ -5,11 +5,9 @@ body,
   margin: 0;
   height: 100%;
   width: 100%;
-  font-family: 'Roboto', sans-serif;
 }
 
 #intro {
-  font-family: 'Reenie Beanie', cursive;
   font-size: 2.2em;
   position: absolute;
   top: 50px;
@@ -22,11 +20,9 @@ body,
   padding: 1em;
 }
 
-#intro>p:first-child {
   font-size: 2em;
 }
 
-#intro>p:last-child {
   transform: rotate(-5deg);
 }
 
@@ -76,17 +72,14 @@ a {
   display: inherit;
 }
 
-#loading, #error {
   position: absolute;
   top: 50%;
   margin-top: -25px;
   text-align: center;
-  font-family: 'Reenie Beanie', cursive;
   font-size: 2.5em;
   width: 100%;
 }
 
-#loading>img {
   height: 15px;
   vertical-align: middle;
 }
@@ -100,13 +93,10 @@ a {
 }
 
 ul {
-  list-style:none;
   padding: 0;
   display: inline-flex;
   flex-wrap: wrap;
 }
-
-.slide{
 
   padding: 0px 10px;
   transform: skew(-45deg);
@@ -118,7 +108,6 @@ ul {
   cursor: pointer;
 }
 
-.slide>div {
   transform: skew(45deg);
 }
 
@@ -132,4 +121,31 @@ ul {
   padding-right: 2px;
 }
 
+.startPauseButton {
+  height: 30px;
+  width: 30px;
+  border: 1px solid black;
+  margin-right: 20px;
+  position: relative;
+  border-radius: 50%;
+  top: 5px;
+  transition: all 200ms;
+  cursor: pointer;
+}
 
+.play {
+  background: url(../play-16-f.svg) no-repeat;
+  background-size: 50%;
+  background-position: center;
+}
+
+.pause {
+  background: url(../pause-16-f.svg) no-repeat;
+  background-position: center;
+  background-size: 50%;
+}
+
+.startPauseButton:hover.play,
+.startPauseButton:hover.pause {
+  background-size: 70%;
+}
