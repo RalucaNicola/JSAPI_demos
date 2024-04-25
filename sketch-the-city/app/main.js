@@ -10,7 +10,7 @@ require([
   const intro = document.getElementById("intro");
   const loading = document.getElementById("loading");
   const error = document.getElementById("error");
-
+  let startPauseButton = document.createElement("button");
   let goToController = null;
   let currentSlideId = 0;
 
@@ -122,8 +122,6 @@ require([
     const slideContainer = document.getElementById("slides");
 
     if (slides.length) {
-
-      const startPauseButton = document.createElement("button");
       startPauseButton.classList.add("startPauseButton");
       startPauseButton.classList.add("pause");
       slideContainer.appendChild(startPauseButton);
@@ -271,7 +269,10 @@ require([
             goToNextSlide();
           }, 4000);
         })
-          .catch(() => { });
+          .catch(() => {
+            startPauseButton.classList.remove("pause");
+            startPauseButton.classList.add("play");
+          });
       }
     }
     goToNextSlide();
