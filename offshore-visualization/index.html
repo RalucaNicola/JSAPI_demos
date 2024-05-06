@@ -1,0 +1,186 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Explode view</title>
+    <link
+      rel="stylesheet"
+      href="https://jsdev.arcgis.com/4.28/esri/themes/light/main.css"
+    />
+    <script src="https://jsdev.arcgis.com/4.28/"></script>
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/1.6.1/calcite.esm.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://js.arcgis.com/calcite-components/1.6.1/calcite.css"
+    />
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      #exploded {
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1em;
+      }
+
+      #credits {
+        font-size: 0.7em;
+        line-height: 1.1em;
+      }
+    </style>
+    <script>
+      require([
+        "esri/views/SceneView",
+        "esri/WebScene",
+        "esri/Map",
+        "esri/layers/GraphicsLayer",
+        "esri/widgets/Daylight",
+        "esri/geometry/Mesh",
+        "esri/geometry/Point",
+        "esri/Graphic",
+        "esri/rest/query",
+        "esri/rest/support/Query",
+        "esri/widgets/DirectLineMeasurement3D",
+      ], (
+        SceneView,
+        WebScene,
+        Map,
+        GraphicsLayer,
+        Daylight,
+        Mesh,
+        Point,
+        Graphic,
+        query,
+        Query,
+        DirectLineMeasurement3D
+      ) => {
+        const inputSR = { wkid: 3857 };
+        const webScene = new WebScene({
+          portalItem: {
+            id: "4890e4b2e0ef41a18cb69c9d36509e69",
+          },
+        });
+
+        const view = new SceneView({
+          container: "viewDiv",
+          map: webScene,
+          viewingMode: "local",
+        });
+
+        const measurement = new DirectLineMeasurement3D({
+          view: view,
+        });
+        view.ui.add(measurement, "top-right");
+        const scale = 10;
+
+        const getGraphicFromModel = async (url, geometry, translate) => {
+          const mesh = await Mesh.createFromGLTF(geometry, url, {
+            vertexSpace: "georeferenced",
+            useTransform: true,
+          });
+          mesh.offset(...translate.map((t) => t * scale));
+          mesh.scale(scale, scale, scale);
+
+          const graphic = new Graphic({
+            geometry: mesh,
+            symbol: {
+              type: "mesh-3d",
+
+              symbolLayers: [
+                {
+                  type: "fill",
+                },
+              ],
+            },
+          });
+          return graphic;
+        };
+
+        function animateBlades(graphic, angle = 360) {
+          angle = (angle - 0.1) % 360;
+          graphic.geometry.transform.rotationAngle = angle;
+          graphic.geometry.transform.rotationAxis = [0, 1, 0];
+          graphic.notifyMeshTransformChanged({
+            action: 2,
+          });
+          requestAnimationFrame(() => animateBlades(graphic, angle));
+        }
+
+        (async () => {
+          try {
+            const layerURL =
+              "https://services6.arcgis.com/u2Q4oAfciDZpDAD8/arcgis/rest/services/wind_turbines_TCE/FeatureServer/0";
+
+            const queryObject = new Query();
+            queryObject.where = "1=1";
+            queryObject.returnGeometry = true;
+            queryObject.outSpatialReference = inputSR;
+
+            const { features } = await query.executeQueryJSON(
+              layerURL,
+              queryObject
+            );
+
+            const pillarGraphics = await Promise.all(
+              features.map((feature) =>
+                getGraphicFromModel(
+                  "./wind-turbine-pillar.glb",
+                  feature.geometry,
+                  [0, 0, 0]
+                )
+              )
+            );
+            const bladeGraphics = await Promise.all(
+              features.map((feature) =>
+                getGraphicFromModel(
+                  "./wind-turbine-blades.glb",
+                  feature.geometry,
+                  [-0.05, 0.8, 12.85]
+                )
+              )
+            );
+            console.log(pillarGraphics, bladeGraphics);
+            view.graphics.addMany([...pillarGraphics, ...bladeGraphics]);
+            bladeGraphics.forEach((graphic) => {
+              animateBlades(graphic, 360);
+            });
+            // features.forEach(async (feature) => {
+            //   const windTurbinePillar = await getGraphicFromModel(
+            //     "./wind-turbine-pillar.glb",
+            //     feature.geometry
+            //   );
+            //   const windTurbineBlades = await getGraphicFromModel(
+            //     "./wind-turbine-blades.glb",
+            //     feature.geometry
+            //   );
+            //   const graphics = [windTurbinePillar, windTurbineBlades];
+            //   windTurbineBlades.geometry.offset(-0.05, 0.8, 12.85);
+            //   view.graphics.addMany(graphics);
+
+            //   animateBlades(windTurbineBlades);
+            // });
+          } catch (error) {
+            console.log(error);
+          }
+        })();
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
