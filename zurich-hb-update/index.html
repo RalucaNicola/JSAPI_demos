@@ -1,0 +1,341 @@
+<!-- https://plans.trafimage.ch/zuerich-hb -->
+<!-- https://stations.sbb.cartaro-enterprise.com/de/api/models/swagger/ -->
+<!-- UID Zurich HB: 8503000-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/3.0.3/calcite.esm.js"
+    ></script>
+    <title>Zurich Main Station</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        font-family: "Avenir Next W00", "Helvetica Neue", Helvetica, Arial,
+          sans-serif;
+        background: linear-gradient(
+          0deg,
+          rgba(228, 234, 242, 1) 5%,
+          rgba(255, 255, 255, 1) 50%
+        );
+      }
+
+      #menu {
+        padding: 0;
+        background: white;
+      }
+
+      #menu>h2 {
+        background-color: #ae88bf;
+        margin: 0;
+        padding: 1rem;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .container {
+        padding: 1rem;
+        padding-bottom : 0;
+      }
+
+      footer {
+        color: gray;
+    font-size: 0.7rem;
+    padding: 1rem 0 0.5rem 0;
+      }
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.32/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.32/"></script>
+
+    <script>
+      require([
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/FeatureLayer",
+        "esri/layers/GraphicsLayer",
+        "esri/layers/GeoJSONLayer",
+        "esri/layers/SceneLayer",
+        "esri/layers/VectorTileLayer",
+        "esri/geometry/Extent",
+        "esri/layers/support/LabelClass",
+        "esri/widgets/Editor",
+        "esri/widgets/Home",
+        "esri/widgets/LayerList",
+        "esri/Color",
+        "esri/geometry/Mesh",
+        "esri/geometry/Point",
+        "esri/geometry/Polygon",
+        "esri/Graphic",
+        "esri/widgets/Slider",
+      ], function (
+        WebScene,
+        SceneView,
+        FeatureLayer,
+        GraphicsLayer,
+        GeoJSONLayer,
+        SceneLayer,
+        VectorTileLayer,
+        Extent,
+        LabelClass,
+        Editor,
+        Home,
+        LayerList,
+        Color,
+        Mesh,
+        Point,
+        Polygon,
+        Graphic,
+        Slider
+      ) {
+        const map = new WebScene({
+          portalItem: {
+            id: "2c5bdabb152b45cf8dc563252080d70d",
+          },
+        });
+
+        const view = new SceneView({
+          container: "viewDiv",
+          viewingMode: "global",
+          map: map,
+          qualityProfile: "high",
+          popup: {
+            defaultPopupTemplateEnabled: true,
+          },
+        });
+        // const layerList = new LayerList({ view });
+        // view.ui.add(layerList);
+
+        view.ui.add("menu", "top-right");
+
+        const groundOpacity = 1;
+
+        const floorMapping = [
+          {
+            name: "Overview",
+            level: 0,
+            elevation: 409,
+          },
+          {
+            name: "Ground",
+            level: 0,
+            elevation: 409,
+          },
+          {
+            name: "-1",
+            level: -1,
+            elevation: 396,
+          },
+          {
+            name: "-2",
+            level: -2,
+            elevation: 391,
+          },
+          {
+            name: "-3",
+            level: -3,
+            elevation: 386,
+          },
+        ];
+
+        view.when(async() => {
+          const floorPlansLayer = view.map.layers.find(
+            (l) => l.title === "Floor plans"
+          );
+          const servicesLayer = view.map.layers.find(
+            (l) => l.title === "Services"
+          );
+          servicesLayer.definitionExpression = `1=1`;
+            floorPlansLayer.definitionExpression = `1=1`;
+          const highlightLayer = view.map.layers.find(
+            (l) => l.title === "Zurich main station hull"
+          );
+
+          const bimLayers = view.map.layers.filter(
+            (l) => l.type === "building-scene"
+          );
+
+          const servicesLayerView = await view.whenLayerView(servicesLayer);
+          const floorPlansLayerView = await view.whenLayerView(floorPlansLayer);
+
+          document
+            .getElementById("floorPicker")
+            .addEventListener("click", (evt) => {
+              const value = parseInt(evt.target.value);
+              if (value === 0) {
+                view.map.ground.opacity = groundOpacity;
+                planeLayer.visible = false;
+                highlightLayer.visible = true;
+                bimLayers.forEach((l) => {
+                  l.opacity = 1;
+                  l.allSublayers.forEach((l) => {
+                    l.opacity = 1;
+                  });
+                });
+              } else {
+                bimLayers.forEach((l) => {
+                  if (value === 1) {
+                    l.opacity = 1;
+                    l.allSublayers.forEach((layer) => {
+                      if (layer.title === "Roofs") {
+                        layer.opacity = 0;
+                      }
+                    });
+                  } else {
+                    l.opacity = 0;
+                  }
+                });
+                planeLayer.visible = true;
+                highlightLayer.visible = false;
+                view.map.ground.opacity = 0;
+                filterFloors(floorMapping[value].level);
+              }
+              const oldValue = planeLayer.elevationInfo.offset;
+              const newValue = floorMapping[value].elevation - 2;
+              if (oldValue < newValue) {
+                liftPlane(oldValue, newValue);
+              }
+              if (oldValue > newValue) {
+                lowerPlane(oldValue, newValue);
+              }
+            });
+
+          const floorExpression = `IIf($feature.floorLevel == 0, ${floorMapping[0].elevation}, IIf($feature.floorLevel == -1, ${floorMapping[1].elevation}, IIf($feature.floorLevel == -2 , ${floorMapping[2].elevation}, ${floorMapping[3].elevation})))`;
+
+          const elevationInfo = {
+            mode: "absolute-height",
+            featureExpressionInfo: {
+              expression: floorExpression,
+            },
+          };
+
+          function filterFloors(level) {
+            servicesLayerView.filter = {
+              where: `floorLevel = ${level}`
+            };
+            floorPlansLayerView.filter = {
+              where: `floorLevel = ${level}`
+            };
+            
+            console.log(floorPlansLayerView);
+          }
+
+          const planeLayer = new GraphicsLayer({
+            elevationInfo: {
+              mode: "absolute-height",
+              offset: floorMapping[0].elevation - 2,
+            },
+            visible: false,
+          });
+          map.add(planeLayer);
+
+          polygonRings = [
+            [8.53418, 47.38077, 0],
+            [8.53252, 47.37848, 0],
+            [8.54158, 47.37569, 0],
+            [8.54302, 47.37842, 0],
+            [8.53418, 47.38077, 0],
+          ];
+
+          const graphic = new Graphic({
+            symbol: {
+              type: "polygon-3d",
+              symbolLayers: [
+                {
+                  type: "extrude",
+                  material: { color: [255, 255, 255, 0.8] },
+                  size: 0.5,
+                  edges: {
+                    type: "solid",
+                    color: [70, 70, 70, 0.5],
+                    size: 1,
+                  },
+                },
+              ],
+            },
+            geometry: new Polygon({
+              rings: polygonRings,
+              spatialReference: 4326,
+            }),
+          });
+          planeLayer.add(graphic);
+
+          function liftPlane(oldValue, newValue) {
+            if (oldValue < newValue - 3) {
+              planeLayer.elevationInfo = {
+                mode: "absolute-height",
+                offset: oldValue,
+              };
+              requestAnimationFrame(function () {
+                liftPlane(oldValue + 0.3, newValue);
+              });
+            }
+          }
+
+          function lowerPlane(oldValue, newValue) {
+            if (oldValue > newValue - 3) {
+              planeLayer.elevationInfo = {
+                mode: "absolute-height",
+                offset: oldValue,
+              };
+              requestAnimationFrame(function () {
+                lowerPlane(oldValue - 0.3, newValue);
+              });
+            }
+          }
+        });
+        window.view = view;
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv">
+      <div id="menu">
+        <h2>Zurich main station</h2>
+        <div class="container">
+          <calcite-segmented-control
+            appearance="outline"
+            layout="vertical"
+            id="floorPicker"
+          >
+            <calcite-segmented-control-item value="0" checked>
+              Overview
+            </calcite-segmented-control-item>
+            <calcite-segmented-control-item value="1"
+              >Ground floor</calcite-segmented-control-item
+            >
+            <calcite-segmented-control-item value="2"
+              >Level -1</calcite-segmented-control-item
+            >
+            <calcite-segmented-control-item value="3"
+              >Level -2</calcite-segmented-control-item
+            >
+            <calcite-segmented-control-item value="4"
+              >Level -3</calcite-segmented-control-item
+            >
+          </calcite-segmented-control>
+        <footer>
+          Data source © SBB/CFF/FFS,
+          <a href="//www.trafimage.ch">www.trafimage.ch</a>
+        </footer>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
