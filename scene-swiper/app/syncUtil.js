@@ -1,7 +1,7 @@
 // small utility for synchronizing 2 views
 // based on code from sample: https://developers.arcgis.com/javascript/latest/sample-code/sandbox/index.html?sample=views-synchronize
 
-define(["esri/core/watchUtils"], function(watchUtils) {
+define(["esri/core/reactiveUtils"], function(reactiveUtils) {
 
   function _syncViews(view1, view2) {
     var viewpointWatchHandle;
@@ -15,7 +15,7 @@ define(["esri/core/watchUtils"], function(watchUtils) {
       viewpointWatchHandle = viewStationaryHandle = scheduleId = null;
     }
 
-    interactWatcher = view1.watch('interacting,animation', function(newValue) {
+    interactWatcher = reactiveUtils.watch(() => view1.interacting || view1.animation, function(newValue) {
       if (!newValue) {
         return;
       }
@@ -26,14 +26,14 @@ define(["esri/core/watchUtils"], function(watchUtils) {
 
       scheduleId = setTimeout(function() {
         scheduleId = null;
-        viewpointWatchHandle = view1.watch('viewpoint',
+        viewpointWatchHandle = reactiveUtils.watch(() => view1.viewpoint,
           function(newValue) {
             view2.viewpoint = newValue;
           });
       }, 0);
 
-      viewStationaryHandle = watchUtils.whenTrue(view1,
-        'stationary', clear);
+      viewStationaryHandle = reactiveUtils.when(() => view1.stationary,
+        clear);
 
     });
 
