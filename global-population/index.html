@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>World population</title>
+  <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+  <script type="module" src="https://jsdev.arcgis.com/5.0/"></script>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    calcite-segmented-control {
+      --calcite-segmented-control-border-color: #cfcfcf;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Use the component with a WebScene ID -->
+  <arcgis-scene basemap="dark-gray">
+    <arcgis-zoom slot="top-left"></arcgis-zoom>
+    <arcgis-navigation-toggle slot="top-left"></arcgis-navigation-toggle>
+    <arcgis-compass slot="top-left"></arcgis-compass>
+  </arcgis-scene>
+
+  <script type="module">
+
+    const SceneLayer = await $arcgis.import("@arcgis/core/layers/SceneLayer.js");
+    const SizeVariable = await $arcgis.import(
+      "@arcgis/core/renderers/visualVariables/SizeVariable.js"
+    );
+    const FeatureLayer = await $arcgis.import("@arcgis/core/layers/FeatureLayer.js");
+    const SimpleRenderer = await $arcgis.import("@arcgis/core/renderers/SimpleRenderer.js");
+    const PointSymbol3D = await $arcgis.import("@arcgis/core/symbols/PointSymbol3D.js");
+    const ObjectSymbol3DLayer = await $arcgis.import(
+      "@arcgis/core/symbols/ObjectSymbol3DLayer.js"
+    );
+    const Glow = await $arcgis.import("@arcgis/core/webscene/Glow");
+
+    const viewElement = document.querySelector("arcgis-scene");
+
+    // Esri color ramps - Magma
+    // #481793ff,#b233b9ff,#ff57a5ff,#ffeca1ff
+    const colors = ["#481793ff", "#b233b9ff", "#ff57a5ff", "#ffeca1ff"];
+    viewElement.viewOnReady(async () => {
+      viewElement.map.ground.opacity = 1;
+      viewElement.environment.lighting.glow = new Glow({ intensity: 0.5 });
+
+      // renderer for the population layer
+      const renderer = new SimpleRenderer({
+        symbol: new PointSymbol3D({
+          symbolLayers: [
+            new ObjectSymbol3DLayer({
+              resource: {
+                primitive: "cube",
+              },
+              material: {
+                color: "#00E9FF",
+                emissive: { strength: 1, source: "color" },
+              },
+              anchor: "bottom",
+              width: 30000,
+              depth: 30000,
+            }),
+          ],
+        }),
+        visualVariables: [
+          {
+            type: "size",
+            field: "population_count",
+            axis: "height",
+            stops: [
+              { value: 10, size: 30000 },
+              { value: 20 * Math.pow(10, 6), size: 20 * Math.pow(10, 5) },
+            ],
+          },
+          new SizeVariable({
+            axis: "width-and-depth",
+            useSymbolValue: true,
+          }),
+          {
+            type: "color",
+            field: "population_count",
+            stops: [
+              { value: 10, color: "#481793ff" },
+              { value: 10 * Math.pow(10, 3), color: "#b233b9ff" },
+              { value: 20 * Math.pow(10, 5), color: "#ff57a5ff" },
+              { value: 30 * Math.pow(10, 6), color: "#ffeca1ff" },
+            ],
+          },
+        ],
+      });
+
+      const populationLayer = new FeatureLayer({
+        url: "https://services2.arcgis.com/cFEFS0EWrhfDeVw9/arcgis/rest/services/World_population_count_2020/FeatureServer",
+        definitionExpression: "population_count > 10",
+        renderer,
+      });
+
+      const graticule = new FeatureLayer({
+        url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/World_graticule_15deg/FeatureServer",
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "line-3d",
+            symbolLayers: [
+              {
+                type: "line",
+                material: {
+                  color: "#00E9FF",
+                },
+              },
+            ],
+          },
+        },
+        opacity: 0.3,
+      });
+
+      const countryBoundaries = new FeatureLayer({
+        url: "http://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries_(Generalized)/FeatureServer",
+        title: "World Countries",
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "polygon-3d",
+            symbolLayers: [
+              {
+                type: "fill", // autocasts as new FillSymbol3DLayer()
+                material: { color: [255, 255, 255, 0] },
+                outline: {
+                  color: [255, 255, 255],
+                  size: 0.5,
+                },
+              },
+            ],
+          },
+        },
+      });
+      viewElement.map.addMany([countryBoundaries, graticule, populationLayer]);
+    });
+  </script>
+</body>
+
+</html>
